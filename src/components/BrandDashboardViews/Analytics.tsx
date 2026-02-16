@@ -1,7 +1,14 @@
-
 import React from 'react';
+
+
+
+
+
+
+
+
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { formatCurrency } from '../constants';
+import { formatCurrency } from '../../constants';
 
 const data = [
   { name: 'Jan 10', views: 4000, payouts: 240000 },

@@ -20,6 +20,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
   return (
     <div 
       className="group bg-[#11141A] border border-white/[0.04] rounded-[32px] overflow-hidden hover:border-teal-500/20 hover:bg-[#151921] transition-all duration-500 flex flex-col shadow-2xl relative active:scale-[0.98]"
+      onClick={()=>{alert(campaign.title)}}
     >
       {/* Reduced Height Cover */}
       <div className="h-36 relative overflow-hidden">

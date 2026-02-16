@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Index from '../components/CreatorDashboardViews/Index';
 import CreatorDashboardLayout from '../layouts/CreatorDashboardLayout';
 import type { CreatorDashboardContextType } from "../types";
 import Wallet from "../components/CreatorDashboardViews/Wallet";
 import Campaigns from "../components/CreatorDashboardViews/Campaings";
+import Home from "../components/CreatorDashboardViews/Home";
 // import { Icon } from "../components/Icons";
 // Import specific Tabler icons
 
@@ -18,7 +18,7 @@ const CreatorDashboard = () => {
     switch(activeView) {
       case 'Wallet': return <Wallet />; 
       case 'Campaigns': return <Campaigns /> 
-      default: return <Index />;
+      default: return <Home />;
     }
   };
 

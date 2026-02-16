@@ -8,7 +8,7 @@ import type React from "react";
 const ASidebar: React.FC<{ links: CustomLink[], Ctx: React.Context<Interface> }> = ({ links, Ctx }) => {
 
   return (
-    <aside className="flex w-[280px] h-screen bg-[#0D1117] border-r border-white/5 flex-col fixed left-0 top-0 z-[200] py-8">
+    <aside className="hidden md:flex w-[280px] h-screen bg-[#0D1117] border-r border-white/5 flex-col fixed left-0 top-0 z-[200] py-8">
       <div className="px-8 mb-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <KreaterlyLogo />

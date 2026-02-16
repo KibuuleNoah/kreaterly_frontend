@@ -37,7 +37,7 @@ const CreatorDashboardLayout: React.FC<{ children: React.ReactNode, Ctx: React.C
     const {activeView, setActiveView} = useContext(Ctx)
     return (
         <div className="min-h-screen flex flex-col bg-[#0A0B0E] selection:bg-teal-500/30 text-white">
-            <MobileNav items={NAV_LINKS} Ctx={Ctx}/>
+            <MobileNav links={NAV_LINKS} Ctx={Ctx}/>
 
             <header className="fixed top-0 left-0 right-0 z-[100] px-6 py-4 bg-[#0D1117]/80 backdrop-blur-3xl border-b border-white/5 flex items-center">
                 <div className="max-w-[1600px] mx-auto w-full flex items-center">

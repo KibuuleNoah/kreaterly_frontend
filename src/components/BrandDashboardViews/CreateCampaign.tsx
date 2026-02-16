@@ -1,14 +1,9 @@
 
 import React, { useState } from 'react';
-// Fix: Ignore potential type definition issues with react-router-dom in this environment
-// @ts-ignore
-import { useNavigate } from 'react-router-dom';
-import { IconPlus, IconTikTok, IconInstagram, IconYouTube, IconAdLibrary } from '../components/Icons';
 
 type Step = 1 | 2 | 3 | 4;
 
 const CreateCampaign: React.FC = () => {
-  const navigate = useNavigate();
   const [step, setStep] = useState<Step>(1);
   const [formData, setFormData] = useState({
     name: '',

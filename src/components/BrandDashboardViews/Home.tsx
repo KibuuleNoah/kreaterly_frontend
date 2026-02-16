@@ -1,13 +1,8 @@
 
 import React from 'react';
-// Fix: Ignore potential type definition issues with react-router-dom in this environment
-// @ts-ignore
-import { useNavigate } from 'react-router-dom';
 
-const BrandDashboard: React.FC = () => {
-  const navigate = useNavigate();
-  const storedUser = JSON.parse(localStorage.getItem('kreaterly_user') || '{}');
-  const brandName = storedUser.name || 'Brand Partner';
+const Home: React.FC = () => {
+  const brandName = 'Brand Partner';
 
   return (
     <div className="h-full min-h-[70vh] flex flex-col items-center justify-center animate-in fade-in duration-1000 relative">
@@ -63,7 +58,6 @@ const BrandDashboard: React.FC = () => {
 
         <div className="flex flex-col items-center">
            <button 
-             onClick={() => navigate('/create-campaign')}
              className="bg-white text-black font-black px-12 py-5 rounded-2xl text-[12px] uppercase tracking-[0.2em] transition-all shadow-[0_20px_50px_rgba(20,184,166,0.15)] hover:bg-teal-500 active:scale-95 btn-bubble"
            >
             New campaign
@@ -79,4 +73,4 @@ const BrandDashboard: React.FC = () => {
   );
 };
 
-export default BrandDashboard;
+export default Home;

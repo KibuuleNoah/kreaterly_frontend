@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 
-const BrandSettings: React.FC = () => {
+const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Profile');
   const storedUser = JSON.parse(localStorage.getItem('kreaterly_user') || '{}');
 
@@ -105,4 +104,4 @@ const BrandSettings: React.FC = () => {
   );
 };
 
-export default BrandSettings;
+export default Settings;
