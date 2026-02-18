@@ -6,7 +6,7 @@ import CreatorDashboard from "./pages/CreatorDashboard";
 import BrandDashboard from "./pages/BrandDashboard";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
-import Onboarding from "./components/Auth/Onboarding";
+import Auth from "./pages/Auth";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <Onboarding />
+    element: <Auth/>
   },
  {
     path: "/brand",

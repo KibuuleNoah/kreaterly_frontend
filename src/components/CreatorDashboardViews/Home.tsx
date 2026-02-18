@@ -1,12 +1,12 @@
 import { formatCurrency, MOCK_CAMPAIGNS } from "../../constants";
 import { IconWallet, IconUsers, IconLink } from "@tabler/icons-react";
-
+import { pb } from "../../lib/pocketbase";
 
 
 const Home = () => {
   
   const storedUser = { name: "John" };
-    const userName = storedUser.name;
+    const userName = pb.authStore.record.name;
     console.log(userName);
 
     const stats = [

@@ -1,25 +1,31 @@
 import React from "react";
 import MobileNav from "../components/MobileNav";
-import type { BrandDashboardContextType, CustomLink } from "../types";
+
+
+
+
+
+
+import type { BrandDashboardContextType } from "../types";
 import { 
   IconHome, 
   IconUsers, 
   IconCoin, 
-  IconMessageDots, 
   IconFileCheck, 
-  IconCalendar, 
-  IconSettings, 
+  IconSettings,
+  IconUserPlus, 
 } from '@tabler/icons-react';
 import ASidebar from "../components/Asidebar";
 
 const BRAND_NAV_ITEMS = [
   { path: '/', label: 'Home', icon: <IconHome size={25} /> },
+  { path: '/new', label: 'New', icon: <IconUserPlus size={25} /> },
   { path: '/creators', label: 'Creators', icon: <IconUsers size={25} /> },
   { path: '/funds', label: 'Funds', icon: <IconCoin size={25} /> },
   // { path: '/messaging', label: 'Messaging', icon: <IconMessage size={25} /> },
-  { path: '/comments', label: 'Comments', icon: <IconMessageDots size={25} /> },
+  // { path: '/comments', label: 'Comments', icon: <IconMessageDots size={25} /> },
   { path: '/review', label: 'Review Content', icon: <IconFileCheck size={25} /> },
-  { path: '/calendar', label: 'Calendar', icon: <IconCalendar size={25} /> },
+  // { path: '/calendar', label: 'Calendar', icon: <IconCalendar size={25} /> },
   { path: '/settings', label: 'Settings', icon: <IconSettings size={25} /> },
 ];
 

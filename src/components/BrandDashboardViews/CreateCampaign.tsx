@@ -1,7 +1,11 @@
 
+import { IconAdCircle } from '@tabler/icons-react';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Step = 1 | 2 | 3 | 4;
+
+const FieldRequired = () => (<span className='text-red-500 font-bold text-xl'>*</span>)
 
 const CreateCampaign: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
@@ -25,27 +29,59 @@ const CreateCampaign: React.FC = () => {
     enableAds: false
   });
 
+  const navigate = useNavigate()
+
   const nextStep = () => setStep(prev => Math.min(prev + 1, 4) as Step);
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1) as Step);
 
+
   const StepIndicator = () => (
-    <div className="flex items-center gap-4 mb-12">
-      {[1, 2, 3, 4].map((s) => (
-        <div key={s} className="flex items-center gap-4">
-          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs transition-all duration-500 ${
-            step === s 
-            ? 'bg-teal-500 text-black shadow-[0_0_20px_rgba(20,184,166,0.5)] scale-110' 
-            : step > s 
-              ? 'bg-teal-500/20 text-teal-500' 
-              : 'bg-white/5 text-gray-600'
-          }`}>
-            {step > s ? '✓' : `0${s}`}
-          </div>
-          {s < 4 && <div className={`w-12 h-0.5 rounded-full transition-all duration-500 ${step > s ? 'bg-teal-500/40' : 'bg-white/5'}`} />}
+    // justify-between ensures it uses the full width without overflow
+    <div className="flex items-center justify-between w-full mb-12 px-2">
+    {[1, 2, 3, 4].map((s) => (
+      <React.Fragment key={s}>
+      {/* Circle: Scaled down to w-8 on small screens */}
+      <div className={`shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center font-black text-[10px] sm:text-xs transition-all duration-500 ${
+        step === s
+          ? 'bg-teal-500 text-black shadow-[0_0_20px_rgba(20,184,166,0.4)] scale-110'
+          : step > s
+            ? 'bg-teal-500/20 text-teal-500'
+            : 'bg-white/5 text-gray-600'
+      }`}>
+      {step > s ? '✓' : `0${s}`}
+      </div>
+
+      {/* Line: flex-1 allows it to shrink/grow based on screen size */}
+      {s < 4 && (
+        <div className="flex-1 mx-2 sm:mx-4">
+        <div className={`h-0.5 w-full rounded-full transition-all duration-500 ${
+          step > s ? 'bg-teal-500/40' : 'bg-white/5'
+        }`} />
         </div>
-      ))}
+      )}
+      </React.Fragment>
+    ))}
     </div>
   );
+
+  // const StepIndicator = () => (
+  //   <div className="flex items-center mb-12">
+  //     {[1, 2, 3, 4].map((s) => (
+  //       <div key={s} className="flex items-center gap-4">
+  //         <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs transition-all duration-500 ${
+  //           step === s 
+  //           ? 'bg-teal-500 text-black shadow-[0_0_20px_rgba(20,184,166,0.5)] scale-110' 
+  //           : step > s 
+  //             ? 'bg-teal-500/20 text-teal-500' 
+  //             : 'bg-white/5 text-gray-600'
+  //         }`}>
+  //           {step > s ? '✓' : `0${s}`}
+  //         </div>
+  //         {s < 4 && <div className={`w-12 h-0.5 rounded-full transition-all duration-500 ${step > s ? 'bg-teal-500/40' : 'bg-white/5'}`} />}
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 
   const SectionHeader = ({ title, subtitle }: { title: string, subtitle: string }) => (
     <div className="mb-10 space-y-2">
@@ -55,7 +91,7 @@ const CreateCampaign: React.FC = () => {
   );
 
   return (
-    <div className="max-w-4xl mx-auto py-10 min-h-screen">
+    <div className="max-w-4xl mx-auto py-10">
       <button 
         onClick={() => navigate(-1)} 
         className="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-[0.4em] mb-12 transition-colors"
@@ -71,20 +107,9 @@ const CreateCampaign: React.FC = () => {
           <SectionHeader title="Campaign Identity" subtitle="Let us know the standard information about your mission." />
           
           <div className="space-y-8">
+            
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Campaign Name (Internal)</label>
-              <input 
-                type="text" 
-                placeholder="Spring/Summer Collection Launch (DK)"
-                className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800"
-                value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
-              />
-              <p className="text-[9px] text-gray-600 font-bold uppercase ml-1">Visible only on your dashboard.</p>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Campaign Title (Visible to Creators)</label>
+              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Campaign Title (Visible to Creators) <FieldRequired /></label>
               <input 
                 type="text" 
                 placeholder="Grab a pair of sunglasses and be a hero"
@@ -94,20 +119,29 @@ const CreateCampaign: React.FC = () => {
               />
             </div>
 
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Campaign Name (Internal)</label>
+              <input 
+                type="text" 
+                placeholder="Spring/Summer Collection Launch (DK)"
+                className="w-full h-8 bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800"
+                value={formData.name}
+                onChange={e => setFormData({...formData, name: e.target.value})}
+              />
+              <p className="text-[9px] text-gray-600 font-bold uppercase ml-1">Visible only on your dashboard.</p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Target Country</label>
+                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Target Country<FieldRequired /></label>
                 <select className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none appearance-none">
                   <option>🇺🇬 Uganda</option>
-                  <option>🇰🇪 Kenya</option>
-                  <option>🇷🇼 Rwanda</option>
-                  <option>🇹🇿 Tanzania</option>
                 </select>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Mission Brief</label>
+              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Mission Brief <FieldRequired /></label>
               <textarea 
                 rows={4}
                 placeholder="Describe what the campaign is about and what you expect..."
@@ -126,7 +160,7 @@ const CreateCampaign: React.FC = () => {
           <div className="space-y-10">
             <div className="p-8 bg-white/5 border border-dashed border-white/10 rounded-[40px] flex flex-col items-center justify-center text-center space-y-4 hover:border-teal-500/30 transition-all cursor-pointer">
               <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-gray-500">
-                <IconAdLibrary />
+                <IconAdCircle />
               </div>
               <div>
                 <p className="text-sm font-black text-white uppercase tracking-widest">Cover Image (Optional)</p>
@@ -343,9 +377,10 @@ const CreateCampaign: React.FC = () => {
 
         <button 
           onClick={step === 4 ? () => navigate('/') : nextStep}
+          disabled={true}
           className="bg-teal-500 text-black font-black px-12 py-5 rounded-2xl text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-teal-500/20 active:scale-95 transition-all btn-bubble"
         >
-          {step === 4 ? 'Deploy Campaign' : 'Next Protocol'}
+          {step === 4 ? 'Deploy Campaign' : 'Next Step'}
         </button>
       </div>
     </div>

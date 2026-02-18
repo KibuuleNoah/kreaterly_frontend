@@ -14,7 +14,7 @@ const Settings: React.FC = () => {
 
       {/* Responsive Tab Navigation */}
       <div className="flex bg-white/5 p-1 rounded-2xl md:rounded-[28px] border border-white/5 overflow-x-auto no-scrollbar">
-        {['Profile', 'Billing', 'Team', 'Security'].map(tab => (
+        {['Profile', 'Billing'].map(tab => (
           <button 
             key={tab} 
             onClick={() => setActiveTab(tab)}

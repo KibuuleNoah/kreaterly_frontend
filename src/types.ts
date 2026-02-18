@@ -2,6 +2,8 @@ import type React from 'react';
 import type { Dispatch, SetStateAction} from 'react';
 
 
+export type AuthStep = 'ROLE_SELECTION' | 'AUTH_ENTRY' | 'OTP_VERIFY';
+
 export interface CustomLink{
   path: string
   label: string
@@ -34,9 +36,8 @@ export enum CampaignCategory {
 }
 
 export enum UserRole {
-  TALENT = 'TALENT',
-  BRAND = 'BRAND',
-  ADMIN = 'ADMIN'
+  CREATOR = 'creator',
+  BRAND = 'brand',
 }
 
 export interface Creator {
