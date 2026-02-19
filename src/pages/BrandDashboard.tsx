@@ -63,7 +63,7 @@ const BrandDashboard = () => {
       <BrandDashboardLayout Ctx={ BrandDashboardCtx }>
         {activeView}
         {renderContent()}
-        <LogOutButton/>
+        {/*<LogOutButton/>*/}
       </BrandDashboardLayout>
     </BrandDashboardCtx.Provider>
   )

@@ -2,21 +2,48 @@
 import { IconAdCircle } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import ErrorAlert from '../ErrorAlert';
 
 type Step = 1 | 2 | 3 | 4;
+
+
+const campaignSchema = z.object({
+  title: z.string().min(5, "Title is too short"),
+  country: z.string().nonempty("Please select a country"),
+  description: z.string().min(100, "description is fakkkk").max(1000, "Description must be under 500 chars"),
+  // showDosDonts: z.boolean(),
+  // dos: z.array(z.string().min(1, "Entry cannot be empty")),
+  // donts: z.array(z.string().min(1, "Entry cannot be empty")),
+  launchDate: z.string().refine((date) => new Date(date) > new Date(), {
+    message: "Launch date must be in the future",
+  }),
+  endDate: z.string().nonempty("End date is required"),
+  hashtags: z.string().startsWith("#", "Hashtags should start with #"),
+  budget: z.coerce.number().positive("Budget must be greater than 0"),
+  cpm: z.coerce.number().positive("CPM must be greater than 0"),
+  productType: z.enum(['none', 'physical', 'digital']),
+  ageRanges: z.array(z.string()).min(1, "Select at least one age range"),
+  gender: z.array(z.string()).min(1, "Select at least one gender"),
+  visibility: z.enum(['open', 'private']),
+  enableAds: z.boolean()
+});
+
+type CampaignFormData = z.infer<typeof campaignSchema>;
 
 const FieldRequired = () => (<span className='text-red-500 font-bold text-xl'>*</span>)
 
 const CreateCampaign: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
+  const [errors, setErrors] = useState<Partial<Record<keyof CampaignFormData, string>>>({});
+  const [stepError, setStepError] = useState('')
   const [formData, setFormData] = useState({
-    name: '',
     title: '',
     country: 'Uganda',
     description: '',
-    showDosDonts: false,
-    dos: [''],
-    donts: [''],
+    // showDosDonts: false,
+    // dos: [''],
+    // donts: [''],
     launchDate: '2026-02-06',
     endDate: '',
     hashtags: 'MWSS2024',
@@ -34,6 +61,110 @@ const CreateCampaign: React.FC = () => {
   const nextStep = () => setStep(prev => Math.min(prev + 1, 4) as Step);
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1) as Step);
 
+
+  // Inside your ue = (key: keyof typeof formData) => {
+  //   return formData[key];
+  // };
+
+  const handleValidateStep = () =>{
+    const isValidStep = (stepFields: string[]): boolean => {
+      for ( const key of stepFields){
+        const fieldSchema = campaignSchema.shape[key as keyof CampaignFormData];
+        if (!fieldSchema.safeParse(formData[key as keyof typeof formData]).success){
+          setStepError('Errror')
+          return false
+        }
+      }
+      return true
+    }
+
+    if (step === 1){
+      const stepFields = ['title','country','description']
+      if (!isValidStep(stepFields)){return}
+    }else if (step === 2){
+      const stepFields = ['title','country','description']
+      if (!isValidStep(stepFields)){return}
+
+    }else if (step === 3){
+      const stepFields = ['title','country','description']
+      if (!isValidStep(stepFields)){return}
+
+    }else if (step === 4){
+      const stepFields = ['title','country','description']
+      if (!isValidStep(stepFields)){return}
+
+    }
+
+    setStepError('')
+    nextStep()
+  }
+  
+  // 1. Keep handleChange simple (only updates state)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    setFormData(prev => ({ ...prev, [name]: val }));
+  };
+
+  // 2. Add handleBlur (triggers validation on defocus)
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    // Validate only the field that just lost focus
+    const fieldSchema = campaignSchema.shape[name as keyof CampaignFormData];
+    const result = fieldSchema.safeParse(val || "");
+
+    setErrors(prev => ({
+      ...prev,
+      [name]: result.success ? undefined : result.error.issues[0].message
+    }));
+  };
+
+  // Specialized handler for Arrays (Dos/Donts)
+  // const handleArrayChange = (index: number, value: string, field: 'dos' | 'donts') => {
+  //   const updatedArray = [...formData[field]];
+  //   updatedArray[index] = value;
+  //   setFormData(prev => ({ ...prev, [field]: updatedArray }));
+  // };
+  //
+  // // Final Submission Validation
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const result = campaignSchema.safeParse(formData);
+  //
+  //   if (!result.success) {
+  //     const formattedErrors = result.error.flatten().fieldErrors;
+  //     // Map first error of each field to state
+  //     const newErrors: any = {};
+  //     for (const key in formattedErrors) {
+  //       newErrors[key] = formattedErrors[key as keyof CampaignFormData]?.[0];
+  //     }
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+
+  //   console.log("Form is valid!", result.data);
+  // };
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <input name="name" value={formData.name} onChange={handleChange} />
+      // {errors.name && <span className="error">{errors.name}</span>}
+//
+//       {/* Example for dynamic arrays */}
+//       {formData.dos.map((doItem, idx) => (
+//         <input 
+//           key={idx} 
+//           value={doItem} 
+//           onChange={(e) => handleArrayChange(idx, e.target.value, 'dos')} 
+//         />
+//       ))}
+//       <button type="submit">Create Campaign</button>
+//     </form>
+//   );
+// };
 
   const StepIndicator = () => (
     // justify-between ensures it uses the full width without overflow
@@ -111,31 +242,23 @@ const CreateCampaign: React.FC = () => {
             <div className="space-y-2">
               <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Campaign Title (Visible to Creators) <FieldRequired /></label>
               <input 
-                type="text" 
+                type="text"
+                name='title'
                 placeholder="Grab a pair of sunglasses and be a hero"
                 className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800"
                 value={formData.title}
-                onChange={e => setFormData({...formData, title: e.target.value})}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Campaign Name (Internal)</label>
-              <input 
-                type="text" 
-                placeholder="Spring/Summer Collection Launch (DK)"
-                className="w-full h-8 bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800"
-                value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
-              />
-              <p className="text-[9px] text-gray-600 font-bold uppercase ml-1">Visible only on your dashboard.</p>
+              {errors.title && <span className="error">{errors.title}</span>}
+              
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Target Country<FieldRequired /></label>
                 <select className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none appearance-none">
-                  <option>🇺🇬 Uganda</option>
+                  <option selected>🇺🇬 Uganda</option>
                 </select>
               </div>
             </div>
@@ -144,11 +267,14 @@ const CreateCampaign: React.FC = () => {
               <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Mission Brief <FieldRequired /></label>
               <textarea 
                 rows={4}
+                name='description'
                 placeholder="Describe what the campaign is about and what you expect..."
                 className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-6 px-8 text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800 resize-none"
                 value={formData.description}
-                onChange={e => setFormData({...formData, description: e.target.value})}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+              {errors.description && <span className="error">{errors.description}</span>}
             </div>
           </div>
         </div>
@@ -171,15 +297,15 @@ const CreateCampaign: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Launch Date</label>
-                <input type="date" value={formData.launchDate} className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none" />
+                <input name='launchDate' type="date" value={formData.launchDate} onChange={handleChange} onBlur={handleBlur} className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none" />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">End Date (Optional)</label>
-                <input type="date" className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none" />
+                <input name='endDate' type="date" className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none" onChange={handleChange} onBlur={handleBlur} />
               </div>
             </div>
 
-            <div className="space-y-6">
+            {/*<div className="space-y-6">
               <div className="flex items-center justify-between p-6 bg-[#11141A] rounded-2xl border border-white/5">
                 <div>
                   <p className="text-xs font-black text-white uppercase tracking-widest">Show Do's and Don'ts to creators</p>
@@ -193,7 +319,6 @@ const CreateCampaign: React.FC = () => {
                 </button>
               </div>
 
-              {/* Do's and Don'ts Dropdown */}
               {formData.showDosDonts && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-500">
                   <div className="space-y-3">
@@ -203,8 +328,11 @@ const CreateCampaign: React.FC = () => {
                     </div>
                     <input 
                       type="text"
+                      name='dons'
                       placeholder="Add a new 'Do'"
                       className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800 font-bold"
+                      onChange={handleChange} 
+                      onBlur={handleBlur} 
                     />
                   </div>
                   <div className="space-y-3">
@@ -214,13 +342,17 @@ const CreateCampaign: React.FC = () => {
                     </div>
                     <input 
                       type="text"
+                      name='donts'
                       placeholder="Add a new 'Dont'"
                       className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800 font-bold"
+                      onChange={handleChange} 
+                      onBlur={handleBlur} 
+
                     />
                   </div>
                 </div>
               )}
-            </div>
+            </div>*/}
           </div>
         </div>
 
@@ -347,7 +479,7 @@ const CreateCampaign: React.FC = () => {
               ))}
             </div>
 
-            <div className="p-8 bg-teal-500/5 border border-teal-500/10 rounded-[40px] flex items-center justify-between group">
+            {/*<div className="p-8 bg-teal-500/5 border border-teal-500/10 rounded-[40px] flex items-center justify-between group">
               <div className="flex items-center gap-6">
                 <div className="w-14 h-14 bg-teal-500 rounded-2xl flex items-center justify-center text-black text-2xl shadow-xl shadow-teal-500/20">⚡</div>
                 <div>
@@ -361,10 +493,13 @@ const CreateCampaign: React.FC = () => {
               >
                 <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 ${formData.enableAds ? 'left-8' : 'left-1'}`} />
               </button>
-            </div>
+            </div>*/}
           </div>
         </div>
       </div>
+
+
+      <ErrorAlert message={stepError} onClose={() => setStepError('')}/>
 
       <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
         <button 
@@ -375,12 +510,14 @@ const CreateCampaign: React.FC = () => {
           Previous Step
         </button>
 
+        
         <button 
-          onClick={step === 4 ? () => navigate('/') : nextStep}
-          disabled={true}
-          className="bg-teal-500 text-black font-black px-12 py-5 rounded-2xl text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-teal-500/20 active:scale-95 transition-all btn-bubble"
+        onClick={handleValidateStep}
+        disabled={false}
+        className="bg-teal-500 text-black font-black px-12 py-5 rounded-2xl text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-teal-500/20 active:scale-95 transition-all btn-bubble disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none disabled:scale-100 disabled:cursor-not-allowed"
         >
-          {step === 4 ? 'Deploy Campaign' : 'Next Step'}
+        {step === 4 ? 'Deploy' : 'Next Step'}
+
         </button>
       </div>
     </div>
