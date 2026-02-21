@@ -11,54 +11,7 @@ import KPICard from '../KPICard';
 
 import { PerformanceChart, SocialAnalytics } from '../Charts';
 import ActivitySection from '../ActivitySection';
-
-import { IconGlobe, IconTarget, IconUsers, IconCalendar } from "@tabler/icons-react";
-
-export const CampaignQuickCard = ({ campaign }:{campaign: any}) => {
-  return (
-    <div className="group p-5 bg-[#161B22] border border-white/5 rounded-2xl hover:border-teal-500/30 transition-all duration-300 shadow-lg">
-      <div className="flex justify-between items-start mb-3">
-        <h4 className="font-bold text-white group-hover:text-teal-400 transition-colors truncate pr-2">
-          {campaign.title || "Untitled Campaign"}
-        </h4>
-        <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-          campaign.visibility === 'open' ? 'bg-teal-500/10 text-teal-400' : 'bg-white/5 text-gray-500'
-        }`}>
-          {campaign.visibility}
-        </span>
-      </div>
-
-      <p className="text-xs text-gray-500 line-clamp-1 mb-4">
-        #{campaign.hashtags} • {campaign.productType}
-      </p>
-
-      {/* Grid of Campaign Details */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="flex items-center gap-2 text-gray-400">
-          <IconTarget size={14} className="text-teal-500" />
-          <span className="text-[11px] font-medium">${campaign.budget.toLocaleString()}</span>
-        </div>
-        <div className="flex items-center gap-2 text-gray-400">
-          <IconGlobe size={14} />
-          <span className="text-[11px] font-medium">UG ({campaign.country})</span>
-        </div>
-        <div className="flex items-center gap-2 text-gray-400">
-          <IconUsers size={14} />
-          <span className="text-[11px] font-medium">{campaign.ageRanges[0]}+</span>
-        </div>
-        <div className="flex items-center gap-2 text-gray-400">
-          <IconCalendar size={14} />
-          <span className="text-[11px] font-medium">{new Date(campaign.launchDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
-        </div>
-      </div>
-
-      {/* Progress/Budget Bar */}
-      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-        <div className="h-full bg-teal-500 w-1/3 rounded-full shadow-[0_0_8px_rgba(20,184,166,0.5)]" />
-      </div>
-    </div>
-  );
-};
+import YourCampaigns from './sections/YourCampaigns';
 
 
 const Home: React.FC = () => {
@@ -123,34 +76,9 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* RIGHT: Your Campaigns Section (Takes 1 column on LG) */}
-      <section className="bg-[#0D1117] border border-white/5 rounded-3xl p-6 flex flex-col max-h-[600px]">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-bold text-white tracking-tight">Your Campaigns</h3>
-          <button className="text-xs font-bold text-teal-400 hover:underline">View All</button>
-        </div>
-
-        {/* Scrollable Campaign List */}
-        <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar">
-          {/* Mapping through your Campaign Model data */}
-          {[1, 2, 3].map((_, i) => (
-            <CampaignQuickCard key={i} campaign={{
-                title: 'Summer Waves 2024',
-                country: 256,
-                launchDate: '2026-02-21',
-                hashtags: 'MWSS2024',
-                budget: 1500,
-                productType: 'Beverage',
-                ageRanges: ['18-24'],
-                visibility: 'open'
-            }} />
-          ))}
-        </div>
-
-        {/* Action Button */}
-        <button className="mt-6 w-full py-3 bg-teal-500 hover:bg-teal-400 text-[#0D1117] font-bold rounded-2xl transition-all shadow-[0_10px_20px_-10px_rgba(20,184,166,0.4)]">
-          + Create New Campaign
-        </button>
+      {/* RIGHT: Your Campaigns Section */}
+      <section className="bg-[#0D1117] border border-white/5 rounded-3xl p-6 flex flex-col h-[600px]">
+        <YourCampaigns />
       </section>
       
     </div>

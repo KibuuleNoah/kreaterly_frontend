@@ -17,6 +17,7 @@ import { IconChevronLeft, IconChevronRight, IconDots } from "@tabler/icons-react
 import type { CustomLink } from "../types";
 import type { Interface } from "readline";
 import { boolean } from "zod";
+import { pb } from "../lib/pocketbase";
 
 
 
@@ -118,8 +119,8 @@ const RetractableSidebar: React.FC<{ links: CustomLink[], Ctx: React.Context<Int
                     <div className="w-10 h-10 rounded-full bg-indigo-500 flex-shrink-0" />
                     <div className={`flex justify-between items-center overflow-hidden transition-all duration-300 ${expanded ? "w-40 ml-3" : "w-0"}`}>
                         <div className="leading-4 text-white">
-                            <h4 className="font-semibold truncate">constGenius</h4>
-                            <span className="text-xs text-gray-400 truncate">constgenius@gmail.com</span>
+                            <h4 className="font-semibold truncate">{pb.authStore.record?.name}</h4>
+                            <span className="text-xs text-gray-400 truncate">{pb.authStore.record?.email}</span>
                         </div>
                         <IconDots size={20} className="text-gray-400" />
                     </div>

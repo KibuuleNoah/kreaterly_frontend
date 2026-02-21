@@ -34,7 +34,7 @@ const CreatorDashboard = () => {
       } catch (err: any) {
         if (err.isAbort) return
         pb.authStore.clear();
-        navigate('/auth'); 
+        navigate('/auth?role=creator'); 
       }
     };
 

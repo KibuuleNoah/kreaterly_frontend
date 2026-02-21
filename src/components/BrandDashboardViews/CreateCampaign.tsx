@@ -28,7 +28,6 @@ const campaignSchema = z.object({
   ageRanges: z.array(z.string()).min(1, "Select at least one age range"),
   gender: z.enum(['F','M','B']),
   visibility: z.enum(['open', 'private']),
-  enableAds: z.boolean()
 });
 
 type CampaignFormData = z.infer<typeof campaignSchema>;
@@ -55,7 +54,6 @@ const CreateCampaign: React.FC = () => {
     ageRanges: ['18-24', '25-34'],
     gender: 'B',
     visibility: 'open',
-    enableAds: false
   });
 
   const navigate = useNavigate()

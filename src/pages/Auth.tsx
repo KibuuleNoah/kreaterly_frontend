@@ -7,12 +7,13 @@
 
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserRole, type AuthStep } from "../types";
 import UserRoleSelection from "../components/Auth/UserRoleSelection";
 import Login from "../components/Auth/Login";
 import VerifyOTP from "../components/Auth/VerifyOTP";
 import Landing from "./Landing";
+import { useSearchParams } from "react-router-dom";
 
 
 
@@ -22,6 +23,24 @@ const Auth: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
   const [authError, setAuthError] = useState<string>('');
   const [authOTPID, setAuthOTPID] = useState<string>('');
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(()=>{
+    const GetRoleAutomatically = () =>{
+      const role = searchParams.get('role');
+      if (role !== null){
+        if (role === 'brand'){
+          setSelectedUserRole(UserRole.BRAND)
+          setAuthStep('AUTH_ENTRY')
+        }else if (role === 'creator'){
+          setSelectedUserRole(UserRole.CREATOR)
+          setAuthStep('AUTH_ENTRY')
+        }
+      }
+    }
+    GetRoleAutomatically()
+  },[])
 
 
   // const usePersistState = (key: string, defaultValue: any, expiryInHours: number = 24) => {
