@@ -17,14 +17,14 @@ interface Props {
 const ErrorAlert = ({ message, onClose }: Props) => {
   useEffect(() => {
     if (!message) return;
-    const timer = setTimeout(onClose, 5000); // Auto-hide after 5s
+    const timer = setTimeout(onClose, 8000); // Auto-hide after 9s
     return () => clearTimeout(timer);
   }, [message, onClose]);
 
   if (!message) return null;
 
   return (
-    <div className="z-[100] flex justify-center pointer-events-none">
+    <div className="z-[100] flex justify-center pointer-events-none m-4">
       <div 
         role="alert"
         className="pointer-events-auto flex items-center gap-3 w-full max-w-[400px] p-4 rounded-xl border border-red-200 bg-red-100 shadow-2xl shadow-red-200/50 animate-in slide-in-from-bottom-5 md:slide-in-from-top-5 duration-300"

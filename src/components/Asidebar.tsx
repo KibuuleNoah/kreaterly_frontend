@@ -4,6 +4,7 @@ import { Icon, KreaterlyLogo } from "./Icons";
 import type { Interface } from "readline";
 import type { CustomLink } from "../types";
 import type React from "react";
+import AsidebarAccount from "./AsidebarAccount";
 
 const ASidebar: React.FC<{ links: CustomLink[], Ctx: React.Context<Interface> }> = ({ links, Ctx }) => {
 
@@ -24,17 +25,7 @@ const ASidebar: React.FC<{ links: CustomLink[], Ctx: React.Context<Interface> }>
       </nav>
 
       <div className="px-4 space-y-1 pt-8 border-t border-white/5">
-        <button 
-          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-500 hover:bg-white/5 hover:text-white font-bold text-sm tracking-tight transition-all"
-        >
-        <IconPlus size={20} stroke={1.5} />
-          <span>New campaign</span>
-        </button>
-        <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-500 hover:bg-white/5 hover:text-white font-bold text-sm tracking-tight transition-all">
-        <IconLifebuoy size={20} stroke={1.5} />
-          <span>Support</span>
-        </button>
-
+      <AsidebarAccount />  
       </div>
     </aside>
   );

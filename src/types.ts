@@ -4,6 +4,14 @@ import type { Dispatch, SetStateAction} from 'react';
 
 export type AuthStep = 'ROLE_SELECTION' | 'AUTH_ENTRY' | 'OTP_VERIFY';
 
+export interface KPI{
+  label: string
+  value: string
+  change: number
+  isPositive: boolean
+}
+
+
 export interface CustomLink{
   path: string
   label: string

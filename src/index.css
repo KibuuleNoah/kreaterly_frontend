@@ -6,6 +6,10 @@
   --color-brand-dark: #121063;
 }
 
+.error{
+  @apply text-red-500 font-bold
+}
+
 /*
 *.font-display { font-family: 'Bebas Neue', cursive; }
       

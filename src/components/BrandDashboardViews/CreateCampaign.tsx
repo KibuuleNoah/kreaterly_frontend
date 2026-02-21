@@ -4,27 +4,29 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import ErrorAlert from '../ErrorAlert';
+import { formatCurrency, ObjectKeysToSnakeCase } from '../../constants';
+import { pb } from '../../lib/pocketbase';
 
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3 ;
 
 
 const campaignSchema = z.object({
   title: z.string().min(5, "Title is too short"),
-  country: z.string().nonempty("Please select a country"),
-  description: z.string().min(100, "description is fakkkk").max(1000, "Description must be under 500 chars"),
+  country: z.number().positive("Please select a country"),
+  description: z.string().min(200, "Description Must be above 200 characters").max(5000, "Description must not exceed 5000 words"),
   // showDosDonts: z.boolean(),
   // dos: z.array(z.string().min(1, "Entry cannot be empty")),
   // donts: z.array(z.string().min(1, "Entry cannot be empty")),
   launchDate: z.string().refine((date) => new Date(date) > new Date(), {
     message: "Launch date must be in the future",
   }),
-  endDate: z.string().nonempty("End date is required"),
+  // endDate: z.string().optional("End date is required"),
   hashtags: z.string().startsWith("#", "Hashtags should start with #"),
   budget: z.coerce.number().positive("Budget must be greater than 0"),
   cpm: z.coerce.number().positive("CPM must be greater than 0"),
   productType: z.enum(['none', 'physical', 'digital']),
   ageRanges: z.array(z.string()).min(1, "Select at least one age range"),
-  gender: z.array(z.string()).min(1, "Select at least one gender"),
+  gender: z.enum(['F','M','B']),
   visibility: z.enum(['open', 'private']),
   enableAds: z.boolean()
 });
@@ -39,19 +41,19 @@ const CreateCampaign: React.FC = () => {
   const [stepError, setStepError] = useState('')
   const [formData, setFormData] = useState({
     title: '',
-    country: 'Uganda',
+    country: 256,
     description: '',
     // showDosDonts: false,
     // dos: [''],
     // donts: [''],
-    launchDate: '2026-02-06',
-    endDate: '',
+    launchDate: '2026-02-21',
+    // endDate: '',
     hashtags: 'MWSS2024',
-    budget: '',
-    cpm: '',
+    budget: 0,
+    cpm: 0,
     productType: 'none',
     ageRanges: ['18-24', '25-34'],
-    gender: ['Female', 'Male'],
+    gender: 'B',
     visibility: 'open',
     enableAds: false
   });
@@ -66,12 +68,43 @@ const CreateCampaign: React.FC = () => {
   //   return formData[key];
   // };
 
-  const handleValidateStep = () =>{
+  const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    const numericValue = parseInt(value.replace(/\D/g, ''), 10) ;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: numericValue || 0,
+    }));
+  };
+
+  const handleMoneyBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    const numericValue = parseInt(value.replace(/\D/g, ''), 10) ;
+
+    const fieldSchema = campaignSchema.shape[name as keyof CampaignFormData];
+    const result = fieldSchema.safeParse(numericValue);
+
+    setErrors(prev => ({
+      ...prev,
+      [name]: result.success ? undefined : result.error.issues[0].message
+    }));
+  };
+
+  // // Helper to format for display
+  // const formatCurrency = (val: string) => {
+  //   if (!val) return '';
+  //   // Convert string to number and add commas
+  //   return Number(val).toLocaleString('en-US');
+  // };
+  const handleValidateStep = async () =>{
     const isValidStep = (stepFields: string[]): boolean => {
       for ( const key of stepFields){
         const fieldSchema = campaignSchema.shape[key as keyof CampaignFormData];
         if (!fieldSchema.safeParse(formData[key as keyof typeof formData]).success){
-          setStepError('Errror')
+          setStepError("Oops, Some Input Field is Missing! or Invalid Please Check Above")
           return false
         }
       }
@@ -79,20 +112,26 @@ const CreateCampaign: React.FC = () => {
     }
 
     if (step === 1){
-      const stepFields = ['title','country','description']
+      const stepFields = ['title','country','description','launchDate']
       if (!isValidStep(stepFields)){return}
     }else if (step === 2){
-      const stepFields = ['title','country','description']
+      const stepFields = ['budget', 'cpm']
       if (!isValidStep(stepFields)){return}
 
     }else if (step === 3){
       const stepFields = ['title','country','description']
-      if (!isValidStep(stepFields)){return}
-
-    }else if (step === 4){
-      const stepFields = ['title','country','description']
-      if (!isValidStep(stepFields)){return}
-
+      if (!isValidStep(stepFields)){
+        return
+      }else{
+        const payload = ObjectKeysToSnakeCase(formData)
+        try {
+          await pb.collection('campaigns').create(payload)
+          navigate("/brand")
+        } catch (err: any) {
+          setStepError(err.message)
+          return
+        }
+      }
     }
 
     setStepError('')
@@ -169,7 +208,7 @@ const CreateCampaign: React.FC = () => {
   const StepIndicator = () => (
     // justify-between ensures it uses the full width without overflow
     <div className="flex items-center justify-between w-full mb-12 px-2">
-    {[1, 2, 3, 4].map((s) => (
+    {[1, 2, 3].map((s) => (
       <React.Fragment key={s}>
       {/* Circle: Scaled down to w-8 on small screens */}
       <div className={`shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center font-black text-[10px] sm:text-xs transition-all duration-500 ${
@@ -183,7 +222,7 @@ const CreateCampaign: React.FC = () => {
       </div>
 
       {/* Line: flex-1 allows it to shrink/grow based on screen size */}
-      {s < 4 && (
+      {s < 3 && (
         <div className="flex-1 mx-2 sm:mx-4">
         <div className={`h-0.5 w-full rounded-full transition-all duration-500 ${
           step > s ? 'bg-teal-500/40' : 'bg-white/5'
@@ -194,25 +233,6 @@ const CreateCampaign: React.FC = () => {
     ))}
     </div>
   );
-
-  // const StepIndicator = () => (
-  //   <div className="flex items-center mb-12">
-  //     {[1, 2, 3, 4].map((s) => (
-  //       <div key={s} className="flex items-center gap-4">
-  //         <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-xs transition-all duration-500 ${
-  //           step === s 
-  //           ? 'bg-teal-500 text-black shadow-[0_0_20px_rgba(20,184,166,0.5)] scale-110' 
-  //           : step > s 
-  //             ? 'bg-teal-500/20 text-teal-500' 
-  //             : 'bg-white/5 text-gray-600'
-  //         }`}>
-  //           {step > s ? '✓' : `0${s}`}
-  //         </div>
-  //         {s < 4 && <div className={`w-12 h-0.5 rounded-full transition-all duration-500 ${step > s ? 'bg-teal-500/40' : 'bg-white/5'}`} />}
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 
   const SectionHeader = ({ title, subtitle }: { title: string, subtitle: string }) => (
     <div className="mb-10 space-y-2">
@@ -276,14 +296,7 @@ const CreateCampaign: React.FC = () => {
               />
               {errors.description && <span className="error">{errors.description}</span>}
             </div>
-          </div>
-        </div>
 
-        {/* Step 2: Media & Timeline */}
-        <div className={`transition-all duration-700 ease-in-out ${step === 2 ? 'opacity-100 translate-x-0' : step < 2 ? 'opacity-0 translate-x-full absolute inset-0 pointer-events-none' : 'opacity-0 -translate-x-full absolute inset-0 pointer-events-none'}`}>
-          <SectionHeader title="Media & Timeline" subtitle="Set your launch windows and brand visuals." />
-          
-          <div className="space-y-10">
             <div className="p-8 bg-white/5 border border-dashed border-white/10 rounded-[40px] flex flex-col items-center justify-center text-center space-y-4 hover:border-teal-500/30 transition-all cursor-pointer">
               <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-gray-500">
                 <IconAdCircle />
@@ -294,94 +307,56 @@ const CreateCampaign: React.FC = () => {
               </div>
             </div>
 
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Launch Date</label>
                 <input name='launchDate' type="date" value={formData.launchDate} onChange={handleChange} onBlur={handleBlur} className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">End Date (Optional)</label>
-                <input name='endDate' type="date" className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white focus:border-teal-500/50 outline-none" onChange={handleChange} onBlur={handleBlur} />
+                {errors.launchDate && <span className="error">{errors.launchDate}</span>}
               </div>
             </div>
 
-            {/*<div className="space-y-6">
-              <div className="flex items-center justify-between p-6 bg-[#11141A] rounded-2xl border border-white/5">
-                <div>
-                  <p className="text-xs font-black text-white uppercase tracking-widest">Show Do's and Don'ts to creators</p>
-                  <p className="text-[10px] text-gray-500">Provide specific requirements and guidelines for the campaign.</p>
-                </div>
-                <button 
-                  onClick={() => setFormData({...formData, showDosDonts: !formData.showDosDonts})}
-                  className={`w-12 h-6 rounded-full transition-all duration-300 relative ${formData.showDosDonts ? 'bg-teal-500' : 'bg-gray-800'}`}
-                >
-                  <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${formData.showDosDonts ? 'left-7' : 'left-1'}`} />
-                </button>
-              </div>
-
-              {formData.showDosDonts && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-500">
-                  <div className="space-y-3">
-                    <div>
-                      <h4 className="text-[10px] font-black text-white uppercase tracking-widest pl-1">Do's</h4>
-                      <p className="text-[9px] text-gray-600 uppercase tracking-widest pl-1 font-bold">What should the creator do?</p>
-                    </div>
-                    <input 
-                      type="text"
-                      name='dons'
-                      placeholder="Add a new 'Do'"
-                      className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800 font-bold"
-                      onChange={handleChange} 
-                      onBlur={handleBlur} 
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <div>
-                      <h4 className="text-[10px] font-black text-white uppercase tracking-widest pl-1">Don'ts</h4>
-                      <p className="text-[9px] text-gray-600 uppercase tracking-widest pl-1 font-bold">What should the creator not do?</p>
-                    </div>
-                    <input 
-                      type="text"
-                      name='donts'
-                      placeholder="Add a new 'Dont'"
-                      className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800 font-bold"
-                      onChange={handleChange} 
-                      onBlur={handleBlur} 
-
-                    />
-                  </div>
-                </div>
-              )}
-            </div>*/}
           </div>
         </div>
 
-        {/* Step 3: Economy */}
-        <div className={`transition-all duration-700 ease-in-out ${step === 3 ? 'opacity-100 translate-x-0' : step < 3 ? 'opacity-0 translate-x-full absolute inset-0 pointer-events-none' : 'opacity-0 -translate-x-full absolute inset-0 pointer-events-none'}`}>
+        {/* Step 2: Economy */}
+        <div className={`transition-all duration-700 ease-in-out ${step === 2 ? 'opacity-100 translate-x-0' : step < 2 ? 'opacity-0 translate-x-full absolute inset-0 pointer-events-none' : 'opacity-0 -translate-x-full absolute inset-0 pointer-events-none'}`}>
           <SectionHeader title="Campaign Economy" subtitle="Define how you compensate Africa's best creators." />
           
           <div className="space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Total Budget (UGX)</label>
+                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Total Budget (UGX)<FieldRequired/></label>
                 <input 
-                  type="number" 
+                  type="text" 
+                  name='budget'
+                  value={formatCurrency(formData.budget)}
                   placeholder="25,000,000"
                   className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white text-2xl font-black focus:border-teal-500/50 outline-none" 
+                  onChange={handleMoneyChange}
+                  onBlur={handleMoneyBlur}
+
                 />
+                {errors.budget && <span className="error">{errors.budget}</span>}
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">CPM Target (UGX/1k)</label>
+                <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">CPM Target (UGX/1k)<FieldRequired/></label>
                 <input 
-                  type="number" 
-                  placeholder="12,000"
+                  type="text" 
+                  name='cpm'
+                  value={formatCurrency(formData.cpm)}
+                  placeholder="10,000"
                   className="w-full bg-[#11141A] border border-white/5 rounded-2xl py-5 px-8 text-white text-2xl font-black focus:border-teal-500/50 outline-none" 
+                  onChange={handleMoneyChange}
+                  onBlur={handleMoneyBlur}
+
                 />
+                {errors.cpm && <span className="error">{errors.cpm}</span>}
               </div>
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Product Requirement</label>
+              <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest pl-1">Product Requirement<FieldRequired/></label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
                   { id: 'custom', title: 'Custom Product', desc: 'Non-physical / Digital assets' },
@@ -412,8 +387,8 @@ const CreateCampaign: React.FC = () => {
           </div>
         </div>
 
-        {/* Step 4: Reach & Controls */}
-        <div className={`transition-all duration-700 ease-in-out ${step === 4 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full absolute inset-0 pointer-events-none'}`}>
+        {/* Step 3: Reach & Controls */}
+        <div className={`transition-all duration-700 ease-in-out ${step === 3 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full absolute inset-0 pointer-events-none'}`}>
           <SectionHeader title="Reach & Controls" subtitle="Targeting demographics and visibility settings." />
           
           <div className="space-y-12">
@@ -441,15 +416,15 @@ const CreateCampaign: React.FC = () => {
               <div className="space-y-4">
                 <label className="text-[10px] font-black text-teal-500 uppercase tracking-widest">Gender</label>
                 <div className="flex gap-2">
-                  {['Female', 'Male', 'Non-Binary'].map(g => (
+                  {['Female', 'Male', 'Both'].map(g => (
                     <button 
                       key={g}
-                      className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all ${formData.gender.includes(g) ? 'bg-teal-500 text-black' : 'bg-white/5 text-gray-500 hover:bg-white/10'}`}
+                      className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all ${formData.gender === g[0] ? 'bg-teal-500 text-black' : 'bg-white/5 text-gray-500 hover:bg-white/10'}`}
                       onClick={() => {
                         const next = formData.gender.includes(g) 
                           ? formData.gender.filter(item => item !== g)
-                          : [...formData.gender, g];
-                        setFormData({...formData, gender: next});
+                          : [...formData.gender, g[0]];
+                        setFormData({...formData, gender: next[0]});
                       }}
                     >
                       {g}
@@ -516,7 +491,7 @@ const CreateCampaign: React.FC = () => {
         disabled={false}
         className="bg-teal-500 text-black font-black px-12 py-5 rounded-2xl text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-teal-500/20 active:scale-95 transition-all btn-bubble disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none disabled:scale-100 disabled:cursor-not-allowed"
         >
-        {step === 4 ? 'Deploy' : 'Next Step'}
+        {step === 3 ? 'Deploy' : 'Next Step'}
 
         </button>
       </div>

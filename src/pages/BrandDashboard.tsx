@@ -20,31 +20,31 @@ const BrandDashboardCtx = React.createContext<BrandDashboardContextType | undefi
 const BrandDashboard = () => {
 
   const [activeView, setActiveView] = useState('Home');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Refresh the token to get the latest user data from server
-        const authData = await pb.collection('users').authRefresh({
-          requestKey: null
-        });
-        
-        // Verify the role is specifically "brand"
-        if (authData.record.role !== UserRole.BRAND) {
-          navigate('/creator')
-        }
-
-       setActiveView('Home') 
-      } catch (err: any) {
-        if (err.isAbort) return
-        pb.authStore.clear();
-        navigate('/auth'); 
-      }
-    };
-
-    checkAuth();
-  }, [navigate]);
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     try {
+  //       // Refresh the token to get the latest user data from server
+  //       const authData = await pb.collection('users').authRefresh({
+  //         requestKey: null
+  //       });
+  //
+  //       // Verify the role is specifically "brand"
+  //       if (authData.record.role !== UserRole.BRAND) {
+  //         navigate('/creator')
+  //       }
+  //
+  //      setActiveView('Home') 
+  //     } catch (err: any) {
+  //       if (err.isAbort) return
+  //       pb.authStore.clear();
+  //       navigate('/auth'); 
+  //     }
+  //   };
+  //
+  //   checkAuth();
+  // }, [navigate]);
 
   const renderContent = () => {
     switch(activeView) {

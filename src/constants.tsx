@@ -135,3 +135,20 @@ export const formatCurrency = (value: number) => {
     maximumFractionDigits: 0,
   }).format(value);
 };
+
+
+/**
+ * Utility to convert camelCase to snake_case
+ */
+export const CamelToSnakeCase = (str: string): string =>
+  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+
+/**
+ * Maps object keys from camelCase to snake_case
+ */
+export const ObjectKeysToSnakeCase = <T extends Record<string, any>>(obj: T): Record<string, any> => {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    acc[CamelToSnakeCase(key)] = value;
+    return acc;
+  }, {} as Record<string, any>);
+};
