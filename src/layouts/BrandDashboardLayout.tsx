@@ -17,6 +17,7 @@ import {
   IconLayoutDashboard,
 } from '@tabler/icons-react';
 import RetractableSidebar, { RetractableSidebarItem } from "../components/RetractableSidebar";
+import TopBar from "../components/TopBar";
 
 const BRAND_NAV_ITEMS = [
   { path: '/', label: 'Home', icon: <IconHome size={25} /> },
@@ -34,10 +35,9 @@ const BRAND_NAV_ITEMS = [
 const BrandDashboardLayout: React.FC<{ children: React.ReactNode, Ctx: React.Context<BrandDashboardContextType> }> = ({ children, Ctx }) => {
     return (
         <div className="flex min-h-screen bg-[#050505]">
-            {/* Sidebar */}
             <RetractableSidebar links={BRAND_NAV_ITEMS} Ctx={Ctx}/>
-                
-            {/* Main Content Area */}
+            <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />
+            <TopBar />
             {/* ml-20 matches the width of the retracted sidebar */}
             <main className="flex-1 md:ml-20 p-8 transition-all">
                 <header className="mb-8">
