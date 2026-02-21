@@ -18,6 +18,8 @@ import {
 } from '@tabler/icons-react';
 import RetractableSidebar, { RetractableSidebarItem } from "../components/RetractableSidebar";
 import TopBar from "../components/TopBar";
+import { GreetUser } from "../constants";
+import { pb } from "../lib/pocketbase";
 
 const BRAND_NAV_ITEMS = [
   { path: '/', label: 'Home', icon: <IconHome size={25} /> },
@@ -39,17 +41,15 @@ const BrandDashboardLayout: React.FC<{ children: React.ReactNode, Ctx: React.Con
             <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />
             <TopBar />
             {/* ml-20 matches the width of the retracted sidebar */}
-            <main className="flex-1 md:ml-20 p-8 transition-all">
+            <main className="mt-10 flex-1 md:ml-20 p-8 transition-all">
                 <header className="mb-8">
-                    <h1 className="text-2xl font-bold text-white">Project Overview</h1>
+                    <h1 className="text-2xl font-bold text-white">{ GreetUser() }<span className="text-gray-500 font-extrabold">{pb.authStore.record?.name || 'Admin'}</span></h1>
                     <p className="text-gray-400">Welcome back to your dashboard.</p>
                 </header>
 
-                {/* Dashboard Grid */}
                 
                 {children}
                 
-                <div className="mt-8 h-96 rounded-xl bg-[#0D1117] border border-white/5" />
             </main>
         </div>
     );
