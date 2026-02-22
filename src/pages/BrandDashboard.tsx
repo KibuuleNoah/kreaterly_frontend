@@ -9,8 +9,9 @@ import Calendar from "../components/BrandDashboardViews/Calendar";
 import Comments from "../components/BrandDashboardViews/Comments";
 import { pb } from "../lib/pocketbase";
 import { useNavigate } from "react-router-dom";
-import LogOutButton from "../components/LogOutButton";
 import CreateCampaign from "../components/BrandDashboardViews/CreateCampaign";
+import LoadingScreen from "../components/LoadingScreen";
+import BrandFirstTime from "../components/BrandDashboardViews/BrandFirstTime";
 // import { Icon } from "../components/Icons";
 // Import specific Tabler icons
 
@@ -20,6 +21,8 @@ const BrandDashboardCtx = React.createContext<BrandDashboardContextType | undefi
 const BrandDashboard = () => {
 
   const [activeView, setActiveView] = useState('Home');
+  const [isBrandFirstTime, setIsBrandFirstTime] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +46,22 @@ const BrandDashboard = () => {
       }
     };
 
+
+    const checkIfBrandFirstTime = async () => {
+
+      try{
+        await pb.collection('campaigns').getFirstListItem(`user_id="${pb.authStore.record?.id}"`);
+      }catch(err: any){
+        if (err.status == 404){
+          setIsBrandFirstTime(true)
+        }
+      }
+      setIsLoading(false)
+    };
+    
     checkAuth();
+    checkIfBrandFirstTime();
+
   }, [navigate]);
 
   const renderContent = () => {
@@ -52,22 +70,26 @@ const BrandDashboard = () => {
       case 'Review Content': return <ReviewContent />
       case 'Calendar': return <Calendar />
       case 'Comments': return <Comments />
-      case 'New': return <CreateCampaign />
-      // case 'Messaging': return <Messaging />
+      case 'Create Campaign': return <CreateCampaign Ctx={BrandDashboardCtx}/>
       default: return <Home />;
     }
   };
 
+
+
   return (
-    <BrandDashboardCtx.Provider value={{ activeView, setActiveView }}>
+    <BrandDashboardCtx.Provider value={{ activeView, setActiveView, setIsLoading }}>
+    {isLoading && (<LoadingScreen />)}
+    {!isLoading && isBrandFirstTime && activeView != 'Create Campaign'
+      ? (<BrandFirstTime Ctx={ BrandDashboardCtx }/>)
+      : (
       <BrandDashboardLayout Ctx={ BrandDashboardCtx }>
-        {activeView}
         {renderContent()}
-        {/*<LogOutButton/>*/}
       </BrandDashboardLayout>
+      )
+    }
     </BrandDashboardCtx.Provider>
   )
 }
 
-    
 export default BrandDashboard;

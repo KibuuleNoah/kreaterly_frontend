@@ -45,6 +45,8 @@ export interface CreatorDashboardContextType {
 export interface BrandDashboardContextType {
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  isBrandFirstTime: boolean;
 }
 
 export enum Platform {

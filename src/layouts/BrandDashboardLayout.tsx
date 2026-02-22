@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import MobileNav from "../components/MobileNav";
 
 
@@ -20,6 +20,7 @@ import RetractableSidebar, { RetractableSidebarItem } from "../components/Retrac
 import TopBar from "../components/TopBar";
 import { GreetUser } from "../constants";
 import { pb } from "../lib/pocketbase";
+import LoadingScreen from "../components/LoadingScreen";
 
 const BRAND_NAV_ITEMS = [
   { path: '/', label: 'Home', icon: <IconHome size={25} /> },
@@ -35,25 +36,45 @@ const BRAND_NAV_ITEMS = [
 
 
 const BrandDashboardLayout: React.FC<{ children: React.ReactNode, Ctx: React.Context<BrandDashboardContextType> }> = ({ children, Ctx }) => {
-    return (
-        <div className="flex min-h-screen bg-[#050505]">
-            <RetractableSidebar links={BRAND_NAV_ITEMS} Ctx={Ctx}/>
-            <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />
-            <TopBar />
-            {/* ml-20 matches the width of the retracted sidebar */}
-            <main className="mt-10 flex-1 md:ml-20 p-8 transition-all">
-                <header className="mb-8">
-                    <h1 className="text-2xl font-bold text-white">{ GreetUser() }<span className="text-gray-500 font-extrabold">{pb.authStore.record?.name || 'Admin'}</span></h1>
-                    <p className="text-gray-400">Welcome back to your dashboard.</p>
-                </header>
+  const {isBrandFirstTime} = useContext<BrandDashboardContextType>(Ctx)  
+  return (
+    <>
+      <div className="flex min-h-screen bg-[#050505]">
+        {isBrandFirstTime && <RetractableSidebar links={BRAND_NAV_ITEMS} Ctx={Ctx}/>}
+        {isBrandFirstTime && <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />}
+        <TopBar />
 
+        <main className="mt-10 flex-1 md:ml-20 p-8 transition-all">
+          <header className="mb-8">
+            <h1 className="text-2xl font-bold text-white">{ GreetUser() }<span className="text-gray-500 font-extrabold">{pb.authStore.record?.name || 'Admin'}</span></h1>
+              {isBrandFirstTime && <p className="text-gray-400">Welcome back to your dashboard.</p>}
+          </header>
                 
-                {children}
+            {children}
                 
-            </main>
-        </div>
+        </main>
+      </div>
+    </>
     );
 }
+
+// <div className="flex min-h-screen bg-[#050505]">
+//             <RetractableSidebar links={BRAND_NAV_ITEMS} Ctx={Ctx}/>
+//             <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />
+//             <TopBar />
+//             {/* ml-20 matches the width of the retracted sidebar */}
+//             <main className="mt-10 flex-1 md:ml-20 p-8 transition-all">
+//                 <header className="mb-8">
+//                     <h1 className="text-2xl font-bold text-white">{ GreetUser() }<span className="text-gray-500 font-extrabold">{pb.authStore.record?.name || 'Admin'}</span></h1>
+//                     <p className="text-gray-400">Welcome back to your dashboard.</p>
+//                 </header>
+//
+//
+//                 {children}
+//
+//             </main>
+//         </div>
+
 
 // const BrandDashboardLayout: React.FC<{ children: React.ReactNode, Ctx: React.Context<BrandDashboardContextType> }> = ({ children, Ctx }) => {
 //

@@ -72,10 +72,6 @@ const Auth: React.FC = () => {
     setAuthStep('AUTH_ENTRY');
   };
 
-  // const handleAuthStepLocation = (step: AuthStep) =>{
-  //   setAuthStep(step)
-  // }
-
   
   const renderContent = () => {
     switch(authStep) {

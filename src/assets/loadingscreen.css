@@ -1,0 +1,66 @@
+.loader-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0f172a; /* Dark background */
+  z-index: 9999;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.brand-name {
+  color: #2dd4bf; /* Kreaterly Teal */
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  letter-spacing: -0.05em;
+}
+
+.loader-message {
+  color: #94a3b8;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  animation: pulse 2s infinite;
+}
+
+/* YOUR CUSTOM ANIMATION */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+  margin: 0 auto;
+}
+
+.loader::before,
+.loader::after {    
+  content: "";
+  grid-area: 1/1;
+  --c: no-repeat radial-gradient(farthest-side, #2dd4bf 92%, #0000);
+  background: 
+    var(--c) 50%  0, 
+    var(--c) 50%  100%, 
+    var(--c) 100% 50%, 
+    var(--c) 0    50%;
+  background-size: 12px 12px;
+  animation: l12 1s infinite;
+}
+
+.loader::before {
+  margin: 4px;
+  filter: hue-rotate(45deg);
+  background-size: 8px 8px;
+  animation-timing-function: linear;
+}
+
+@keyframes l12 { 
+  100% { transform: rotate(.5turn); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

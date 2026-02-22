@@ -1,11 +1,12 @@
 
 import { IconAdCircle } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import ErrorAlert from '../ErrorAlert';
 import { formatCurrency, ObjectKeysToSnakeCase } from '../../constants';
 import { pb } from '../../lib/pocketbase';
+import type { BrandDashboardContextType } from '../../types';
 
 type Step = 1 | 2 | 3 ;
 
@@ -34,7 +35,8 @@ type CampaignFormData = z.infer<typeof campaignSchema>;
 
 const FieldRequired = () => (<span className='text-red-500 font-bold text-xl'>*</span>)
 
-const CreateCampaign: React.FC = () => {
+const CreateCampaign: React.FC<{Ctx: React.Context<BrandDashboardContextType> }> = ({Ctx}) => {
+  const {setActiveView, setIsLoading} = useContext<BrandDashboardContextType>(Ctx)
   const [step, setStep] = useState<Step>(1);
   const [errors, setErrors] = useState<Partial<Record<keyof CampaignFormData, string>>>({});
   const [stepError, setStepError] = useState('')
@@ -242,7 +244,7 @@ const CreateCampaign: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto py-10">
       <button 
-        onClick={() => navigate(-1)} 
+        onClick={() => setActiveView('Home')} 
         className="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-[0.4em] mb-12 transition-colors"
       >
         ← Abandon Creation

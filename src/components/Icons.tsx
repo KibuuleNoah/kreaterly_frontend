@@ -24,6 +24,68 @@ export const KreaterlyLogo = () => (
     </div>
 );
 
+
+export const KreaterlyLogoAnimateDraw = () => (
+    <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+        <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full text-teal-400 fill-current drop-shadow-[0_0_12px_rgba(45,212,191,0.5)]"
+        >
+            <motion.path
+                d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
+                stroke="currentColor"
+                strokeWidth="12"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatType: "reverse"
+                }}
+            />
+            <motion.path 
+                d="M78 12 L92 5 L85 22 Z" 
+                fill="currentColor"
+                initial={{ scale: 0 }}
+                animate={{ scale: [0, 1.2, 1] }}
+                transition={{ 
+                    duration: 1, 
+                    repeat: Infinity, 
+                    repeatDelay: 1 
+                }}
+            />
+        </svg>
+    </div>
+);
+
+
+export const KreaterlyLogoAnimateGrow = () => (
+    <div className="w-10 h-10 flex items-center justify-center">
+        <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full text-teal-400 fill-current animate-pulse"
+        >
+            <path
+                className="transition-all duration-700"
+                d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
+                stroke="currentColor"
+                strokeWidth="12"
+                strokeLinecap="round"
+                fill="none"
+            />
+            {/* The spark/arrow-head blinks faster */}
+            <path 
+                d="M78 12 L92 5 L85 22 Z" 
+                fill="currentColor" 
+                className="animate-bounce"
+            />
+        </svg>
+    </div>
+);
+
 // export const KreaterlyLogo = () => {
 //     // Professional spring physics for that "snappy" Google feel
 //     const springTransition = {

@@ -3,6 +3,7 @@ import SocialLoginButton from "../SociaLoginButton"
 import type { AuthStep, UserRole } from "../../types"
 import { useEffect, useState } from "react"
 import { pb } from "../../lib/pocketbase"
+import { KreaterlyLogoAnimateDraw, KreaterlyLogoAnimateGrow } from "../Icons"
 
 
 
@@ -75,9 +76,7 @@ const Login = ({ selectedUserRole, identifier, setIdentifier, setAuthError, setA
         <div className="max-w-md w-full space-y-12">
           <div className="space-y-8">
             <div className="flex items-center gap-4 group cursor-pointer" onClick={()=>{}}>
-              <div className="w-11 h-11 bg-teal-500 rounded-2xl flex items-center justify-center text-black font-black shadow-[0_4px_30px_rgba(20,184,166,0.3)]">
-                <span className="text-xl font-display leading-none pt-0.5">KkKkkk</span>
-              </div>
+              <KreaterlyLogoAnimateDraw />  
               <span className="font-display text-4xl tracking-tight text-white uppercase pt-1">Kreaterly</span>
             </div>
 
