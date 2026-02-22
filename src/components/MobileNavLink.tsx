@@ -3,13 +3,12 @@ import type { CreatorDashboardContextType, CustomLink } from "../types"
 import { useContext } from "react"
 
 
-const MobileNavLink = ({ link, Ctx }: { link: CustomLink, Ctx: React.Context<CreatorDashboardContextType>}) => {
+const MobileNavLink: React.FC<{ link: CustomLink, Ctx: React.Context<CreatorDashboardContextType>}> = ({ link, Ctx }) => {
 
   const {activeView, setActiveView} = useContext(Ctx)
 
   return (
     <a
-    key={link.label}
     onClick={()=>{setActiveView(link.label)}}
     className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 ${
         activeView == link.label

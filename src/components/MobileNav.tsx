@@ -27,7 +27,7 @@ const MobileNav = ({
     <>
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] md:hidden w-[90%] max-w-sm">
     <nav className="flex links-center justify-between p-2 bg-[#0D1117]/90 backdrop-blur-3xl border border-white/10 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-    {primaryLinks.map(link => <MobileNavLink link={link} Ctx={Ctx} /> )}
+    {primaryLinks.map((link, idx) => <MobileNavLink key={idx} link={link} Ctx={Ctx} /> )}
 
     {links.length > 5 ? (
       <button

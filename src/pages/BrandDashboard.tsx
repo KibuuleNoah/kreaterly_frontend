@@ -21,7 +21,7 @@ const BrandDashboardCtx = React.createContext<BrandDashboardContextType | undefi
 const BrandDashboard = () => {
 
   const [activeView, setActiveView] = useState('Home');
-  const [isBrandFirstTime, setIsBrandFirstTime] = useState(true);
+  const [isBrandFirstTime, setIsBrandFirstTime] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -71,7 +71,7 @@ const BrandDashboard = () => {
       case 'Calendar': return <Calendar />
       case 'Comments': return <Comments />
       case 'Create Campaign': return <CreateCampaign Ctx={BrandDashboardCtx}/>
-      default: return <Home />;
+      default: return <Home Ctx={BrandDashboardCtx} />;
     }
   };
 

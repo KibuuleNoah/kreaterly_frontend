@@ -10,7 +10,7 @@ import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 
 const KPICard: React.FC<KPI> = ({ label, value, change, isPositive } ) => {
   return (
-    <div key={label} className="rounded-xl bg-[#0D1117] border border-white/5 p-6 shadow-sm hover:border-white/10 transition-colors">
+    <div className="rounded-xl bg-[#0D1117] border border-white/5 p-6 shadow-sm hover:border-white/10 transition-colors">
       {/* Header: Label & Trend Icon */}
       <div className="flex justify-between items-start mb-4">
           <span className="text-gray-400 text-sm font-medium">{label}</span>

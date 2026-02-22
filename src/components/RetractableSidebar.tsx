@@ -16,7 +16,6 @@ import type React from "react";
 import { IconChevronLeft, IconChevronRight, IconDots } from "@tabler/icons-react"
 import type { CustomLink } from "../types";
 import type { Interface } from "readline";
-import { boolean } from "zod";
 import { pb } from "../lib/pocketbase";
 
 
@@ -24,31 +23,8 @@ import { pb } from "../lib/pocketbase";
 
 
 
-// const AsideNavLink = ({ link, Ctx }: { link: CustomLink, Ctx: React.Context<Interface>}) => {
-//
-//   const {activeView, setActiveView} = useContext(Ctx)
-//
-//   return (
-//     <a
-//     key={link.path}
-//     onClick={()=>{setActiveView(link.label)}}
-//     className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 font-bold text-sm tracking-tight ${
-//       activeView == link.label
-//         ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20' 
-//         : 'text-gray-500 hover:bg-white/5 hover:text-white'
-//     }`}
-//     >
-//     <div className={ activeView == link.label ? 'text-teal-400 scale-110' : 'text-gray-500 transition-transform'}>
-//     {link.icon}
-//     </div>
-//     <span className="tracking-tight">{link.label}</span>
-//     </a>
-//   )
-// }
 
-
-
-export const RetractableSidebarItem = ({ link, Ctx, badge, sidebarExpanded }: { link: any, Ctx: React.Context<any>, badge?: boolean, sidebarExpanded: boolean }) => {
+export const RetractableSidebarItem: React.FC<{ link: any, Ctx: React.Context<any>, badge?: boolean, sidebarExpanded: boolean }> = ({ link, Ctx, badge, sidebarExpanded }) => {
   const { activeView, setActiveView } = useContext(Ctx)
 
   return (
@@ -112,7 +88,7 @@ const RetractableSidebar: React.FC<{ links: CustomLink[], Ctx: React.Context<Int
                 </div>
 
                 <ul className="flex-1 px-4 space-y-1">
-                  {links.map(link => <RetractableSidebarItem link={link} Ctx={Ctx} sidebarExpanded={expanded} badge={link.label === "Creators" }/> )}
+                  {links.map((link, idx) => <RetractableSidebarItem key={idx} link={link} Ctx={Ctx} sidebarExpanded={expanded} badge={link.label === "Creators" }/> )}
                 </ul>
 
                 <div className="border-t border-white/10 flex p-3 items-center">

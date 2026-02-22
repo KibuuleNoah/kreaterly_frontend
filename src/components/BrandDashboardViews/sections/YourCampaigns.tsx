@@ -1,6 +1,6 @@
 
 import { IconGlobe, IconTarget, IconUsers, IconCalendar, IconPlus, IconPackageOff, IconAlertTriangle } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { pb } from "../../../lib/pocketbase"
 
 
@@ -8,7 +8,7 @@ import { pb } from "../../../lib/pocketbase"
 
 
 
-import type { Campaign } from "../../../types";
+import type { BrandDashboardContextType, Campaign } from "../../../types";
 
 
 
@@ -66,37 +66,8 @@ export const YourCampaignCard = ({ campaign }:{campaign: any}) => {
 };
 
 
-
-const CAMPAIGNS: Campaign[] = [
-  {
-    title: 'Summer Sale',
-    country: 1,
-    description: 'Get discounts on summer products',
-    launchDate: '2024-07-01',
-    hashtags: '#NewArrivals',
-    budget: 1000,
-    cpm: 5,
-    productType: 'physical',
-    ageRanges: ['18-24', '25-34'],
-    gender: 'B',
-    visibility: 'open',
-  },
-  {
-    title: 'New Arrival',
-    country: 2,
-    description: 'Check out our latest collection',
-    launchDate: '2024-08-01',
-    hashtags: '#NewArrivals',
-    budget: 500,
-    cpm: 3,
-    productType: 'digital',
-    ageRanges: ['25-34', '35-44'],
-    gender: 'F',
-    visibility: 'private',
-  },
-];
-
-const YourCampaigns = () => {
+const YourCampaigns: React.FC<{Ctx: React.Context<BrandDashboardContextType> }> = ({ Ctx }) => {
+  const { setActiveView } = useContext<BrandDashboardContextType>(Ctx)
   const [campaigns, setCampaigns] = useState<any[] | null >(null);
   const [error, setError] = useState(null);
   const fetched = useRef(false); 
@@ -173,7 +144,6 @@ const YourCampaigns = () => {
         {/* DATA STATE */}
         { !error && campaigns ? (
           <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar">
-          yyyy  
           {campaigns.map((c, i) => (
               <YourCampaignCard key={i} campaign={c} />
             ))}
@@ -185,7 +155,7 @@ const YourCampaigns = () => {
         
         {/* Action Button */}
         { !error && campaigns ? (
-          <button className="mt-6 w-full py-3 bg-teal-500 hover:bg-teal-400 text-[#0D1117] font-bold rounded-2xl transition-all shadow-[0_10px_20px_-10px_rgba(20,184,166,0.4)]">
+          <button onClick={()=> setActiveView('Create Campaign')} className="mt-6 w-full py-3 bg-teal-500 hover:bg-teal-400 text-[#0D1117] font-bold rounded-2xl transition-all shadow-[0_10px_20px_-10px_rgba(20,184,166,0.4)]">
             + Create New Campaign
           </button>
         ) : ''}

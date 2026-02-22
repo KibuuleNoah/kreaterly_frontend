@@ -15,22 +15,19 @@ import {
   IconSettings,
   IconUserPlus, 
   IconLayoutDashboard,
+  IconSpeakerphone,
 } from '@tabler/icons-react';
 import RetractableSidebar, { RetractableSidebarItem } from "../components/RetractableSidebar";
 import TopBar from "../components/TopBar";
 import { GreetUser } from "../constants";
 import { pb } from "../lib/pocketbase";
-import LoadingScreen from "../components/LoadingScreen";
 
 const BRAND_NAV_ITEMS = [
   { path: '/', label: 'Home', icon: <IconHome size={25} /> },
-  { path: '/new', label: 'New', icon: <IconUserPlus size={25} /> },
   { path: '/creators', label: 'Creators', icon: <IconUsers size={25} /> },
+  { path: '/camp', label: 'Campaigns', icon: <IconSpeakerphone size={25} /> },
   { path: '/funds', label: 'Funds', icon: <IconCoin size={25} /> },
-  // { path: '/messaging', label: 'Messaging', icon: <IconMessage size={25} /> },
-  // { path: '/comments', label: 'Comments', icon: <IconMessageDots size={25} /> },
   { path: '/review', label: 'Review Content', icon: <IconFileCheck size={25} /> },
-  // { path: '/calendar', label: 'Calendar', icon: <IconCalendar size={25} /> },
   { path: '/settings', label: 'Settings', icon: <IconSettings size={25} /> },
 ];
 
@@ -40,8 +37,8 @@ const BrandDashboardLayout: React.FC<{ children: React.ReactNode, Ctx: React.Con
   return (
     <>
       <div className="flex min-h-screen bg-[#050505]">
-        {isBrandFirstTime && <RetractableSidebar links={BRAND_NAV_ITEMS} Ctx={Ctx}/>}
-        {isBrandFirstTime && <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />}
+        {!isBrandFirstTime && <RetractableSidebar links={BRAND_NAV_ITEMS} Ctx={Ctx}/>}
+        {!isBrandFirstTime && <MobileNav links={BRAND_NAV_ITEMS} Ctx={Ctx} />}
         <TopBar />
 
         <main className="mt-10 flex-1 md:ml-20 p-8 transition-all">

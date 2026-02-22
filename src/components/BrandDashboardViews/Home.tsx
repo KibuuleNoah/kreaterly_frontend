@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import KPICard from '../KPICard';
 
 
@@ -12,10 +12,13 @@ import KPICard from '../KPICard';
 import { PerformanceChart, SocialAnalytics } from '../Charts';
 import ActivitySection from '../ActivitySection';
 import YourCampaigns from './sections/YourCampaigns';
+import type { BrandDashboardContextType } from '../../types';
 
 
-const Home: React.FC = () => {
-
+const Home: React.FC<{Ctx: React.Context<BrandDashboardContextType> }> = ({Ctx}) => {
+  
+  // const {  } = useContext<BrandDashboardContextType>(Ctx)
+  
   const KPIS = [
     { label: 'Total Views', value: '12.4M', change: 12.5, isPositive: true },
     { label: 'Engagement Rate', value: '6.21%', change: -1.4, isPositive: false },
@@ -29,7 +32,7 @@ const Home: React.FC = () => {
     {/* KPI Section */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-      {KPIS.map(kpi => <KPICard label={kpi.label} value={kpi.value} change={kpi.change} isPositive={kpi.isPositive}/>)}                
+      {KPIS.map((kpi, idx) => <KPICard key={idx} label={kpi.label} value={kpi.value} change={kpi.change} isPositive={kpi.isPositive}/>)}                
      
     </div>
 
@@ -78,7 +81,7 @@ const Home: React.FC = () => {
 
       {/* RIGHT: Your Campaigns Section */}
       <section className="bg-[#0D1117] border border-white/5 rounded-3xl p-6 flex flex-col h-[600px]">
-        <YourCampaigns />
+        <YourCampaigns Ctx={Ctx}/>
       </section>
       
     </div>
