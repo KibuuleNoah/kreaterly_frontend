@@ -1,3 +1,4 @@
+import { IconBuilding } from '@tabler/icons-react';
 import React, { useState } from 'react';
 
 const Settings: React.FC = () => {
@@ -7,7 +8,6 @@ const Settings: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-8 md:space-y-12 animate-in slide-in-from-bottom-4 duration-700 pb-20">
       <header className="space-y-2">
-        <p className="text-teal-500 text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em]">Configuration Node</p>
         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase font-display leading-none">Brand Settings</h1>
         <p className="text-gray-500 text-sm md:text-lg font-medium leading-snug">Manage your identity, billing methods, and team access.</p>
       </header>
@@ -29,8 +29,9 @@ const Settings: React.FC = () => {
         {activeTab === 'Profile' && (
           <div className="space-y-8 md:space-y-10 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8 text-center sm:text-left">
-               <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-[32px] bg-black/40 border border-white/10 flex items-center justify-center text-3xl md:text-4xl relative group cursor-pointer overflow-hidden flex-shrink-0">
-                 🏢
+               <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-[32px] bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-3xl md:text-4xl relative group cursor-pointer overflow-hidden flex-shrink-0">
+                 
+               <IconBuilding className='text-teal-500' size={40}/>
                  <div className="absolute inset-0 bg-teal-500/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-black text-[10px] font-black uppercase transition-all">Upload</div>
                </div>
                <div className="space-y-1">
@@ -41,7 +42,7 @@ const Settings: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1">Company Name</label>
+                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1">Brand Name</label>
                 <input type="text" defaultValue={storedUser.company || 'Nile Breweries'} className="w-full bg-black/40 border border-white/5 rounded-xl md:rounded-2xl py-4 px-6 text-white font-bold focus:border-teal-500/50 outline-none transition-all" />
               </div>
               <div className="space-y-2">

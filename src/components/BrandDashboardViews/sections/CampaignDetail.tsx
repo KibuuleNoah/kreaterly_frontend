@@ -1,0 +1,399 @@
+import React, { useState } from "react";
+
+import { useParams } from "react-router-dom";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { MOCK_CAMPAIGNS } from "../../../constants";
+import { Platform } from "../../../types";
+import {
+  IconBrandInstagram,
+  IconBrandTiktok,
+  IconBrandYoutube,
+  IconUserPlus,
+} from "@tabler/icons-react";
+
+const CPM_CHART_DATA = [
+  { name: "Feb 6", cpm: 1 },
+  { name: "Feb 6 4:44 AM", cpm: 1 },
+  { name: "Feb 7", cpm: 1 },
+];
+
+const CampaignDetail: React.FC = () => {
+  const { id } = useParams();
+
+  const campaign = MOCK_CAMPAIGNS[0]; //.find((c) => c.id === id);
+  const [showSubmit, setShowSubmit] = useState(false);
+  const [submissionLink, setSubmissionLink] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  if (!campaign) {
+    return (
+      <div className="p-20 text-center text-white font-display text-2xl">
+        Campaign Not Found
+      </div>
+    );
+  }
+
+  const budgetProgress = (campaign.paidOutUSD / campaign.totalBudgetUSD) * 100;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitSuccess(true);
+      setSubmissionLink("");
+      setTimeout(() => setShowSubmit(false), 3000);
+    }, 1500);
+  };
+
+  return (
+    <div className="bg-[#0A0B0E] min-h-screen text-white pb-20 space-y-12">
+      {/* Header Info */}
+      <div className="space-y-6">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+          {campaign.title}
+        </h1>
+        <p className="text-gray-400 text-lg md:text-xl max-w-4xl">
+          {campaign.description}
+        </p>
+
+        <div className="flex flex-wrap items-center gap-4 text-sm font-bold">
+          <span className="bg-teal-500/20 text-teal-400 border border-teal-500/30 px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest bg-[#E91E63]/10 text-[#E91E63]">
+            {campaign.type}
+          </span>
+          <span className="bg-teal-500/20 text-teal-400 border border-teal-500/30 px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest bg-[#E91E63]/10 text-[#E91E63]">
+            {campaign.category}
+          </span>
+          <span className="text-gray-500">•</span>
+          <span className="text-white">{campaign.cpmUSD} / 1k views</span>
+          <span className="text-gray-500">•</span>
+          <div className="flex gap-2">
+            <IconBrandTiktok />
+            <IconBrandInstagram />
+          </div>
+          <span className="text-gray-500">•</span>
+          <span className="text-gray-400">
+            Avg review time:{" "}
+            <span className="text-green-500">{campaign.avgReviewTime}</span>
+          </span>
+          <span className="text-gray-500">•</span>
+          <span className="bg-white/5 border border-white/10 px-3 py-1 rounded-lg text-xs">
+            {campaign.approvalRate}% Approval Rate
+          </span>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <button className=" group w-full sm:w-64 mt-8 py-4 px-8 flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] bg-teal-500/10 text-teal-400 border border-teal-500/20 rounded-2xl shadow-[0_0_20px_rgba(20,184,166,0.05)] transition-all duration-300 ease-out hover:bg-teal-500 hover:text-[#0D1117] hover:border-teal-400 hover:shadow-[0_0_30px_rgba(20,184,166,0.3)] hover:-translate-y-1 active:scale-95 active:translate-y-0 ">
+          {/* The Icon */}
+          <IconUserPlus
+            size={18}
+            stroke={2.5}
+            className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
+          />
+
+          <span>Invite</span>
+
+          {/* Subtle indicator dot for "Pro" feel */}
+          <span className="ml-auto w-1 h-1 rounded-full bg-teal-400 group-hover:bg-[#0D1117] transition-colors" />
+        </button>
+      </div>
+
+      {/* Main Campaign Image */}
+      <div className="rounded-3xl overflow-hidden border border-white/5 shadow-2xl">
+        <img
+          src={campaign.image}
+          className="w-full h-[500px] object-cover"
+          alt="Campaign Banner"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="lg:col-span-12 space-y-12">
+          {/* Campaign Overview Section */}
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold">Campaign Details</h2>
+
+            <div className="space-y-4">
+              {/* Budget Card */}
+              <div className="bg-[#11141A] border border-white/5 p-8 rounded-3xl space-y-6">
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                    Budget Remaining
+                  </p>
+                  <h3 className="text-4xl font-black">
+                    $
+                    {(
+                      campaign.totalBudgetUSD - campaign.paidOutUSD
+                    ).toLocaleString()}
+                    k
+                  </h3>
+                  <p className="text-xs text-gray-400">
+                    Paid Out: ${campaign.paidOutUSD} / $
+                    {campaign.totalBudgetUSD / 1000}k
+                  </p>
+                </div>
+                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-orange-500/40"
+                    style={{ width: `${budgetProgress}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Detail List */}
+              <div className="bg-[#11141A] border border-white/5 rounded-3xl overflow-hidden divide-y divide-white/5">
+                <div className="flex justify-between items-center p-6">
+                  <span className="text-sm text-gray-400">Category</span>
+                  <span className="text-sm font-bold">{campaign.category}</span>
+                </div>
+                <div className="flex justify-between items-center p-6">
+                  <span className="text-sm text-gray-400">Platforms</span>
+                  <div className="flex gap-2">
+                    <IconBrandTiktok />
+                    <IconBrandInstagram />
+                  </div>
+                </div>
+                <div className="flex justify-between items-center p-6">
+                  <span className="text-sm text-gray-400">Last Updated</span>
+                  <span className="text-sm font-bold">
+                    {campaign.lastUpdated}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-6">
+                  <span className="text-sm text-gray-400">Launched on</span>
+                  <span className="text-sm font-bold text-gray-500">
+                    {campaign.launchedOn}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Requirements */}
+          <div className="space-y-6">
+            <h2 className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+              Requirements
+            </h2>
+            <p className="text-xl font-bold">{campaign.requirementsText}</p>
+          </div>
+
+          {/* Payouts */}
+          <div className="space-y-6">
+            <h2 className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+              Payouts
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {campaign.platformPayouts.map((p) => (
+                <div
+                  key={p.platform}
+                  className="bg-[#11141A] border border-white/5 p-8 rounded-3xl space-y-6"
+                >
+                  <div className="flex items-center gap-3">
+                    {p.platform === Platform.TIKTOK ? (
+                      <IconBrandTiktok />
+                    ) : (
+                      <IconBrandInstagram />
+                    )}
+                    <h4 className="text-xl font-bold">{p.platform}</h4>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-3xl font-black text-white">{p.rate}</p>
+                    <div className="flex justify-between text-xs text-gray-400 pt-4 border-t border-white/5">
+                      <div>
+                        <p className="uppercase text-[9px] mb-1">Min. payout</p>
+                        <p className="text-white font-bold">{p.minPayout}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="uppercase text-[9px] mb-1">Max. payout</p>
+                        <p className="text-white font-bold">{p.maxPayout}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FAQs */}
+          <div className="space-y-6">
+            <h2 className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+              FAQs
+            </h2>
+            <div className="space-y-4">
+              {[0, 1, 2].map((q, i) => (
+                <div
+                  key={i}
+                  className="bg-[#11141A] border border-white/5 p-8 rounded-3xl space-y-3"
+                >
+                  <h4 className="text-xl font-bold text-white">Question {q}</h4>
+                  <p className="text-gray-400 text-base">
+                    Question {q} Answer Here
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Videos */}
+          <div className="space-y-6">
+            <div className="flex justify-between items-end px-2">
+              <h2 className="text-xl font-bold uppercase tracking-widest text-gray-500">
+                Top Performing Videos
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {campaign.topVideos.map((video, idx) => (
+                <div
+                  key={video.id}
+                  className="bg-[#11141A] border border-white/5 rounded-3xl overflow-hidden flex flex-col group"
+                >
+                  <div className="h-48 relative overflow-hidden bg-black/50">
+                    <img
+                      src={video.thumbnail}
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                      alt={video.title}
+                    />
+                    <div className="absolute top-4 left-4 w-8 h-8 rounded-lg bg-black/80 border border-white/20 flex items-center justify-center font-black text-xs text-orange-500">
+                      {idx + 1}
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    <h4 className="font-bold text-white line-clamp-2 min-h-[3rem]">
+                      {video.title}
+                    </h4>
+                    <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest">
+                      <div className="text-center">
+                        <p className="text-gray-600 mb-1">Views</p>
+                        <p className="text-white">{video.views}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-gray-600 mb-1">Est. Payout</p>
+                        <p className="text-white">{video.payout}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="px-6 pb-6 pt-2 border-t border-white/5">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={video.creatorAvatar}
+                        className="w-8 h-8 rounded-full border border-white/10"
+                        alt=""
+                      />
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-black text-white truncate leading-none">
+                          {video.creatorName}
+                        </p>
+                        <p className="text-[8px] text-gray-500 font-bold truncate mt-1">
+                          {video.creatorHandle}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CPM History Chart */}
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold uppercase tracking-widest text-gray-500">
+                CPM History
+              </h2>
+              <div className="flex gap-2 bg-white/5 p-1 rounded-xl">
+                <button className="px-3 py-1.5 text-[10px] font-black text-yellow-500 bg-yellow-500/10 rounded-lg">
+                  CPM
+                </button>
+                <button className="px-3 py-1.5 text-[10px] font-black text-gray-500">
+                  Min Payout
+                </button>
+                <button className="px-3 py-1.5 text-[10px] font-black text-gray-500">
+                  Max Payout
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-[#11141A] border border-white/5 p-10 rounded-3xl h-[400px] min-h-0 min-w-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={CPM_CHART_DATA}>
+                  <defs>
+                    <linearGradient id="colorCpm" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#F1C40F" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#F1C40F" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#1f2937"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#4b5563"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#4b5563"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    domain={[0.8, 1.2]}
+                    tickFormatter={(val) => `${val}`}
+                    label={{
+                      value: "CPM ($)",
+                      angle: -90,
+                      position: "insideLeft",
+                      offset: 10,
+                      fill: "#6b7280",
+                      fontSize: 10,
+                      fontWeight: 900,
+                    }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#11141A",
+                      border: "1px solid rgba(255,255,255,0.05)",
+                      borderRadius: "16px",
+                    }}
+                    itemStyle={{ color: "#F1C40F" }}
+                  />
+                  <Area
+                    type="stepAfter"
+                    dataKey="cpm"
+                    stroke="#F1C40F"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorCpm)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="flex justify-center mt-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(241,196,15,0.6)]"></div>
+                  <span className="text-[10px] font-black uppercase text-gray-500">
+                    All Platforms
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CampaignDetail;

@@ -1,22 +1,21 @@
-import { KreaterlyLogo } from './Icons';
-import UserProfileDropdown from './UserProfileDropdown';
+import { IconBell } from "@tabler/icons-react";
+import BrandUserProfileDropdown from "./BrandUserProfileDropdown";
+import { KreaterlyLogo } from "../../Icons";
 
-
-import { IconBell, IconSearch, IconPlus } from "@tabler/icons-react";
-
-const TopBar = () => {
+const BrandTopBar: React.FC = () => {
   return (
     <header className="fixed top-0 left-0 right-0 h-16 bg-[#0D1117]/80 backdrop-blur-md border-b border-white/5 px-6 flex items-center z-[150] transition-all">
-      
       <div className="sm:hidden flex items-center gap-4 flex-shrink-0 lg:ml-20">
         <div className="flex items-center gap-2">
-           <KreaterlyLogo />
-           <span className="text-white font-bold tracking-tighter text-lg">Kreaterly</span>
+          <KreaterlyLogo />
+          <span className="text-white font-bold tracking-tighter text-lg">
+            Kreaterly
+          </span>
         </div>
       </div>
 
       <div className="flex-grow flex justify-center px-8 max-w-2xl mx-auto">
-      {/*<div className="relative w-full hidden md:block">
+        {/*<div className="relative w-full hidden md:block">
           <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input 
             type="text" 
@@ -42,13 +41,13 @@ const TopBar = () => {
           <IconBell size={22} />
           <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-teal-400 rounded-full border-2 border-[#0D1117]"></span>
         </button>
-        
+
         {/* User Profile Area */}
         <div className="ml-2">
-          <UserProfileDropdown />
+          <BrandUserProfileDropdown />
         </div>
       </div>
     </header>
   );
 };
-export default TopBar;
+export default BrandTopBar;

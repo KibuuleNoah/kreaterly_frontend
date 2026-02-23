@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { 
-  IconUser, 
-  IconSettings, 
-  IconPower, 
-  IconEditCircle, 
-  IconHistory, 
-} from '@tabler/icons-react';
+import React, { useState } from "react";
+import {
+  IconUser,
+  IconSettings,
+  IconPower,
+  IconEditCircle,
+  IconHistory,
+} from "@tabler/icons-react";
+import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
+import { pb } from "../../../lib/pocketbase";
 
-
-export const UserProfileDropdown = () => {
+export const BrandUserProfileDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { setActiveView } = useBrandDashboard();
 
   return (
     <li className="relative list-none">
@@ -21,7 +23,9 @@ export const UserProfileDropdown = () => {
         <div className="w-8 h-8 rounded-full bg-teal-500/10 flex items-center justify-center border border-teal-500/20 text-teal-400">
           <IconUser size={20} stroke={1.5} />
         </div>
-        <span className="hidden sm:inline-block text-sm font-bold text-gray-300">Stebin Ben</span>
+        <span className="hidden sm:inline-block text-sm font-bold text-gray-300">
+          {pb.authStore.record?.name}
+        </span>
       </button>
 
       {/* Dropdown Menu */}
@@ -35,8 +39,12 @@ export const UserProfileDropdown = () => {
                   SB
                 </div>
                 <div>
-                  <h6 className="text-sm font-bold text-white leading-none">Stebin Ben</h6>
-                  <p className="text-[10px] text-teal-500/80 font-bold uppercase tracking-widest mt-1">Creator Pro</p>
+                  <h6 className="text-sm font-bold text-white leading-none">
+                    {pb.authStore.record?.name}
+                  </h6>
+                  <p className="text-[10px] text-teal-500/80 font-bold uppercase tracking-widest mt-1">
+                    {pb.authStore.record?.role}
+                  </p>
                 </div>
               </div>
               <button className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors">
@@ -47,24 +55,34 @@ export const UserProfileDropdown = () => {
 
           {/* Tabs Navigation */}
           <div className="flex border-b border-white/5 bg-[#161B22]/50">
-              <button
-                className='flex-1 flex items-center justify-center gap-2 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 border-teal-500 text-teal-400 bg-teal-500/5'>
-                <IconUser size={16} />
-                  Profile
-              </button>
+            <button className="flex-1 flex items-center justify-center gap-2 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 border-teal-500 text-teal-400 bg-teal-500/5">
+              <IconUser size={16} />
+              Profile
+            </button>
           </div>
 
           {/* Tab Content */}
           <div className="p-2 max-h-[300px] overflow-y-auto">
-              <div className="space-y-1">
-                <DropdownLink icon={<IconEditCircle size={18} />} label="Edit Profile" />
-                <DropdownLink icon={<IconHistory size={18} />} label="Activity Log" />
-              </div>
-              <div className="mt-2 pt-2 border-t border-white/5">
-                <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-400 font-bold rounded-lg hover:bg-rose-500/10 transition-colors">
-                    <IconPower size={18} />
-                    Logout
-                </button>
+            <div className="space-y-1">
+              <DropdownLink
+                icon={<IconEditCircle size={18} />}
+                label="Edit Profile"
+              />
+              <DropdownLink
+                icon={<IconSettings size={18} />}
+                label="Brand Settings"
+                handleOnClick={() => setActiveView("Settings")}
+              />
+              <DropdownLink
+                icon={<IconHistory size={18} />}
+                label="Activity Log"
+              />
+            </div>
+            <div className="mt-2 pt-2 border-t border-white/5">
+              <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-400 font-bold rounded-lg hover:bg-rose-500/10 transition-colors">
+                <IconPower size={18} />
+                Logout
+              </button>
             </div>
           </div>
         </div>
@@ -73,18 +91,24 @@ export const UserProfileDropdown = () => {
   );
 };
 
-const DropdownLink = ({ icon, label }: {icon: React.ReactNode, label: string}) => (
+const DropdownLink: React.FC<{
+  icon: React.ReactNode;
+  label: string;
+  handleOnClick?: () => void;
+}> = ({ icon, label, handleOnClick }) => (
   <a
     href="#!"
+    onClick={handleOnClick}
     className="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 font-medium rounded-xl hover:bg-white/5 hover:text-teal-400 transition-all group"
   >
-    <span className="text-gray-600 group-hover:text-teal-500 transition-colors">{icon}</span>
+    <span className="text-gray-600 group-hover:text-teal-500 transition-colors">
+      {icon}
+    </span>
     {label}
   </a>
 );
 
-export default UserProfileDropdown;
-
+export default BrandUserProfileDropdown;
 
 // export const UserProfileDropdown = () => {
 //   const [isOpen, setIsOpen] = useState(false);
@@ -131,12 +155,12 @@ export default UserProfileDropdown;
 //                 key={tab}
 //                 onClick={() => setActiveTab(tab)}
 //                 className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 ${
-//                   activeTab === tab 
-//                   ? 'border-teal-500 text-teal-400 bg-teal-500/5' 
+//                   activeTab === tab
+//                   ? 'border-teal-500 text-teal-400 bg-teal-500/5'
 //                   : 'border-transparent text-gray-500 hover:text-gray-300'
 //                 }`}
 //               >
-//                 {tab === 'profile' ? <IconUser size={16} /> : <IconSettings size={16} />} 
+//                 {tab === 'profile' ? <IconUser size={16} /> : <IconSettings size={16} />}
 //                 {tab}
 //               </button>
 //             ))}
@@ -171,4 +195,3 @@ export default UserProfileDropdown;
 //     </li>
 //   );
 // };
-
