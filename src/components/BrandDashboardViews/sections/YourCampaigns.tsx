@@ -11,12 +11,18 @@ import { useEffect, useRef, useState } from "react";
 import { pb } from "../../../lib/pocketbase";
 
 import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
+import type { CampaignsRecord } from "../../../pocketbase-types";
 
-export const YourCampaignCard: React.FC<{ campaign: any }> = ({ campaign }) => {
-  const { setActiveView } = useBrandDashboard();
+export const YourCampaignCard: React.FC<{ campaign: CampaignsRecord }> = ({
+  campaign,
+}) => {
+  const { setActiveView, setCampaignInDetails } = useBrandDashboard();
   return (
     <div
-      onClick={() => setActiveView("Campaign Details")}
+      onClick={() => {
+        setCampaignInDetails(campaign);
+        setActiveView("Campaign Details");
+      }}
       className="group p-5 bg-[#161B22] border border-white/5 rounded-2xl hover:border-teal-500/30 transition-all duration-300 shadow-lg"
     >
       <div className="flex justify-between items-start mb-3">
@@ -35,7 +41,7 @@ export const YourCampaignCard: React.FC<{ campaign: any }> = ({ campaign }) => {
       </div>
 
       <p className="text-xs text-gray-500 line-clamp-1 mb-4">
-        #{campaign.hashtags} • {campaign.productType}
+        #hashtag • {campaign.product_type}
       </p>
 
       {/* Grid of Campaign Details */}
@@ -54,9 +60,7 @@ export const YourCampaignCard: React.FC<{ campaign: any }> = ({ campaign }) => {
         </div>
         <div className="flex items-center gap-2 text-gray-400">
           <IconUsers size={14} />
-          <span className="text-[11px] font-medium">
-            {campaign.age_ranges[0]}+
-          </span>
+          <span className="text-[11px] font-medium">age+</span>
         </div>
         <div className="flex items-center gap-2 text-gray-400">
           <IconCalendar size={14} />
@@ -78,8 +82,7 @@ export const YourCampaignCard: React.FC<{ campaign: any }> = ({ campaign }) => {
 };
 
 const YourCampaigns: React.FC = () => {
-  const { setActiveView } = useBrandDashboard();
-  const [campaigns, setCampaigns] = useState<any[] | null>(null);
+  const { setActiveView, campaigns, setCampaigns } = useBrandDashboard();
   const [error, setError] = useState(null);
   const fetched = useRef(false);
 
@@ -92,10 +95,12 @@ const YourCampaigns: React.FC = () => {
 
     const fetchCampaigns = async () => {
       try {
-        const records = await pb.collection("campaigns").getList(1, 10, {
-          filter: `user_id="${pb.authStore.record?.id}"`,
-          sort: "-created",
-        });
+        const records = await pb
+          .collection("campaigns")
+          .getList<CampaignsRecord>(1, 10, {
+            filter: `user_id="${pb.authStore.record?.id}"`,
+            sort: "-created",
+          });
         setCampaigns(records.items);
       } catch (e: any) {
         // Don't set error state if we manually cancelled the request

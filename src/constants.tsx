@@ -186,6 +186,14 @@ export const formatCurrency = (value: number) => {
   }).format(value);
 };
 
+export const FormatUGXCurrency = (value: number) => {
+  return new Intl.NumberFormat("en-UG", {
+    style: "currency",
+    currency: "UGX",
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
 /**
  * Utility to convert camelCase to snake_case
  */

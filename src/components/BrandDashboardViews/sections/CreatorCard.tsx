@@ -12,7 +12,8 @@ const CreatorCard: React.FC<{ creator: any }> = ({ creator }) => {
             alt={creator.name}
           />
           <div className="absolute -bottom-1 -right-1 bg-teal-500 rounded-lg px-1.5 py-0.5 border border-[#0A0B0E] text-[7px] font-black text-black">
-            {creator.country.split(" ")[0]}
+            {/*creator.country.split(" ")[0]*/}
+            {creator.country}
           </div>
         </div>
         <div className="flex-1">
@@ -46,7 +47,7 @@ const CreatorCard: React.FC<{ creator: any }> = ({ creator }) => {
             Avg. Views
           </p>
           <p className="text-sm font-black text-white">
-            {creator.stats.tiktok.avgViews}
+            {creator.stats.tiktok.avg_views}
           </p>
         </div>
       </div>

@@ -14,11 +14,15 @@ import Analytics from "../components/BrandDashboardViews/Analytics";
 import InviteCreators from "../components/BrandDashboardViews/InviteCreators";
 import { BrandDashboardProvider } from "../components/contexts/BrandDashboardContext";
 import CampaignDetail from "../components/BrandDashboardViews/sections/CampaignDetail";
+import type { CampaignsRecord } from "../pocketbase-types";
 
 const BrandDashboard = () => {
   const [activeView, setActiveView] = useState("Campaign Detail");
   const [isBrandFirstTime, setIsBrandFirstTime] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [campaigns, setCampaigns] = useState<CampaignsRecord[] | null>(null);
+  const [campaignInDetails, setCampaignInDetails] =
+    useState<CampaignsRecord | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,7 +67,7 @@ const BrandDashboard = () => {
     switch (activeView) {
       case "Settings":
         return <Settings />;
-      case "Browse Creators":
+      case "Invite Creators":
         return <InviteCreators />;
       case "Analytics":
         return <Analytics />;
@@ -79,7 +83,18 @@ const BrandDashboard = () => {
   };
 
   return (
-    <BrandDashboardProvider data={{ activeView, setActiveView, setIsLoading }}>
+    <BrandDashboardProvider
+      data={{
+        activeView,
+        setActiveView,
+        setIsLoading,
+        campaigns,
+        setCampaigns,
+        campaignInDetails,
+        setCampaignInDetails,
+        isBrandFirstTime,
+      }}
+    >
       {isLoading && <LoadingScreen />}
       {!isLoading && isBrandFirstTime && activeView != "Create Campaign" ? (
         <BrandFirstTime />

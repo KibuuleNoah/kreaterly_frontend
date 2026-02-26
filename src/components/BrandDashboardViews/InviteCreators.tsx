@@ -1,8 +1,13 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import { Platform } from "../../types";
 import { IconFilter, IconSearch } from "@tabler/icons-react";
 
 import CreatorCard from "./sections/CreatorCard";
+import { useBrandDashboard } from "../../hooks/useBrandDashboard";
+import {
+  useCollection,
+  usePaginatedCollection,
+} from "../../hooks/useCollection";
 
 export const MOCK_CREATORS = [
   {
@@ -89,9 +94,9 @@ export const MOCK_CREATORS = [
   },
 ];
 
-const ALL_INTERESTS = Array.from(
-  new Set(MOCK_CREATORS.flatMap((c) => c.interests)),
-).sort();
+// const ALL_INTERESTS = Array.from(
+//   new Set(MOCK_CREATORS.flatMap((c) => c.interests)),
+// ).sort();
 
 const InviteCreators: React.FC = () => {
   const [search, setSearch] = useState("");
@@ -100,6 +105,13 @@ const InviteCreators: React.FC = () => {
   const [minFollowers, setMinFollowers] = useState<number>(0);
   const [minEngagement, setMinEngagement] = useState<number>(0);
   const [activePlatform, setActivePlatform] = useState<Platform | "All">("All");
+  const { campaignInDetails } = useBrandDashboard();
+
+  const { items, collLoading, collErr } = usePaginatedCollection("creators");
+
+  if (!campaignInDetails) {
+    return;
+  }
 
   const parseMetric = (val: string) => {
     const num = parseFloat(val.replace(/[^\d.]/g, ""));
@@ -202,7 +214,10 @@ const InviteCreators: React.FC = () => {
             </div>
 
             {/* Smaller Filter Button */}
-            <div className="flex gap-2 justify-end">
+            <div className="flex gap-2 justify-between">
+              <div className="text-teal-500 font-bold uppercase">
+                {campaignInDetails.title}
+              </div>
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border transition-all font-black text-[9px] uppercase tracking-widest ${
@@ -221,8 +236,8 @@ const InviteCreators: React.FC = () => {
       <div className="space-y-6">{/*Filters*/}</div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredCreators.length > 0 ? (
-          filteredCreators.map((creator, idx) => (
+        {items.length > 0 ? (
+          items.map((creator, idx) => (
             <CreatorCard key={idx} creator={creator} />
           ))
         ) : (
