@@ -16,8 +16,12 @@ import { BrandDashboardProvider } from "../components/contexts/BrandDashboardCon
 import CampaignDetail from "../components/BrandDashboardViews/sections/CampaignDetail";
 import type { CampaignsRecord } from "../pocketbase-types";
 
+const BASE_VIEWS = ["Home", "Settings", "Analytics", "Review Content"];
+
 const BrandDashboard = () => {
-  const [activeView, setActiveView] = useState("Campaign Detail");
+  const [activeView, setActiveView] = useState("Home");
+  // Used by the back btn to travese views
+  const [viewNavTree, setViewNavTree] = useState<string[]>(["Home"]);
   const [isBrandFirstTime, setIsBrandFirstTime] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [campaigns, setCampaigns] = useState<CampaignsRecord[] | null>(null);
@@ -63,6 +67,18 @@ const BrandDashboard = () => {
     checkIfBrandFirstTime();
   }, [navigate]);
 
+  useEffect(() => {
+    (() => {
+      if (BASE_VIEWS.includes(activeView) && viewNavTree.length != 1) {
+        setViewNavTree([activeView]);
+      } else if (!viewNavTree.includes(activeView)) {
+        setViewNavTree((prev) => [...prev, activeView]);
+      }
+
+      console.log(viewNavTree);
+    })();
+  }, [activeView, viewNavTree]);
+
   const renderContent = () => {
     switch (activeView) {
       case "Settings":
@@ -93,6 +109,8 @@ const BrandDashboard = () => {
         campaignInDetails,
         setCampaignInDetails,
         isBrandFirstTime,
+        viewNavTree,
+        setViewNavTree,
       }}
     >
       {isLoading && <LoadingScreen />}

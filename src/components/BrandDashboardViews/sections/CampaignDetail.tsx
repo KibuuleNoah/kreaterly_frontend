@@ -25,6 +25,7 @@ import { FormatUGXCurrency } from "../../../constants";
 import { motion } from "framer-motion";
 import CreatorInvitesSection from "./CreatorInvitesSection";
 import CampaignCreatorsSection from "./CampaignCreatorsSection";
+import BackButton from "../../BackButton";
 
 const VideoCard = ({ video, index }: { video: any; index: any }) => (
   <motion.div
@@ -218,7 +219,7 @@ const CampaignDetails = () => {
   }
   const campaign = campaignInDetails;
   return (
-    <div className="bg-[#0A0B0E] min-h-screen text-white pb-20 space-y-12">
+    <div className="bg-[#0A0B0E] relative min-h-screen text-white pb-20 space-y-12">
       <div className="mx-auto p-1 w-full">
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">

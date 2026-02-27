@@ -29,6 +29,10 @@ export type AuthStep = "ROLE_SELECTION" | "AUTH_ENTRY" | "OTP_VERIFY";
 //   visibility: z.enum(["open", "private"]),
 // });
 //
+export interface AlertType {
+  message: string;
+  type?: "success" | "error" | "info";
+}
 
 export const CampaignSchema = z
   .object({
@@ -147,6 +151,8 @@ export interface BrandDashboardContextType {
   campaignInDetails: CampaignsRecord;
   setCampaignInDetails: Dispatch<SetStateAction<CampaignsRecord>>;
   isBrandFirstTime: boolean;
+  viewNavTree: string[];
+  setViewNavTree: React.Dispatch<SetStateAction<string[]>>;
 }
 
 export enum Platform {

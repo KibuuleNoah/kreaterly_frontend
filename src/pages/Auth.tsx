@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { UserRole, type AuthStep } from "../types";
+import { UserRole, type AlertType, type AuthStep } from "../types";
 import UserRoleSelection from "../components/Auth/UserRoleSelection";
-import Login from "../components/Auth/Login";
 import VerifyOTP from "../components/Auth/VerifyOTP";
 import Landing from "./Landing";
 import { useSearchParams } from "react-router-dom";
+
+import Alert from "../components/Alert";
+import AuthComponent from "../components/Auth/AuthComponent";
 
 const Auth: React.FC = () => {
   const [authStep, setAuthStep] = useState<AuthStep>("ROLE_SELECTION");
@@ -12,10 +14,20 @@ const Auth: React.FC = () => {
     "",
   );
   const [identifier, setIdentifier] = useState("");
-  const [authError, setAuthError] = useState<string>("");
+  const [authAlert, setAuthAlert] = useState<AlertType>({
+    message: "",
+    type: "error",
+  });
   const [authOTPID, setAuthOTPID] = useState<string>("");
+  const [lastOtpRequest, setLastOtpRequest] = useState<string>(
+    localStorage.getItem("kty_last_otp_request") || "",
+  );
 
   const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    localStorage.setItem("kty_last_otp_request", lastOtpRequest);
+  }, [lastOtpRequest]);
 
   useEffect(() => {
     const GetRoleAutomatically = () => {
@@ -33,28 +45,6 @@ const Auth: React.FC = () => {
     GetRoleAutomatically();
   }, []);
 
-  // const usePersistState = (key: string, defaultValue: any, expiryInHours: number = 24) => {
-  //   const [state, setState] = useState(() => {
-  //     const saved = localStorage.getItem(key);
-  //     if (saved) {
-  //       const { value, expiry } = JSON.parse(saved);
-  //       // Check if expiry hours have passed
-  //       if (new Date().getTime() < expiry) {
-  //         return value;
-  //       }
-  //       localStorage.removeItem(key);
-  //     }
-  //     return defaultValue;
-  //   });
-  //
-  //   useEffect(() => {
-  //     const expiry = new Date().getTime() + expiryInHours * 60 * 60 * 1000;
-  //     localStorage.setItem(key, JSON.stringify({ value: state, expiry }));
-  //   }, [key, state, expiryInHours]);
-  //
-  //   return [state, setState];
-  // }
-
   const handleRoleSelect = (role: string) => {
     setSelectedUserRole(role);
     setAuthStep("AUTH_ENTRY");
@@ -66,14 +56,15 @@ const Auth: React.FC = () => {
         return <UserRoleSelection handleRoleSelect={handleRoleSelect} />;
       case "AUTH_ENTRY":
         return (
-          <Login
+          <AuthComponent
             selectedUserRole={selectedUserRole}
             identifier={identifier}
             setIdentifier={setIdentifier}
             setAuthStep={setAuthStep}
-            setAuthError={setAuthError}
-            authError={authError}
+            setAuthAlert={setAuthAlert}
+            authAlert={authAlert}
             setAuthOTPID={setAuthOTPID}
+            setLastOtpRequest={setLastOtpRequest}
           />
         );
       case "OTP_VERIFY":
@@ -81,7 +72,10 @@ const Auth: React.FC = () => {
           <VerifyOTP
             identifier={identifier}
             authOTPID={authOTPID}
-            setAuthError={setAuthError}
+            setAuthOTPID={setAuthOTPID}
+            setAuthAlert={setAuthAlert}
+            lastOtpRequest={lastOtpRequest}
+            setLastOtpRequest={setLastOtpRequest}
           />
         );
       default:
@@ -97,13 +91,8 @@ const Auth: React.FC = () => {
         <div className="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-teal-500/5 blur-[200px] rounded-full"></div>
       </div>
 
-      {authError && (
-        <p className="text-red-500 text-[10px] font-black uppercase tracking-widest animate-shake">
-          {authError}
-        </p>
-      )}
-      {/* Changed: Removed items-center, added py-10 for scroll safety */}
       <div className="relative z-10 w-full min-h-full flex flex-col justify-center items-center py-10 px-4">
+        <Alert {...authAlert} />
         {renderContent()}
       </div>
     </div>

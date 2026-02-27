@@ -6,6 +6,44 @@ export const WITHDRAWAL_FEE_PERCENT = 20;
 export const BRAND_FEE_PERCENT = 15;
 export const MIN_WITHDRAWAL_UGX = 20000;
 
+export function GetRemainingCooldown(
+  lastRequestedAt: string,
+  cooldownSeconds: number = 120,
+) {
+  const lastRequest = new Date(lastRequestedAt).getTime();
+  const now = new Date().getTime();
+
+  // Calculate when the user is allowed to request again
+  const allowedAt = lastRequest + cooldownSeconds * 1000;
+
+  // Calculate difference from now
+  const diff = allowedAt - now;
+
+  if (diff <= 0) {
+    return { totalSeconds: 0, formatted: "0:00", isExpired: true };
+  }
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return {
+    totalSeconds,
+    formatted: `${minutes}:${seconds.toString().padStart(2, "0")}`,
+    isExpired: false,
+  };
+}
+
+export const MaskEmail = (email: string): string => {
+  const [local, domain] = email.split("@");
+  if (local.length <= 5) return email; // too short to mask
+
+  const start = local.slice(0, 3);
+  const end = local.slice(-2);
+  const masked = start + "x".repeat(local.length - 5) + end;
+  return `${masked}@${domain}`;
+};
+
 export const MOCK_CAMPAIGNS = [
   {
     id: "cod-bo7",

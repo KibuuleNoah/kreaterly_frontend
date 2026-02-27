@@ -15,6 +15,7 @@ import { pb } from "../lib/pocketbase";
 import { useBrandDashboard } from "../hooks/useBrandDashboard";
 import { BrandDashboardCtx } from "../components/contexts/BrandDashboardContext";
 import BrandTopBar from "../components/BrandDashboardViews/sections/BrandTopBar";
+import BackButton from "../components/BackButton";
 
 const BRAND_NAV_ITEMS = [
   { path: "/", label: "Home", icon: <IconHome size={25} /> },
@@ -36,7 +37,13 @@ const BRAND_NAV_ITEMS = [
 const BrandDashboardLayout: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const { isBrandFirstTime, activeView } = useBrandDashboard();
+  const {
+    isBrandFirstTime,
+    activeView,
+    viewNavTree,
+    setViewNavTree,
+    setActiveView,
+  } = useBrandDashboard();
   return (
     <>
       <div className="flex min-h-screen bg-[#050505]">
@@ -61,6 +68,11 @@ const BrandDashboardLayout: React.FC<{
             </header>
           )}
 
+          <BackButton
+            viewNavTree={viewNavTree}
+            setViewNavTree={setViewNavTree}
+            setActiveView={setActiveView}
+          />
           {children}
         </main>
       </div>
