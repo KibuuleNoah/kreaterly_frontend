@@ -10,7 +10,7 @@ import {
   IconChartLine,
 } from "@tabler/icons-react";
 import RetractableSidebar from "../components/RetractableSidebar";
-import { GreetUser } from "../constants";
+import { GreetUser } from "../lib/helpers";
 import { pb } from "../lib/pocketbase";
 import { useBrandDashboard } from "../hooks/useBrandDashboard";
 import { BrandDashboardCtx } from "../components/contexts/BrandDashboardContext";

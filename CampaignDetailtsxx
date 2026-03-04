@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { MOCK_CAMPAIGNS } from "../../../constants";
+import { MOCK_CAMPAIGNS } from "../../../lib/helpers";
 import { Platform } from "../../../types";
 import {
   IconBrandInstagram,

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import BrandDashboardLayout from "../layouts/BrandDashboardLayout";
-import { UserRole, type BrandDashboardContextType } from "../types";
+import {
+  UserRole,
+  type BrandDashboardContextType,
+  type CampaignDetailsType,
+} from "../types";
 import Home from "../components/BrandDashboardViews/Home";
 // import Analytics from "../components/BrandDashboardViews/Analytics";
 import Settings from "../components/BrandDashboardViews/Settings";
@@ -13,8 +17,8 @@ import BrandFirstTime from "../components/BrandDashboardViews/BrandFirstTime";
 import Analytics from "../components/BrandDashboardViews/Analytics";
 import InviteCreators from "../components/BrandDashboardViews/InviteCreators";
 import { BrandDashboardProvider } from "../components/contexts/BrandDashboardContext";
-import CampaignDetail from "../components/BrandDashboardViews/sections/CampaignDetail";
 import type { CampaignsRecord } from "../pocketbase-types";
+import CampaignDetails from "../components/CampaignDetail";
 
 const BASE_VIEWS = ["Home", "Settings", "Analytics", "Review Content"];
 
@@ -26,7 +30,7 @@ const BrandDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [campaigns, setCampaigns] = useState<CampaignsRecord[] | null>(null);
   const [campaignInDetails, setCampaignInDetails] =
-    useState<CampaignsRecord | null>(null);
+    useState<CampaignDetailsType | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -92,7 +96,7 @@ const BrandDashboard = () => {
       case "Create Campaign":
         return <CreateCampaign />;
       case "Campaign Details":
-        return <CampaignDetail />;
+        return <CampaignDetails />;
       default:
         return <Home />;
     }
@@ -101,6 +105,7 @@ const BrandDashboard = () => {
   return (
     <BrandDashboardProvider
       data={{
+        ctxType: "Brand",
         activeView,
         setActiveView,
         setIsLoading,

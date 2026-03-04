@@ -1,6 +1,6 @@
 import type { CreateCampaignCtx } from "../../../types";
 import FieldRequired from "../../FieldRequired";
-import { formatCurrency, FormatUGXCurrency } from "../../../constants";
+import { FormatUGXCurrency } from "../../../lib/helpers";
 
 const CreateCampaignStep2: React.FC<CreateCampaignCtx> = ({
   formData,

@@ -2,7 +2,6 @@ import { IconBrandApple, IconBrandGoogle } from "@tabler/icons-react";
 import SocialLoginButton from "../SociaLoginButton";
 import type { AlertType, AuthStep, UserRole } from "../../types";
 import { useState } from "react";
-import { GetLastReponsHeaders, pb } from "../../lib/pocketbase";
 
 import { KreaterlyLogoAnimateDraw } from "../Icons";
 import { motion, AnimatePresence } from "framer-motion";
@@ -94,8 +93,6 @@ const AuthComponent = ({
       const userRecord = await pb
         .collection("users")
         .getFirstListItem(`email="${identifier}"`);
-
-      // const nextAllowedAt = GetLastReponsHeaders()?.get("X-Next-Allowed-At");
 
       setLastOtpRequest(userRecord?.last_otp_request || "");
       setAuthStep("OTP_VERIFY");

@@ -1,161 +1,103 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export const Icon = () => {
-  return (
-    <>Icon</>
-  )
-}
+  return <>Icon</>;
+};
 
 export const KreaterlyLogo = () => (
-    <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
-        <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full text-teal-400 fill-current drop-shadow-[0_0_8px_rgba(45,212,191,0.3)]"
-        >
-            <path
-                d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
-                stroke="currentColor"
-                strokeWidth="12"
-                strokeLinecap="round"
-                fill="none"
-            />
-            <path d="M78 12 L92 5 L85 22 Z" fill="currentColor" />
-        </svg>
-    </div>
+  <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
+    <svg
+      viewBox="0 0 100 100"
+      className="w-full h-full text-teal-400 fill-current drop-shadow-[0_0_8px_rgba(45,212,191,0.3)]"
+    >
+      <path
+        d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path d="M78 12 L92 5 L85 22 Z" fill="currentColor" />
+    </svg>
+  </div>
 );
-
 
 export const KreaterlyLogoAnimateDraw = () => (
-    <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
-        <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full text-teal-400 fill-current drop-shadow-[0_0_12px_rgba(45,212,191,0.5)]"
-        >
-            <motion.path
-                d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
-                stroke="currentColor"
-                strokeWidth="12"
-                strokeLinecap="round"
-                fill="none"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatType: "reverse"
-                }}
-            />
-            <motion.path 
-                d="M78 12 L92 5 L85 22 Z" 
-                fill="currentColor"
-                initial={{ scale: 0 }}
-                animate={{ scale: [0, 1.2, 1] }}
-                transition={{ 
-                    duration: 1, 
-                    repeat: Infinity, 
-                    repeatDelay: 1 
-                }}
-            />
-        </svg>
-    </div>
+  <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+    <svg
+      viewBox="0 0 100 100"
+      className="w-full h-full text-teal-400 fill-current drop-shadow-[0_0_12px_rgba(45,212,191,0.5)]"
+    >
+      <motion.path
+        d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="round"
+        fill="none"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "reverse",
+        }}
+      />
+      <motion.path
+        d="M78 12 L92 5 L85 22 Z"
+        fill="currentColor"
+        initial={{ scale: 0 }}
+        animate={{ scale: [0, 1.2, 1] }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          repeatDelay: 1,
+        }}
+      />
+    </svg>
+  </div>
 );
-
 
 export const KreaterlyLogoAnimateGrow = () => (
-    <div className="w-10 h-10 flex items-center justify-center">
-        <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full text-teal-400 fill-current animate-pulse"
-        >
-            <path
-                className="transition-all duration-700"
-                d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
-                stroke="currentColor"
-                strokeWidth="12"
-                strokeLinecap="round"
-                fill="none"
-            />
-            {/* The spark/arrow-head blinks faster */}
-            <path 
-                d="M78 12 L92 5 L85 22 Z" 
-                fill="currentColor" 
-                className="animate-bounce"
-            />
-        </svg>
-    </div>
+  <div className="w-10 h-10 flex items-center justify-center">
+    <svg
+      viewBox="0 0 100 100"
+      className="w-full h-full text-teal-400 fill-current animate-pulse"
+    >
+      <path
+        className="transition-all duration-700"
+        d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* The spark/arrow-head blinks faster */}
+      <path
+        d="M78 12 L92 5 L85 22 Z"
+        fill="currentColor"
+        className="animate-bounce"
+      />
+    </svg>
+  </div>
 );
-
-// export const KreaterlyLogo = () => {
-//     // Professional spring physics for that "snappy" Google feel
-//     const springTransition = {
-//         type: "spring",
-//         stiffness: 100,
-//         damping: 15,
-//         restDelta: 0.001
-//     };
+// <svg
+//                 width="24"
+//                 height="24"
 //
-//     return (
-//         <div className="relative w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
-//             <motion.svg
-//                 viewBox="0 0 100 100"
-//                 className="w-full h-full text-teal-400 fill-current"
-//                 initial="hidden"
-//                 animate="visible"
-//             >
-//                 {/* Main "K" Structure - Path Drawing Animation */}
-//                 <motion.path
-//                     d="M25 20 L25 80 M25 50 L75 20 M25 50 L75 80"
-//                     stroke="currentColor"
-//                     strokeWidth="12"
-//                     strokeLinecap="round"
-//                     fill="none"
-//                     variants={{
-//                         hidden: { pathLength: 0, opacity: 0 },
-//                         visible: { 
-//                             pathLength: 1, 
-//                             opacity: 1,
-//                             transition: { duration: 0.8, ease: "easeInOut" }
-//                         }
-//                     }}
+//                 viewBox="0 0 24 24"
+//                 fill="none"
+//                 xmlns="http://www.w3.org"
+//               >
+//                 <path
+//                   d="M12 2L14.8 3.5L18 3.2L19.2 6.2L22 7.8L21.2 11L22.5 14L20.2 16.5L20 19.8L16.8 20.2L14.5 22.5L11.2 21.5L8 22.5L5.8 20.2L2.5 19.8L2.2 16.5L0 14L1.2 11L0.5 7.8L3.2 6.2L4.5 3.2L7.8 3.5L10.5 2H12Z"
+//                   fill="#14b8a6"
 //                 />
-//
-//                 {/* Accent Spark - Scale & Drop Animation */}
-//                 <motion.path 
-//                     d="M78 12 L92 5 L85 22 Z" 
-//                     fill="currentColor"
-//                     variants={{
-//                         hidden: { scale: 0, y: -10, opacity: 0 },
-//                         visible: { 
-//                             scale: 1, 
-//                             y: 0, 
-//                             opacity: 1,
-//                             transition: { ...springTransition, delay: 0.6 }
-//                         }
-//                     }}
+//                 <path
+//                   d="M9 12L11 14L15 10"
+//                   stroke="#0B0E14"
+//                   stroke-width="2"
+//                   stroke-linecap="round"
+//                   stroke-linejoin="round"
 //                 />
-//
-//                 {/* Subtle Ambient Glow Pulse */}
-//                 <motion.circle
-//                     cx="50" cy="50" r="40"
-//                     fill="transparent"
-//                     stroke="currentColor"
-//                     strokeWidth="2"
-//                     className="opacity-20"
-//                     animate={{
-//                         scale: [1, 1.15, 1],
-//                         opacity: [0.1, 0.3, 0.1]
-//                     }}
-//                     transition={{
-//                         duration: 3,
-//                         repeat: Infinity,
-//                         ease: "easeInOut"
-//                     }}
-//                 />
-//             </motion.svg>
-//
-//             {/* Static Drop Shadow for performance */}
-//             <div className="absolute inset-0 rounded-full blur-xl bg-teal-400/20 -z-10" />
-//         </div>
-//     );
-// };
+//               </svg>

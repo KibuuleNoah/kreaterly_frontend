@@ -21,11 +21,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
-import { FormatUGXCurrency } from "../../../constants";
+import { FormatUGXCurrency } from "../../../lib/helpers";
 import { motion } from "framer-motion";
 import CreatorInvitesSection from "./CreatorInvitesSection";
 import CampaignCreatorsSection from "./CampaignCreatorsSection";
-import BackButton from "../../BackButton";
 
 const VideoCard = ({ video, index }: { video: any; index: any }) => (
   <motion.div

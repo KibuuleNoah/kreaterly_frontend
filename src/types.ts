@@ -1,34 +1,11 @@
 import type React from "react";
 import type { Dispatch, SetStateAction } from "react";
 
-import PocketBase from "pocketbase";
-import type { CampaignsRecord } from "./pocketbase-types";
+import type { BrandsRecord, CampaignsRecord } from "./pocketbase-types";
 import z from "zod";
+import type { RecordModel } from "pocketbase";
 export type AuthStep = "ROLE_SELECTION" | "AUTH_ENTRY" | "OTP_VERIFY";
 
-// export const CampaignSchema = z.object({
-//   title: z.string().min(5, "Title is too short"),
-//   country: z.number().positive("Please select a country"),
-//   description: z
-//     .string()
-//     .min(200, "Description Must be above 200 characters")
-//     .max(5000, "Description must not exceed 5000 words"),
-//   launch_date: z.string().refine((date) => new Date(date) > new Date(), {
-//     message: "Launch date must be in the future",
-//   }),
-//
-//   end_date: z.string().refine((date) => new Date(date) > new Date(), {
-//     message: "End date must be in the future",
-//   }),
-//   hashtags: z.string().startsWith("#", "Hashtags should start with #"),
-//   budget: z.coerce.number().positive("Budget must be greater than 0"),
-//   cpm: z.coerce.number().positive("CPM must be greater than 0"),
-//   product_type: z.enum(["none", "physical", "digital"]),
-//   age_ranges: z.array(z.string()).min(1, "Select at least one age range"),
-//   gender: z.enum(["F", "M", "B"]),
-//   visibility: z.enum(["open", "private"]),
-// });
-//
 export interface AlertType {
   message: string;
   type?: "success" | "error" | "info";
@@ -94,22 +71,6 @@ export type CampaignFormErrors = Partial<
   Record<keyof CampaignFormData, string>
 >;
 
-// export interface Campaign {
-//   title: string;
-//   country: number;
-//   description: string;
-//   launchDate: string;
-//   // endDate?: string;
-//   hashtags: string;
-//   budget: number;
-//   cpm: number;
-//   productType: "physical" | "digital" | "none";
-//   ageRanges: string[];
-//   gender: "F" | "M" | "B";
-//   visibility: "open" | "private";
-//   brand_id?: string;
-// }
-//
 export interface CreateCampaignCtx {
   formData: CampaignsRecord;
   currentStep: number;
@@ -137,19 +98,44 @@ export interface CustomLink {
   icon: React.ReactNode;
 }
 
+export interface CampaignDetailsType extends RecordModel, CampaignsRecord {
+  expand?: {
+    brand?: BrandsRecord;
+  };
+}
+// export interface Campaign extends CampaignsRecord {
+//   expand?: {
+//     brand?: { name: string; logo: string; is_verified?: boolean };
+//     "submissions(campaign)"?: { id: string; payout: number }[];
+//   };
+// }
+
 export interface CreatorDashboardContextType {
+  ctxType?: string;
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
 }
 
+export interface HomeContextType {
+  ctxType?: string;
+  activeView: string;
+  setActiveView: Dispatch<SetStateAction<string>>;
+  campaigns: CampaignDetailsType[];
+  activeCategory: string;
+  setActiveCategory: Dispatch<SetStateAction<string>>;
+  campaignInDetails: CampaignDetailsType;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignDetailsType>>;
+}
+
 export interface BrandDashboardContextType {
+  ctxType?: string;
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   campaigns: CampaignsRecord[] | null;
   setCampaigns: Dispatch<SetStateAction<CampaignsRecord[] | null>>;
-  campaignInDetails: CampaignsRecord;
-  setCampaignInDetails: Dispatch<SetStateAction<CampaignsRecord>>;
+  campaignInDetails: CampaignDetailsType;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignDetailsType>>;
   isBrandFirstTime: boolean;
   viewNavTree: string[];
   setViewNavTree: React.Dispatch<SetStateAction<string[]>>;

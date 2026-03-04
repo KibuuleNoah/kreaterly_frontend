@@ -2,7 +2,7 @@ import React, { useEffect, useState, type SetStateAction } from "react";
 import { pb } from "../../lib/pocketbase";
 import { useNavigate } from "react-router-dom";
 import type { AlertType } from "../../types";
-import { MaskEmail } from "../../constants";
+import { MaskEmail } from "../../lib/helpers";
 
 interface Props {
   identifier: string;

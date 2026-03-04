@@ -1,26 +1,32 @@
-import React from 'react';
+import React from "react";
 
-
-
-
-
-
-
-
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { formatCurrency } from '../../constants';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { FormatUGXCurrency } from "../../lib/helpers";
 
 const data = [
-  { name: 'Jan 10', views: 4000, payouts: 240000 },
-  { name: 'Jan 15', views: 3000, payouts: 139000 },
-  { name: 'Jan 20', views: 2000, payouts: 980000 },
-  { name: 'Jan 25', views: 2780, payouts: 390000 },
-  { name: 'Jan 30', views: 1890, payouts: 480000 },
-  { name: 'Feb 05', views: 2390, payouts: 380000 },
-  { name: 'Feb 10', views: 3490, payouts: 430000 },
+  { name: "Jan 10", views: 4000, payouts: 240000 },
+  { name: "Jan 15", views: 3000, payouts: 139000 },
+  { name: "Jan 20", views: 2000, payouts: 980000 },
+  { name: "Jan 25", views: 2780, payouts: 390000 },
+  { name: "Jan 30", views: 1890, payouts: 480000 },
+  { name: "Feb 05", views: 2390, payouts: 380000 },
+  { name: "Feb 10", views: 3490, payouts: 430000 },
 ];
 
-const StatCard: React.FC<{ label: string; value: string; icon: string; trend?: string }> = ({ label, value, icon, trend }) => (
+const StatCard: React.FC<{
+  label: string;
+  value: string;
+  icon: string;
+  trend?: string;
+}> = ({ label, value, icon, trend }) => (
   <div className="bg-[#101217] p-8 rounded-[42px] border border-white/5 hover:border-teal-500/20 transition-all shadow-xl">
     <div className="flex justify-between items-start mb-6">
       <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-3xl border border-white/5">
@@ -32,7 +38,9 @@ const StatCard: React.FC<{ label: string; value: string; icon: string; trend?: s
         </span>
       )}
     </div>
-    <p className="text-[11px] text-gray-500 font-black mb-2 uppercase tracking-[0.2em]">{label}</p>
+    <p className="text-[11px] text-gray-500 font-black mb-2 uppercase tracking-[0.2em]">
+      {label}
+    </p>
     <p className="text-3xl font-black text-white tracking-tighter">{value}</p>
   </div>
 );
@@ -42,8 +50,12 @@ const Analytics: React.FC = () => {
     <div className="space-y-12 animate-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <header className="space-y-2">
-          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter">Performance</h1>
-          <p className="text-gray-500 text-lg font-medium">Insights for your creative business.</p>
+          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter">
+            Performance
+          </h1>
+          <p className="text-gray-500 text-lg font-medium">
+            Insights for your creative business.
+          </p>
         </header>
         <button className="bg-white text-black border border-white rounded-[20px] px-8 py-4 text-sm font-black uppercase tracking-widest hover:bg-teal-500 hover:border-teal-500 transition-all">
           Export Insights
@@ -52,17 +64,28 @@ const Analytics: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard label="Total Views" value="4.2M" icon="👁️" trend="+12%" />
-        <StatCard label="Earnings" value={formatCurrency(4850000)} icon="💰" trend="+8%" />
+        <StatCard
+          label="Earnings"
+          value={FormatUGXCurrency(4850000)}
+          icon="💰"
+          trend="+8%"
+        />
         <StatCard label="Live Submits" value="142" icon="📹" />
         <StatCard label="Active Gigs" value="12" icon="🚀" />
       </div>
 
       <div className="bg-[#101217] border border-white/5 p-10 rounded-[56px] shadow-2xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
-          <h3 className="text-2xl font-black text-white tracking-tight">Views Growth</h3>
+          <h3 className="text-2xl font-black text-white tracking-tight">
+            Views Growth
+          </h3>
           <div className="flex bg-white/5 p-1.5 rounded-[20px] border border-white/5">
-            <button className="px-6 py-2.5 text-[11px] font-black text-black bg-teal-500 rounded-[14px] shadow-lg shadow-teal-500/20 uppercase tracking-widest">Views</button>
-            <button className="px-6 py-2.5 text-[11px] font-black text-gray-500 hover:text-white transition-all uppercase tracking-widest">Payouts</button>
+            <button className="px-6 py-2.5 text-[11px] font-black text-black bg-teal-500 rounded-[14px] shadow-lg shadow-teal-500/20 uppercase tracking-widest">
+              Views
+            </button>
+            <button className="px-6 py-2.5 text-[11px] font-black text-gray-500 hover:text-white transition-all uppercase tracking-widest">
+              Payouts
+            </button>
           </div>
         </div>
         <div className="h-[400px] w-full min-h-0 min-w-0">
@@ -70,18 +93,48 @@ const Analytics: React.FC = () => {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#14B8A6" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#14B8A6" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#14B8A6" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#14B8A6" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
-              <XAxis dataKey="name" stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tick={{ fontWeight: 800 }} />
-              <YAxis stroke="#6b7280" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `${val / 1000}k`} tick={{ fontWeight: 800 }} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#101217', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
-                itemStyle={{ color: '#14B8A6', fontWeight: 900 }}
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#1f2937"
+                vertical={false}
               />
-              <Area type="monotone" dataKey="views" stroke="#14B8A6" strokeWidth={4} fillOpacity={1} fill="url(#colorViews)" />
+              <XAxis
+                dataKey="name"
+                stroke="#6b7280"
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fontWeight: 800 }}
+              />
+              <YAxis
+                stroke="#6b7280"
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(val) => `${val / 1000}k`}
+                tick={{ fontWeight: 800 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#101217",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  borderRadius: "24px",
+                  boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
+                }}
+                itemStyle={{ color: "#14B8A6", fontWeight: 900 }}
+              />
+              <Area
+                type="monotone"
+                dataKey="views"
+                stroke="#14B8A6"
+                strokeWidth={4}
+                fillOpacity={1}
+                fill="url(#colorViews)"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>

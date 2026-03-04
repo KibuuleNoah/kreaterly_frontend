@@ -7,32 +7,37 @@ import BrandDashboard from "./pages/BrandDashboard";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing />
+    element: <Landing />,
   },
- {
+  {
     path: "/home",
-    element: <Home />
+    element: <Home />,
   },
   {
     path: "/auth",
-    element: <Auth/>
+    element: <Auth />,
   },
- {
+  {
     path: "/brand",
-    element: <BrandDashboard />
+    element: <BrandDashboard />,
   },
   {
     path: "/creator",
-    element: <CreatorDashboard />
-  }
+    element: <CreatorDashboard />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-        <RouterProvider router={router} />
-    </StrictMode>
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
 );
