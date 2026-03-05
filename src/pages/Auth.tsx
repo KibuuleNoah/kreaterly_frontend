@@ -9,21 +9,68 @@ import Alert from "../components/Alert";
 import AuthComponent from "../components/Auth/AuthComponent";
 
 const Auth: React.FC = () => {
-  const [authStep, setAuthStep] = useState<AuthStep>("ROLE_SELECTION");
+  const [authStep, setAuthStep] = useState<AuthStep>(
+    (localStorage.getItem("kty_auth_step") as AuthStep) || "ROLE_SELECTION",
+  );
   const [selectedUserRole, setSelectedUserRole] = useState<UserRole | string>(
-    "",
+    localStorage.getItem("kty_selected_user_role") || "",
   );
   const [identifier, setIdentifier] = useState("");
   const [authAlert, setAuthAlert] = useState<AlertType>({
     message: "",
     type: "error",
   });
-  const [authOTPID, setAuthOTPID] = useState<string>("");
+  // Used by the back btn to travese views
+  const [navTree, setNavTree] = useState<string[]>(["ROLE_SELECTION"]);
+
+  const [authOTPID, setAuthOTPID] = useState<string>(
+    localStorage.getItem("kty_auth_otp_id") || "",
+  );
   const [lastOtpRequest, setLastOtpRequest] = useState<string>(
     localStorage.getItem("kty_last_otp_request") || "",
   );
 
   const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    localStorage.setItem("kty_auth_step", authStep);
+  }, [authStep]);
+
+  useEffect(() => {
+    localStorage.setItem("kty_selected_user_role", selectedUserRole);
+  }, [selectedUserRole]);
+
+  useEffect(() => {
+    localStorage.setItem("kty_auth_otp_id", authOTPID);
+  }, [authOTPID]);
+
+  useEffect(() => {
+    // When the tree grows (user goes forward), push a new entry to the browser history
+    // This gives the hardware back button something to "pop"
+    if (navTree.length > 1) {
+      window.history.pushState({ view: navTree[navTree.length - 1] }, "");
+    }
+
+    const handleHardwareBack = (event: PopStateEvent) => {
+      // If user hits hardware back and we have a custom history
+      if (navTree.length > 1) {
+        // Prevent the browser from actually leaving the site
+        event.preventDefault();
+
+        // Trigger your existing logic to go back in your state
+        setNavTree((prev) => {
+          const newTree = prev.slice(0, -1);
+          setAuthStep(`${newTree[newTree.length - 1]}` as AuthStep);
+          return newTree;
+        });
+      }
+    };
+
+    // Listen for the hardware/browser back button
+    window.addEventListener("popstate", handleHardwareBack);
+
+    return () => window.removeEventListener("popstate", handleHardwareBack);
+  }, [navTree, setNavTree]);
 
   useEffect(() => {
     localStorage.setItem("kty_last_otp_request", lastOtpRequest);
@@ -48,6 +95,7 @@ const Auth: React.FC = () => {
   const handleRoleSelect = (role: string) => {
     setSelectedUserRole(role);
     setAuthStep("AUTH_ENTRY");
+    setNavTree((prev) => [...prev, "AUTH_ENTRY"]);
   };
 
   const renderContent = () => {
@@ -61,6 +109,7 @@ const Auth: React.FC = () => {
             identifier={identifier}
             setIdentifier={setIdentifier}
             setAuthStep={setAuthStep}
+            setNavTree={setNavTree}
             setAuthAlert={setAuthAlert}
             authAlert={authAlert}
             setAuthOTPID={setAuthOTPID}

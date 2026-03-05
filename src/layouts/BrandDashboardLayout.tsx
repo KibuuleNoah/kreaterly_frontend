@@ -16,6 +16,7 @@ import { useBrandDashboard } from "../hooks/useBrandDashboard";
 import { BrandDashboardCtx } from "../components/contexts/BrandDashboardContext";
 import BrandTopBar from "../components/BrandDashboardViews/sections/BrandTopBar";
 import BackButton from "../components/BackButton";
+import DashFooter from "../components/DashFooter";
 
 const BRAND_NAV_ITEMS = [
   { path: "/", label: "Home", icon: <IconHome size={25} /> },
@@ -76,6 +77,7 @@ const BrandDashboardLayout: React.FC<{
           {children}
         </main>
       </div>
+      <DashFooter />
     </>
   );
 };

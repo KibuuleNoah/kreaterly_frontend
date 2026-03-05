@@ -19,7 +19,6 @@ const Home: React.FC = () => {
     { label: "Active Creators", value: "142", change: 8.0, isPositive: true },
   ];
 
-  // <div className="h-full min-h-[70vh] flex flex-col items-center justify-center animate-in fade-in duration-1000 relative">
   return (
     <div className="h-full min-h-[70vh]animate-in fade-in duration-1000 relative">
       {/* KPI Section */}
@@ -89,11 +88,6 @@ const Home: React.FC = () => {
       </div>
 
       <ActivitySection />
-
-      {/* Global Status Footer */}
-      <div className="absolute bottom-4 left-0 right-0 py-8 flex justify-center opacity-10 text-[9px] font-black uppercase tracking-[0.5em] text-gray-500">
-        KAMPALA PRIMARY NODE • SECURE ENDPOINT ACTIVE
-      </div>
     </div>
   );
 };

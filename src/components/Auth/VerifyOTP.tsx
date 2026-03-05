@@ -66,7 +66,7 @@ const VerifyOTP: React.FC<Props> = ({
 
     // Update every second
     const timer = setInterval(() => {
-      const remaining = getRemainingCooldown(lastRequestDate);
+      const remaining = getRemainingCooldown(lastOtpRequest);
       setTimeLeft(remaining);
 
       if (remaining.isExpired) {

@@ -12,6 +12,7 @@ import { pb } from "../../../lib/pocketbase";
 
 import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
 import type { CampaignsRecord } from "../../../pocketbase-types";
+import { usePaginatedCollection } from "../../../hooks/useCollection";
 
 export const YourCampaignCard: React.FC<{ campaign: CampaignsRecord }> = ({
   campaign,
@@ -84,36 +85,17 @@ export const YourCampaignCard: React.FC<{ campaign: CampaignsRecord }> = ({
 const YourCampaigns: React.FC = () => {
   const { setActiveView, campaigns, setCampaigns } = useBrandDashboard();
   const [error, setError] = useState(null);
-  const fetched = useRef(false);
 
-  useEffect(() => {
-    // Prevent duplicate execution in Strict Mode
-    if (fetched.current) return;
-    fetched.current = true;
-
-    const controller = new AbortController();
-
-    const fetchCampaigns = async () => {
-      try {
-        const records = await pb
-          .collection("campaigns")
-          .getList<CampaignsRecord>(1, 10, {
-            filter: `user_id="${pb.authStore.record?.id}"`,
-            sort: "-created",
-          });
-        setCampaigns(records.items);
-      } catch (e: any) {
-        // Don't set error state if we manually cancelled the request
-        if (e.name !== "AbortError" && !e.isAbort) {
-          setError(e.message);
-        }
-      }
-    };
-    fetchCampaigns();
-
-    // Cleanup: Runs if component unmounts before fetch finishes
-    return () => controller.abort();
-  }, []);
+  const collection = usePaginatedCollection<CampaignsRecord>(
+    "campaigns",
+    1,
+    10,
+    {
+      filter: `user_id="${pb.authStore.record?.id}"`,
+      sort: "-created",
+    },
+  );
+  setCampaigns(collection.items);
 
   console.log(campaigns);
 

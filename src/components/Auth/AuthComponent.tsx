@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { KreaterlyLogoAnimateDraw } from "../Icons";
 import { motion, AnimatePresence } from "framer-motion";
+import { pb } from "../../lib/pocketbase";
 
 interface Props {
   selectedUserRole: UserRole | string;
@@ -13,6 +14,7 @@ interface Props {
   setAuthAlert: React.Dispatch<React.SetStateAction<AlertType>>;
   authAlert: AlertType;
   setAuthStep: React.Dispatch<React.SetStateAction<AuthStep>>;
+  setNavTree: React.Dispatch<React.SetStateAction<string[]>>;
   setAuthOTPID: React.Dispatch<React.SetStateAction<string>>;
   setLastOtpRequest: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -42,17 +44,17 @@ const AuthComponent = ({
     setAuthAlert({ message: "" });
 
     try {
-      // 1. Check if user exists
+      // Check if user exists
       let existingUser = null;
       try {
         existingUser = await pb
           .collection("users")
           .getFirstListItem(`email = "${identifier}"`);
       } catch (err: any) {
-        // 404 means user not found
+        console.log(err);
       }
 
-      // 2. Logic: If Login but no user, or Signup but user exists
+      // If Login but no user, or Signup but user exists
       if (authMode === "LOGIN" && !existingUser) {
         setIsProcessing(false);
         setAuthAlert({
@@ -72,19 +74,16 @@ const AuthComponent = ({
         return;
       }
 
-      // 3. Create user if in Signup mode
+      // Create user if in Signup mode
       if (authMode === "SIGNUP" && !existingUser) {
         await pb.collection("users").create({
           email: identifier,
           emailVisibility: true,
-          name: "User",
           role: selectedUserRole,
-          password: "secure-random-password-123", // OTP bypasses this usually
-          passwordConfirm: "secure-random-password-123",
         });
       }
 
-      // 4. Request OTP
+      // Request OTP
       const res = await pb.collection("users").requestOTP(identifier);
       setAuthOTPID(res.otpId);
 
