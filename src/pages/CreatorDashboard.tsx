@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CreatorDashboardLayout from "../layouts/CreatorDashboardLayout";
-import { UserRole, type CreatorDashboardContextType } from "../types";
 import Wallet from "../components/CreatorDashboardViews/Wallet";
-import Campaigns from "../components/CreatorDashboardViews/Campaings";
 import Home from "../components/CreatorDashboardViews/Home";
-import { pb } from "../lib/pocketbase";
-import { useNavigate } from "react-router-dom";
 import LogOutButton from "../components/LogOutButton";
 import LoadingScreen from "../components/LoadingScreen";
-// import { Icon } from "../components/Icons";
-// Import specific Tabler icons
+import { CreatorDashboardProvider } from "../components/contexts/CreatorDashboardContext";
+import { useNavigate } from "react-router-dom";
+import Submissions from "../components/CreatorDashboardViews/Submissions";
 
-const CreatorDashboardCtx = React.createContext<
-  CreatorDashboardContextType | undefined
->(undefined);
 const CreatorDashboard = () => {
   const [activeView, setActiveView] = useState("Home");
   const navigate = useNavigate();
@@ -46,23 +40,26 @@ const CreatorDashboard = () => {
     switch (activeView) {
       case "Home":
         return <Home />;
+      case "Submissions":
+        return <Submissions />;
       case "Wallet":
         return <Wallet />;
       case "Campaigns":
-        return <Campaigns />;
+        navigate("/home");
+        return;
       default:
         return <LoadingScreen />;
     }
   };
 
   return (
-    <CreatorDashboardCtx.Provider value={{ activeView, setActiveView }}>
-      <CreatorDashboardLayout Ctx={CreatorDashboardCtx}>
+    <CreatorDashboardProvider data={{ activeView, setActiveView }}>
+      <CreatorDashboardLayout>
         {renderContent()}
         <LogOutButton />
         {/*<button onClick={()=>{setActiveView("New")}}>Click</button>*/}
       </CreatorDashboardLayout>
-    </CreatorDashboardCtx.Provider>
+    </CreatorDashboardProvider>
   );
 };
 

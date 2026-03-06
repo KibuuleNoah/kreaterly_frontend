@@ -64,3 +64,31 @@ export const CampaignSkeleton: React.FC = () => {
     </div>
   );
 };
+
+export const SubmissionCardSkeleton: React.FC = () => {
+  return (
+    <div className="bg-[#11141A] border border-white/[0.05] rounded-[24px] p-4 animate-pulse flex gap-4">
+      {/* Thumbnail Skeleton */}
+      <div className="w-24 h-24 shrink-0 rounded-2xl bg-white/5" />
+
+      {/* Content Skeleton */}
+      <div className="flex-1 py-1 flex flex-col justify-between">
+        <div className="space-y-3">
+          <div className="flex justify-between items-start">
+            <div className="h-2 w-16 bg-teal-500/20 rounded" />
+            <div className="h-5 w-16 bg-white/5 rounded-full" />
+          </div>
+          <div className="h-3 w-3/4 bg-white/10 rounded" />
+        </div>
+
+        <div className="flex justify-between items-end">
+          <div className="space-y-2">
+            <div className="h-2 w-10 bg-white/5 rounded" />
+            <div className="h-3 w-20 bg-white/10 rounded" />
+          </div>
+          <div className="h-8 w-24 bg-white/5 rounded-xl" />
+        </div>
+      </div>
+    </div>
+  );
+};

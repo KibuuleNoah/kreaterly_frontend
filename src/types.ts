@@ -1,13 +1,8 @@
 import type React from "react";
 import type { Dispatch, SetStateAction } from "react";
 
-import type {
-  BrandsRecord,
-  CampaignsRecord,
-  CampaignsResponse,
-} from "./pocketbase-types";
+import type { CampaignsRecord, CampaignsResponse } from "./pocketbase-types";
 import z from "zod";
-import type { RecordModel } from "pocketbase";
 export type AuthStep = "ROLE_SELECTION" | "AUTH_ENTRY" | "OTP_VERIFY";
 
 export interface AlertType {
@@ -100,6 +95,7 @@ export interface CustomLink {
   path: string;
   label: string;
   icon: React.ReactNode;
+  handleOnClick?: () => void;
 }
 
 // export interface CampaignResponse extends RecordModel, CampaignsRecord {
@@ -124,11 +120,11 @@ export interface HomeContextType {
   ctxType?: string;
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
-  campaigns: CampaignResponse[];
+  campaigns: CampaignsResponse[];
   activeCategory: string;
   setActiveCategory: Dispatch<SetStateAction<string>>;
-  campaignInDetails: CampaignResponse;
-  setCampaignInDetails: Dispatch<SetStateAction<CampaignResponse>>;
+  campaignInDetails: CampaignsResponse;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignsResponse>>;
 }
 
 export interface BrandDashboardContextType {

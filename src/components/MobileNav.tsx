@@ -1,26 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 import type { CustomLink } from "../types";
 import MobileNavLink from "./MobileNavLink";
 import { IconDots } from "@tabler/icons-react";
-import type { Interface } from "node:readline";
-import { useScrollDirection } from "../hooks/useScrollDirection";
 
-const MobileNav = ({
-  links,
-  Ctx,
-}: {
+import { useScrollDirection } from "../hooks/useScrollDirection";
+import { useMobileNav } from "../hooks/useMobileNav";
+
+const MobileNav: React.FC<{
   links: CustomLink[];
-  Ctx: React.Context<Interface>;
-}) => {
+}> = ({ links }) => {
   const [showMore, setShowMore] = useState(false);
-  const { activeView, setActiveView } = useContext(Ctx);
+  const { activeView, setActiveView } = useMobileNav();
 
   const primaryLinks = links.length > 5 ? links.slice(0, 4) : links;
   const secondaryLinks = links.length > 5 ? links.slice(4) : [];
 
   const scrollDirection = useScrollDirection();
-  // <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] md:hidden w-[90%] max-w-sm">
   return (
     <>
       <div
@@ -30,7 +26,7 @@ const MobileNav = ({
       >
         <nav className="flex links-center justify-between p-2 bg-[#0D1117]/90 backdrop-blur-3xl border border-white/10 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
           {primaryLinks.map((link, idx) => (
-            <MobileNavLink key={idx} link={link} Ctx={Ctx} />
+            <MobileNavLink key={idx} link={link} />
           ))}
 
           {links.length > 5 ? (

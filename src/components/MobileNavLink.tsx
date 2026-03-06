@@ -1,25 +1,24 @@
-import React from "react"
-import type { CreatorDashboardContextType, CustomLink } from "../types"
-import { useContext } from "react"
+import React from "react";
+import { useMobileNav } from "../hooks/useMobileNav";
+import type { CustomLink } from "../types";
 
-
-const MobileNavLink: React.FC<{ link: CustomLink, Ctx: React.Context<CreatorDashboardContextType>}> = ({ link, Ctx }) => {
-
-  const {activeView, setActiveView} = useContext(Ctx)
+const MobileNavLink: React.FC<{
+  link: CustomLink;
+}> = ({ link }) => {
+  const { activeView, setActiveView } = useMobileNav();
 
   return (
     <a
-    onClick={()=>{setActiveView(link.label)}}
-    className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 ${
+      onClick={link.handleOnClick ?? (() => setActiveView(link.label))}
+      className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 ${
         activeView == link.label
           ? "bg-teal-500 text-black shadow-[0_0_20px_rgba(20,184,166,0.4)]"
           : "text-gray-500"
-      }`
-    }
+      }`}
     >
-    <div className="scale-110">{link.icon}</div>
+      <div className="scale-110">{link.icon}</div>
     </a>
-  )
-}
+  );
+};
 
-export default MobileNavLink
+export default MobileNavLink;

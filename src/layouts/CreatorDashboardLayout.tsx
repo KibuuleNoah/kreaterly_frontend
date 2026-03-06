@@ -1,43 +1,52 @@
 import React, { useContext, useState, type ReactNode } from "react";
 
-import type { CreatorDashboardContextType } from "../types";
+import type { CreatorDashboardContextType, CustomLink } from "../types";
 import { FormatUGXCurrency } from "../lib/helpers";
 import {
   IconLayoutDashboard,
   IconRocket,
   IconWallet,
+  IconCloudUpload,
   IconUserCircle,
 } from "@tabler/icons-react";
-import CreatorTopNavLink from "../components/CreatorTopNavLink";
+import CreatorTopNavLink from "../components/CreatorDashboardViews/sections/CreatorTopNavLink";
 import { KreaterlyLogo } from "../components/Icons";
 import MobileNav from "../components/MobileNav";
-
-const NAV_LINKS = [
-  {
-    path: "/",
-    label: "Home",
-    icon: <IconLayoutDashboard size={25} stroke={1.5} />,
-  },
-  {
-    path: "/campaigns",
-    label: "Campaigns",
-    icon: <IconRocket size={25} stroke={1.5} />,
-  },
-  {
-    path: "/wallet",
-    label: "Wallet",
-    icon: <IconWallet size={25} stroke={1.5} />,
-  },
-];
+import { useCreatorDashboard } from "../hooks/useCreatorDashboard";
+import { useNavigate } from "react-router-dom";
 
 const CreatorDashboardLayout: React.FC<{
   children: React.ReactNode;
-  Ctx: React.Context<CreatorDashboardContextType>;
-}> = ({ children, Ctx }) => {
-  const { activeView } = useContext(Ctx);
+}> = ({ children }) => {
+  const { activeView } = useCreatorDashboard();
+  const navigate = useNavigate();
+
+  const NAV_LINKS: CustomLink[] = [
+    {
+      path: "/",
+      label: "Home",
+      icon: <IconLayoutDashboard size={25} stroke={1.5} />,
+    },
+    {
+      path: "/home",
+      label: "Campaigns",
+      icon: <IconRocket size={25} stroke={1.5} />,
+    },
+    {
+      path: "/submissions", // Standard path for your new page
+      label: "Submissions",
+      icon: <IconCloudUpload size={25} stroke={1.5} />,
+    },
+    {
+      path: "/wallet",
+      label: "Wallet",
+      icon: <IconWallet size={25} stroke={1.5} />,
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0A0B0E] selection:bg-teal-500/30 text-white">
-      <MobileNav links={NAV_LINKS} Ctx={Ctx} />
+      <MobileNav links={NAV_LINKS} />
 
       <header className="fixed top-0 left-0 right-0 z-[100] px-6 py-4 bg-[#0D1117]/80 backdrop-blur-3xl border-b border-white/5 flex items-center">
         <div className="max-w-[1600px] mx-auto w-full flex items-center">
@@ -55,7 +64,7 @@ const CreatorDashboardLayout: React.FC<{
           <div className="hidden md:flex flex-none items-center justify-center">
             <nav className="flex items-center gap-1 p-1 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
               {NAV_LINKS.map((link, idx) => {
-                return <CreatorTopNavLink key={idx} link={link} Ctx={Ctx} />;
+                return <CreatorTopNavLink key={idx} link={link} />;
               })}
             </nav>
           </div>
