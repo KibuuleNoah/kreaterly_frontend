@@ -14,6 +14,7 @@ import { KreaterlyLogo } from "../components/Icons";
 import MobileNav from "../components/MobileNav";
 import { useCreatorDashboard } from "../hooks/useCreatorDashboard";
 import { useNavigate } from "react-router-dom";
+import DashFooter from "../components/DashFooter";
 
 const CreatorDashboardLayout: React.FC<{
   children: React.ReactNode;
@@ -99,11 +100,13 @@ const CreatorDashboardLayout: React.FC<{
 
       <main className="flex-1 mt-24 lg:mt-28">
         <div className="px-4 md:px-10 lg:px-12 max-w-7xl mx-auto h-full pb-32 md:pb-10">
-          {children} {activeView}
+          {children}
         </div>
       </main>
 
-      <div className="fixed top-[72px] left-0 right-0 h-[1px] z-[101] pointer-events-none">
+      <DashFooter />
+
+      <div className="fixed top-[72px] left-0 right-0 h-[1px] z-[101] pointer-events-none bg-teal-500">
         <div className="h-full bg-teal-500/20 w-full shadow-[0_0_15px_rgba(20,184,166,0.1)]"></div>
       </div>
     </div>

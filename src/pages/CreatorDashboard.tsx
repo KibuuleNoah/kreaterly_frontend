@@ -54,11 +54,7 @@ const CreatorDashboard = () => {
 
   return (
     <CreatorDashboardProvider data={{ activeView, setActiveView }}>
-      <CreatorDashboardLayout>
-        {renderContent()}
-        <LogOutButton />
-        {/*<button onClick={()=>{setActiveView("New")}}>Click</button>*/}
-      </CreatorDashboardLayout>
+      <CreatorDashboardLayout>{renderContent()}</CreatorDashboardLayout>
     </CreatorDashboardProvider>
   );
 };

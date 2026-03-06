@@ -1,6 +1,7 @@
 import React from "react";
 import SubmissionCard from "./sections/SubmissionCard";
 import { SubmissionCardSkeleton } from "../Skeletons";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MOCK_SUBMISSIONS = [
   {
@@ -78,42 +79,51 @@ const Submissions: React.FC = () => {
         </div>
       </header>
 
-      {/* Tab Navigation */}
-      <div className="flex gap-8 overflow-x-auto no-scrollbar border-b border-white/[0.05]">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative ${
-              activeTab === tab
-                ? "text-teal-400"
-                : "text-gray-500 hover:text-gray-300"
-            }`}
-          >
-            {tab}
-            <span className="ml-2 text-[10px] opacity-50">
-              {tab === "All"
-                ? MOCK_SUBMISSIONS.length
-                : MOCK_SUBMISSIONS.filter((s) => s.status === tab).length}
-            </span>
-            {activeTab === tab && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-400 shadow-[0_0_12px_rgba(45,212,191,0.4)]" />
-            )}
-          </button>
-        ))}
+      <div className="relative border-b border-white/[0.05]">
+        <div className="flex gap-8 overflow-x-auto no-scrollbar">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative ${
+                activeTab === tab
+                  ? "text-teal-400"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              {tab}
+              <span className="ml-2 text-[10px] opacity-50">
+                {tab === "All"
+                  ? MOCK_SUBMISSIONS.length
+                  : MOCK_SUBMISSIONS.filter((s) => s.status === tab).length}
+              </span>
+
+              {activeTab === tab && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-400 shadow-[0_0_12px_rgba(45,212,191,0.4)]"
+                />
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Results Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-max mt-8">
-        {filteredSubmissions.length > 0 ? (
-          filteredSubmissions.map((sub) => (
-            <SubmissionCard key={sub.id} submission={sub} />
-          ))
-        ) : (
-          <div className="col-span-full py-20 text-center text-gray-500 text-sm italic">
-            No {activeTab.toLowerCase()} submissions found.
-          </div>
-        )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-max mt-8 overflow-hidden">
+        <AnimatePresence mode="popLayout">
+          {filteredSubmissions.map((sub) => (
+            <motion.div
+              key={sub.id}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <SubmissionCard submission={sub} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-max">
