@@ -1,20 +1,14 @@
 import React from "react";
-import type { CampaignDetailsType } from "../types";
 
 import { useHome } from "../hooks/useHome";
 import { IconBuilding } from "@tabler/icons-react";
 import { FormatUGXCurrency, GetFullGenderName } from "../lib/helpers";
+import type { CampaignsResponse } from "../pocketbase-types";
 
-const CampaignCard: React.FC<{ campaign: CampaignDetailsType }> = ({
+const CampaignCard: React.FC<{ campaign: CampaignsResponse }> = ({
   campaign,
 }) => {
   const { setActiveView, setCampaignInDetails } = useHome();
-  // Join Feature: Calculate utilization based on joined submissions
-  // const spent =
-  //   campaign.expand?.["submissions(campaign)"]?.reduce(
-  //     (acc, curr) => acc + curr.payout,
-  //     0,
-  //   ) || 0;
   const progress = 59; //(spent / campaign.budget) * 100;
 
   const brand = campaign.expand?.brand;
@@ -30,9 +24,9 @@ const CampaignCard: React.FC<{ campaign: CampaignDetailsType }> = ({
       {/* Header: Visual Context */}
       <div className="h-32 relative overflow-hidden bg-zinc-950">
         {/* Thumbnail Image or Placeholder */}
-        {campaign.thumbnail ? (
+        {campaign?.thumbnail ? (
           <img
-            src={campaign.thumbnail}
+            src={campaign?.thumbnail}
             className="absolute inset-0 w-full h-full object-cover"
             alt="Campaign"
           />

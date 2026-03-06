@@ -7,14 +7,14 @@ import {
   IconPackageOff,
   IconAlertTriangle,
 } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { pb } from "../../../lib/pocketbase";
 
 import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
-import type { CampaignsRecord } from "../../../pocketbase-types";
+import type { CampaignsResponse } from "../../../pocketbase-types";
 import { usePaginatedCollection } from "../../../hooks/useCollection";
 
-export const YourCampaignCard: React.FC<{ campaign: CampaignsRecord }> = ({
+export const YourCampaignCard: React.FC<{ campaign: CampaignsResponse }> = ({
   campaign,
 }) => {
   const { setActiveView, setCampaignInDetails } = useBrandDashboard();
@@ -83,21 +83,32 @@ export const YourCampaignCard: React.FC<{ campaign: CampaignsRecord }> = ({
 };
 
 const YourCampaigns: React.FC = () => {
-  const { setActiveView, campaigns, setCampaigns } = useBrandDashboard();
-  const [error, setError] = useState(null);
+  const { setCampaigns, campaigns, setActiveView } = useBrandDashboard();
+  const userId = pb.authStore.record?.id;
 
-  const collection = usePaginatedCollection<CampaignsRecord>(
+  // Memoize the options object
+  const options = useMemo(
+    () => ({
+      filter: `user="${userId}"`,
+      sort: "-created",
+    }),
+    [userId],
+  );
+
+  const { items, collErr: error } = usePaginatedCollection<CampaignsResponse>(
     "campaigns",
     1,
     10,
-    {
-      filter: `user_id="${pb.authStore.record?.id}"`,
-      sort: "-created",
-    },
+    options,
   );
-  setCampaigns(collection.items);
 
-  console.log(campaigns);
+  useEffect(() => {
+    if (items.length > 0) {
+      setCampaigns(items);
+    }
+  }, [items, setCampaigns]);
+
+  console.log("Cioii", campaigns);
 
   return (
     <>
@@ -125,7 +136,9 @@ const YourCampaigns: React.FC = () => {
             <h4 className="text-white font-bold mb-1">
               Failed to load campaigns
             </h4>
-            <p className="text-gray-500 text-xs max-w-[200px]">{error}</p>
+            <p className="text-gray-500 text-xs max-w-[200px]">
+              {error.message}
+            </p>
             <button className="mt-4 text-xs font-bold text-rose-400 hover:underline">
               Retry Connection
             </button>
@@ -133,7 +146,7 @@ const YourCampaigns: React.FC = () => {
         )}
 
         {/* EMPTY STATE (No Content) */}
-        {!campaigns && (
+        {!campaigns?.length && (
           <div className="flex-1 flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl">
             <div className="p-4 bg-white/5 rounded-full mb-4">
               <IconPackageOff size={40} className="text-gray-600" />
@@ -175,43 +188,5 @@ const YourCampaigns: React.FC = () => {
     </>
   );
 };
-
-// {/* Scrollable Campaign List */}
-//         <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar">
-//
-//         {/*[1, 2, 3].map((_, i) => (
-//           <YourCampaignCard key={i} campaign={{
-//             title: 'Summer Waves 2024',
-//             country: 256,
-//             launchDate: '2026-02-21',
-//             hashtags: 'MWSS2024',
-//             budget: 1500,
-//             productType: 'Beverage',
-//             ageRanges: ['18-24'],
-//             visibility: 'open'
-//           }} />
-//         ))*/}
-//         </div>
-//
-//
-// export const CampaignContainer = ({ campaigns, loading, error }: { campaigns: any[], loading: boolean, error: boolean }) => {
-//
-//   // Logic to determine what to show
-//   const hasNoContent = !loading && !error && campaigns.length === 0;
-//
-//   return (
-//     <section className="bg-[#0D1117] border border-white/5 rounded-3xl p-6 flex flex-col h-[600px] shadow-2xl">
-//       <div className="flex justify-between items-center mb-6">
-//         <h3 className="text-lg font-bold text-white tracking-tight">Your Campaigns</h3>
-//         {!hasNoContent && !error && (
-//           <span className="text-[10px] bg-teal-500/10 text-teal-400 px-2 py-1 rounded-md font-bold uppercase">
-//             {campaigns.length} Active
-//           </span>
-//         )}
-//       </div>
-//
-//           </section>
-//   );
-// };
 
 export default YourCampaigns;

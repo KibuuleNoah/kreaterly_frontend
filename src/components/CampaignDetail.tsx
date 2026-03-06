@@ -4,19 +4,9 @@ import {
   IconUserPlus,
   IconChartBar,
   IconTarget,
-  IconCheck,
   IconUsers,
   IconCalendar,
-  IconAlertCircle,
 } from "@tabler/icons-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import CreatorInvitesSection from "./BrandDashboardViews/sections/CreatorInvitesSection";
 import CampaignCreatorsSection from "./BrandDashboardViews/sections/CampaignCreatorsSection";
 import { useCampaignDetail } from "../hooks/useCampaignDetail";
@@ -48,7 +38,7 @@ export const CampaignDescription = ({ desc }: { desc: string }) => {
   return (
     <div>
       <p
-        className={`text-gray-400 text-lg md:text-xl max-w-4xl ${!isExpanded && "line-clamp-3"}`}
+        className={`text-gray-400 text-lg md:text-xl max-w-4xl transition-all ${!isExpanded && "line-clamp-3"}`}
       >
         {desc}
       </p>
@@ -95,9 +85,11 @@ const CampaignDetails = () => {
     },
   ];
 
+  // <div className="bg-[#0A0B0E] relative min-h-screen text-white max-w-7xl mx-auto px-6 py-12 space-y-12">
+  //   <div className="mx-auto p-1 w-full">
   return (
-    <div className="bg-[#0A0B0E] relative min-h-screen text-white max-w-7xl mx-auto px-6 py-12 space-y-12">
-      <div className="mx-auto p-1 w-full">
+    <div className="bg-[#0A0B0E] text-white">
+      <div className="p-1 w-full">
         {/* Header Area */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
           <div>

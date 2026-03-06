@@ -54,8 +54,8 @@ const CreatorDashboardLayout: React.FC<{
           {/* Center: Balanced Navigation Pill */}
           <div className="hidden md:flex flex-none items-center justify-center">
             <nav className="flex items-center gap-1 p-1 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
-              {NAV_LINKS.map((link) => {
-                return <CreatorTopNavLink link={link} Ctx={Ctx} />;
+              {NAV_LINKS.map((link, idx) => {
+                return <CreatorTopNavLink key={idx} link={link} Ctx={Ctx} />;
               })}
             </nav>
           </div>

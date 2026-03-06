@@ -3,7 +3,7 @@ import BrandDashboardLayout from "../layouts/BrandDashboardLayout";
 import {
   UserRole,
   type BrandDashboardContextType,
-  type CampaignDetailsType,
+  type CampaignResponse,
 } from "../types";
 import Home from "../components/BrandDashboardViews/Home";
 // import Analytics from "../components/BrandDashboardViews/Analytics";
@@ -17,7 +17,7 @@ import BrandFirstTime from "../components/BrandDashboardViews/BrandFirstTime";
 import Analytics from "../components/BrandDashboardViews/Analytics";
 import InviteCreators from "../components/BrandDashboardViews/InviteCreators";
 import { BrandDashboardProvider } from "../components/contexts/BrandDashboardContext";
-import type { CampaignsRecord } from "../pocketbase-types";
+import type { CampaignsResponse } from "../pocketbase-types";
 import CampaignDetails from "../components/CampaignDetail";
 
 const BASE_VIEWS = ["Home", "Settings", "Analytics", "Review Content"];
@@ -28,9 +28,9 @@ const BrandDashboard = () => {
   const [viewNavTree, setViewNavTree] = useState<string[]>(["Home"]);
   const [isBrandFirstTime, setIsBrandFirstTime] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [campaigns, setCampaigns] = useState<CampaignsRecord[] | null>(null);
+  const [campaigns, setCampaigns] = useState<CampaignsResponse[] | null>(null);
   const [campaignInDetails, setCampaignInDetails] =
-    useState<CampaignDetailsType | null>(null);
+    useState<CampaignsResponse | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const BrandDashboard = () => {
       try {
         await pb
           .collection("campaigns")
-          .getFirstListItem(`user_id="${pb.authStore.record?.id}"`);
+          .getFirstListItem(`user="${pb.authStore.record?.id}"`);
       } catch (err: any) {
         if (err.status == 404) {
           setIsBrandFirstTime(true);

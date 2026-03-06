@@ -6,10 +6,7 @@ import { pb } from "../lib/pocketbase";
  * Custom hook to fetch a PocketBase collection.
  * T represents the record type for better DX.
  */
-export function useCollection<T extends RecordModel>(
-  collectionName: string,
-  options: object = {},
-) {
+export function useCollection<T>(collectionName: string, options: object = {}) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -53,7 +50,7 @@ export function useCollection<T extends RecordModel>(
   return { data, loading, error };
 }
 
-export function usePaginatedCollection<T extends RecordModel>(
+export function usePaginatedCollection<T>(
   collectionName: string,
   page: number = 1,
   perPage: number = 20,

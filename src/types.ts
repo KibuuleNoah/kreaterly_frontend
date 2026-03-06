@@ -1,7 +1,11 @@
 import type React from "react";
 import type { Dispatch, SetStateAction } from "react";
 
-import type { BrandsRecord, CampaignsRecord } from "./pocketbase-types";
+import type {
+  BrandsRecord,
+  CampaignsRecord,
+  CampaignsResponse,
+} from "./pocketbase-types";
 import z from "zod";
 import type { RecordModel } from "pocketbase";
 export type AuthStep = "ROLE_SELECTION" | "AUTH_ENTRY" | "OTP_VERIFY";
@@ -98,11 +102,11 @@ export interface CustomLink {
   icon: React.ReactNode;
 }
 
-export interface CampaignDetailsType extends RecordModel, CampaignsRecord {
-  expand?: {
-    brand?: BrandsRecord;
-  };
-}
+// export interface CampaignResponse extends RecordModel, CampaignsRecord {
+//   expand?: {
+//     brand?: BrandsRecord;
+//   };
+// }
 // export interface Campaign extends CampaignsRecord {
 //   expand?: {
 //     brand?: { name: string; logo: string; is_verified?: boolean };
@@ -120,11 +124,11 @@ export interface HomeContextType {
   ctxType?: string;
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
-  campaigns: CampaignDetailsType[];
+  campaigns: CampaignResponse[];
   activeCategory: string;
   setActiveCategory: Dispatch<SetStateAction<string>>;
-  campaignInDetails: CampaignDetailsType;
-  setCampaignInDetails: Dispatch<SetStateAction<CampaignDetailsType>>;
+  campaignInDetails: CampaignResponse;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignResponse>>;
 }
 
 export interface BrandDashboardContextType {
@@ -132,10 +136,10 @@ export interface BrandDashboardContextType {
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
-  campaigns: CampaignsRecord[] | null;
-  setCampaigns: Dispatch<SetStateAction<CampaignsRecord[] | null>>;
-  campaignInDetails: CampaignDetailsType;
-  setCampaignInDetails: Dispatch<SetStateAction<CampaignDetailsType>>;
+  campaigns: CampaignsResponse[] | null;
+  setCampaigns: Dispatch<SetStateAction<CampaignsResponse[] | null>>;
+  campaignInDetails: CampaignsResponse;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignResponse>>;
   isBrandFirstTime: boolean;
   viewNavTree: string[];
   setViewNavTree: React.Dispatch<SetStateAction<string[]>>;

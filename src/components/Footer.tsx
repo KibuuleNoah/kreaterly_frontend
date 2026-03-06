@@ -1,12 +1,9 @@
 import React from "react";
 import {
-  IconRocket,
   IconBrandTiktok,
   IconBrandInstagram,
   IconBrandTwitter,
   IconChevronRight,
-  IconCopyright,
-  IconCopyrightFilled,
 } from "@tabler/icons-react";
 import { KreaterlyLogo } from "./Icons";
 

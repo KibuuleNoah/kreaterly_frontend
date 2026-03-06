@@ -8,10 +8,12 @@ import {
 } from "@tabler/icons-react";
 import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
 import { pb } from "../../../lib/pocketbase";
+import { useNavigate } from "react-router-dom";
 
 export const BrandUserProfileDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { setActiveView } = useBrandDashboard();
+  const navigate = useNavigate();
 
   return (
     <li className="relative list-none">
@@ -79,7 +81,13 @@ export const BrandUserProfileDropdown: React.FC = () => {
               />
             </div>
             <div className="mt-2 pt-2 border-t border-white/5">
-              <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-400 font-bold rounded-lg hover:bg-rose-500/10 transition-colors">
+              <button
+                onClick={() => {
+                  pb.authStore.clear();
+                  navigate(`/auth?role=Brand`);
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-400 font-bold rounded-lg hover:bg-rose-500/10 transition-colors"
+              >
                 <IconPower size={18} />
                 Logout
               </button>

@@ -126,7 +126,7 @@ const Wallet: React.FC = () => {
             <div className="bg-white/5 rounded-3xl p-6 space-y-3">
               <div className="flex justify-between text-[10px] font-black text-gray-500 uppercase tracking-widest">
                 <span>Fee 20%</span>
-                <span className="text-red-400">-{formatCurrency(5000)}</span>
+                <span className="text-red-400">-{FormatUGXCurrency(5000)}</span>
               </div>
               <div className="pt-3 border-t border-white/10 flex justify-between items-end">
                 <div>

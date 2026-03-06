@@ -1,7 +1,7 @@
 import { IconWallet, IconUsers, IconLink } from "@tabler/icons-react";
 import { pb } from "../../lib/pocketbase";
 
-import { FormatUGXCurrency } from "../../lib/helpers";
+import { FormatUGXCurrency, GreetUser } from "../../lib/helpers";
 
 const Home = () => {
   const storedUser = { name: "John" };
@@ -30,11 +30,9 @@ const Home = () => {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
       {/* Hero Welcome */}
       <header className="space-y-4">
-        <p className="text-teal-500 text-[10px] font-black uppercase tracking-[0.4em]">
-          Creator Dashboard
-        </p>
         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight">
-          Hello, <span className="text-white/40">{userName}.</span>
+          {GreetUser()}{" "}
+          <span className="text-white/40">{userName || "Kibuule Noah"}.</span>
         </h1>
         <div className="flex flex-wrap gap-4">
           <a className="bg-white/5 border border-white/10 text-white font-black px-8 py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all btn-bubble">

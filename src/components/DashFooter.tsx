@@ -20,7 +20,7 @@ const DashFooter: React.FC = () => {
           </div>
           <span className="hidden md:block h-4 w-[1px] bg-white/10" />
           <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">
-            © {new Date().getFullYear()} — NOTRIX
+            © {new Date().getFullYear()} @NOTRIX
           </p>
         </div>
 
