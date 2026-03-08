@@ -1,5 +1,9 @@
-import { IconBrandInstagram, IconBrandTiktok, IconBrandYoutube } from '@tabler/icons-react';
-import React, { useMemo } from 'react';
+import {
+  IconBrandInstagram,
+  IconBrandTiktok,
+  IconBrandYoutube,
+} from "@tabler/icons-react";
+import React, { useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -11,33 +15,34 @@ import {
   BarChart,
   Bar,
   Legend,
-  Cell
-} from 'recharts';
+  Cell,
+} from "recharts";
 
+// import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, CartesianGrid, Defs, LinearGradient, Stop } from 'recharts';
 interface ChartDataPoint {
   date: string;
   views: number;
   engagement: number;
 }
 
-
 const PERFORMANCE_DATA: ChartDataPoint[] = [
-  { date: 'Mon', views: 4000, engagement: 2400 },
-  { date: 'Tue', views: 3000, engagement: 1398 },
-  { date: 'Wed', views: 2000, engagement: 9800 },
-  { date: 'Thu', views: 2780, engagement: 3908 },
-  { date: 'Fri', views: 1890, engagement: 4800 },
-  { date: 'Sat', views: 2390, engagement: 3800 },
-  { date: 'Sun', views: 3490, engagement: 4300 },
+  { date: "Mon", views: 4000, engagement: 2400 },
+  { date: "Tue", views: 3000, engagement: 1398 },
+  { date: "Wed", views: 2000, engagement: 9800 },
+  { date: "Thu", views: 2780, engagement: 3908 },
+  { date: "Fri", views: 1890, engagement: 4800 },
+  { date: "Sat", views: 2390, engagement: 3800 },
+  { date: "Sun", views: 3490, engagement: 4300 },
 ];
-
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-slate-900 border border-slate-700 p-3 rounded-lg shadow-xl">
         <p className="text-slate-400 text-xs font-medium mb-1">{label}</p>
-        <p className="text-[#2dd4bf] text-sm font-bold">{payload[0].value.toLocaleString()} Views</p>
+        <p className="text-[#2dd4bf] text-sm font-bold">
+          {payload[0].value.toLocaleString()} Views
+        </p>
       </div>
     );
   }
@@ -46,10 +51,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export const PerformanceChart: React.FC = () => {
   return (
-    
     <div className="h-[350px] w-full bg-[#0D1117] border border-white/5 p-6 rounded-3xl shadow-2xl">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={PERFORMANCE_DATA} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        <AreaChart
+          data={PERFORMANCE_DATA}
+          margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+        >
           <defs>
             <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.3} />
@@ -60,26 +67,30 @@ export const PerformanceChart: React.FC = () => {
               <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
             </linearGradient>
           </defs>
-          
+
           {/* Modified: Grid color matches brand subtle borders */}
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
-          
+          <CartesianGrid
+            strokeDasharray="3 3"
+            vertical={false}
+            stroke="rgba(255,255,255,0.03)"
+          />
+
           {/* Modified: Axis tick colors match brand secondary text */}
           <XAxis
             dataKey="date"
             axisLine={false}
             tickLine={false}
-            tick={{ fill: '#6b7280', fontSize: 12 }}
+            tick={{ fill: "#6b7280", fontSize: 12 }}
             dy={10}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
-            tick={{ fill: '#6b7280', fontSize: 12 }}
+            tick={{ fill: "#6b7280", fontSize: 12 }}
           />
-          
+
           <Tooltip content={<CustomTooltip />} />
-          
+
           {/* UNTOUCHED: Plot colors preserved */}
           <Area
             type="monotone"
@@ -103,9 +114,7 @@ export const PerformanceChart: React.FC = () => {
   );
 };
 
-
-
-/** 
+/**
  * TypeScript Interfaces for Data & Config
  */
 interface PlatformData {
@@ -118,7 +127,7 @@ interface PlatformData {
 }
 
 interface PlatformConfig {
-  id: keyof Omit<PlatformData, 'name'>;
+  id: keyof Omit<PlatformData, "name">;
   color: string;
   icon: React.ReactNode;
   label: string;
@@ -127,96 +136,135 @@ interface PlatformConfig {
 export const SocialAnalytics: React.FC = () => {
   // 1. Centralized Platform Configuration
   const platforms: PlatformConfig[] = [
-    { id: 'tiktok', color: '#ffffff', icon: <IconBrandTiktok/>, label: 'TikTok' },
-    { id: 'youtube', color: '#ff0000', icon: <IconBrandYoutube/>, label: 'YouTube' },
-    { id: 'instagram', color: '#0ff0f0', icon: <IconBrandInstagram />, label: 'Instagram' },
+    {
+      id: "tiktok",
+      color: "#ffffff",
+      icon: <IconBrandTiktok />,
+      label: "TikTok",
+    },
+    {
+      id: "youtube",
+      color: "#ff0000",
+      icon: <IconBrandYoutube />,
+      label: "YouTube",
+    },
+    {
+      id: "instagram",
+      color: "#0ff0f0",
+      icon: <IconBrandInstagram />,
+      label: "Instagram",
+    },
   ];
 
   const data: PlatformData[] = [
-    { name: 'Week 1', tiktok: 4000, youtube: 2400, instagram: 2400 },
-    { name: 'Week 2', tiktok: 3000, youtube: 1398, instagram: 2210 },
-    { name: 'Week 3', tiktok: 2000, youtube: 9800, instagram: 2290 },
+    { name: "Week 1", tiktok: 4000, youtube: 2400, instagram: 2400 },
+    { name: "Week 2", tiktok: 3000, youtube: 1398, instagram: 2210 },
+    { name: "Week 3", tiktok: 2000, youtube: 9800, instagram: 2290 },
   ];
 
   // Calculate totals for a modern "KPI" header
   const totals = useMemo(() => {
-    return platforms.reduce((acc, p) => {
-      acc[p.id] = data.reduce((sum, item) => sum + (item[p.id] as number), 0);
-      return acc;
-    }, {} as Record<string, number>);
+    return platforms.reduce(
+      (acc, p) => {
+        acc[p.id] = data.reduce((sum, item) => sum + (item[p.id] as number), 0);
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }, [data]);
 
   return (
-    
-<div className="w-full max-w-5xl bg-[#0D1117] border border-white/5 rounded-3xl shadow-2xl overflow-hidden font-sans text-white">
-      
+    <div className="w-full max-w-5xl bg-[#0D1117] border border-white/5 rounded-3xl shadow-2xl overflow-hidden font-sans text-white">
       {/* Header with KPI Cards */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
         <div>
-          <h3 className="text-2xl font-bold tracking-tight text-white">Channel Growth</h3>
-          <p className="text-sm text-gray-400 mt-1">Aggregated performance across 3 networks</p>
+          <h3 className="text-2xl font-bold tracking-tight text-white">
+            Channel Growth
+          </h3>
+          <p className="text-sm text-gray-400 mt-1">
+            Aggregated performance across 3 networks
+          </p>
         </div>
       </div>
 
       {/* Chart Section */}
       <div className="h-[420px] w-full group">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          >
             <defs>
               {/* Ensure platforms.color includes your Brand Teal (#14b8a6) */}
               {platforms.map((p) => (
-                <linearGradient key={p.id} id={`${p.id}Grad`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={p.color} stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor={p.color} stopOpacity={0}/>
+                <linearGradient
+                  key={p.id}
+                  id={`${p.id}Grad`}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop offset="5%" stopColor={p.color} stopOpacity={0.3} />
+                  <stop offset="95%" stopColor={p.color} stopOpacity={0} />
                 </linearGradient>
               ))}
             </defs>
 
             {/* Subtler grid for a cleaner look */}
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
-            
-            <XAxis 
-              dataKey="name" 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fill: '#6b7280', fontSize: 12 }} 
-              dy={15}
-            />
-            <YAxis 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fill: '#6b7280', fontSize: 12 }} 
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="rgba(255,255,255,0.03)"
             />
 
-            <Tooltip 
-              cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2 }}
-              contentStyle={{ 
-                backgroundColor: '#0D1117', 
-                border: '1px solid rgba(255,255,255,0.1)', 
-                borderRadius: '16px',
-                padding: '12px'
-              }}
-              itemStyle={{ fontSize: '13px', fontWeight: '500' }}
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280", fontSize: 12 }}
+              dy={15}
             />
-            
-            <Legend 
-              verticalAlign="top" 
-              align="right" 
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280", fontSize: 12 }}
+            />
+
+            <Tooltip
+              cursor={{ stroke: "rgba(255,255,255,0.1)", strokeWidth: 2 }}
+              contentStyle={{
+                backgroundColor: "#0D1117",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "16px",
+                padding: "12px",
+              }}
+              itemStyle={{ fontSize: "13px", fontWeight: "500" }}
+            />
+
+            <Legend
+              verticalAlign="top"
+              align="right"
               iconType="circle"
-              wrapperStyle={{ paddingBottom: '30px', fontSize: '11px', textTransform: 'uppercase', color: '#9ca3af' }}
+              wrapperStyle={{
+                paddingBottom: "30px",
+                fontSize: "11px",
+                textTransform: "uppercase",
+                color: "#9ca3af",
+              }}
             />
 
             {platforms.map((p, index) => (
-              <Area 
+              <Area
                 key={p.id}
-                type="monotone" 
-                dataKey={p.id} 
+                type="monotone"
+                dataKey={p.id}
                 stroke={p.color} // Make sure this is #14b8a6 in your platforms array
-                strokeWidth={3} 
-                fillOpacity={1} 
-                fill={`url(#${p.id}Grad)`} 
-                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
-                animationDuration={1200 + (index * 400)}
+                strokeWidth={3}
+                fillOpacity={1}
+                fill={`url(#${p.id}Grad)`}
+                activeDot={{ r: 6, strokeWidth: 0, fill: "#fff" }}
+                animationDuration={1200 + index * 400}
               />
             ))}
           </AreaChart>
@@ -226,7 +274,6 @@ export const SocialAnalytics: React.FC = () => {
   );
 };
 
-
 // Kreaterly Brand Configuration
 const KREATERLY_TEAL = "#14b8a6";
 const KREATERLY_BG = "#0D1117";
@@ -235,76 +282,180 @@ const KREATERLY_BORDER = "rgba(255, 255, 255, 0.05)";
 export const ChannelGrowthChart = ({ data }) => {
   return (
     <div className="w-full p-8 bg-[#0D1117] border border-white/5 rounded-3xl shadow-2xl overflow-hidden font-sans text-white">
-      
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
         <div>
-          <h3 className="text-2xl font-bold tracking-tight text-white">Channel Growth</h3>
-          <p className="text-sm text-gray-400 mt-1">Aggregated performance across Kreaterly networks</p>
+          <h3 className="text-2xl font-bold tracking-tight text-white">
+            Channel Growth
+          </h3>
+          <p className="text-sm text-gray-400 mt-1">
+            Aggregated performance across Kreaterly networks
+          </p>
         </div>
-        
+
         {/* Quick Legend/Status Badge */}
         <div className="flex items-center gap-2 px-3 py-1 bg-teal-500/10 border border-teal-500/20 rounded-full">
           <div className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-          <span className="text-xs font-bold text-teal-400 uppercase tracking-wider">Live Metrics</span>
+          <span className="text-xs font-bold text-teal-400 uppercase tracking-wider">
+            Live Metrics
+          </span>
         </div>
       </div>
 
       {/* Chart Section */}
       <div className="h-[420px] w-full group">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          >
             <defs>
               {/* Kreaterly Signature Gradient */}
               <linearGradient id="kreaterlyGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={KREATERLY_TEAL} stopOpacity={0.3}/>
-                <stop offset="95%" stopColor={KREATERLY_TEAL} stopOpacity={0}/>
+                <stop
+                  offset="5%"
+                  stopColor={KREATERLY_TEAL}
+                  stopOpacity={0.3}
+                />
+                <stop offset="95%" stopColor={KREATERLY_TEAL} stopOpacity={0} />
               </linearGradient>
             </defs>
 
             {/* Subtle Grid - matching brand border feel */}
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
-            
-            <XAxis 
-              dataKey="name" 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fill: '#6b7280', fontSize: 12 }} 
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="rgba(255,255,255,0.03)"
+            />
+
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280", fontSize: 12 }}
               dy={15}
             />
-            <YAxis 
-              axisLine={false} 
-              tickLine={false} 
-              tick={{ fill: '#6b7280', fontSize: 12 }} 
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280", fontSize: 12 }}
             />
 
-            <Tooltip 
-              cursor={{ stroke: 'rgba(20, 184, 166, 0.2)', strokeWidth: 2 }}
-              contentStyle={{ 
-                backgroundColor: '#0D1117', 
-                border: '1px solid rgba(255,255,255,0.1)', 
-                borderRadius: '16px',
-                padding: '12px',
-                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.5)'
+            <Tooltip
+              cursor={{ stroke: "rgba(20, 184, 166, 0.2)", strokeWidth: 2 }}
+              contentStyle={{
+                backgroundColor: "#0D1117",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "16px",
+                padding: "12px",
+                boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.5)",
               }}
-              itemStyle={{ fontSize: '13px', fontWeight: '600', color: KREATERLY_TEAL }}
-            />
-            
-            <Legend 
-              verticalAlign="top" 
-              align="right" 
-              iconType="circle"
-              wrapperStyle={{ paddingBottom: '30px', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}
+              itemStyle={{
+                fontSize: "13px",
+                fontWeight: "600",
+                color: KREATERLY_TEAL,
+              }}
             />
 
-            <Area 
-              type="monotone" 
+            <Legend
+              verticalAlign="top"
+              align="right"
+              iconType="circle"
+              wrapperStyle={{
+                paddingBottom: "30px",
+                fontSize: "11px",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+              }}
+            />
+
+            <Area
+              type="monotone"
               dataKey="views" // Replace with your data key
-              stroke={KREATERLY_TEAL} 
-              strokeWidth={3} 
-              fillOpacity={1} 
-              fill="url(#kreaterlyGrad)" 
-              activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+              stroke={KREATERLY_TEAL}
+              strokeWidth={3}
+              fillOpacity={1}
+              fill="url(#kreaterlyGrad)"
+              activeDot={{ r: 6, strokeWidth: 0, fill: "#fff" }}
+              animationDuration={1500}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};
+
+const MOCK_CHART_DATA = [
+  { day: "Mon", total: 400000 },
+  { day: "Tue", total: 300000 },
+  { day: "Wed", total: 600000 },
+  { day: "Thu", total: 800000 },
+  { day: "Fri", total: 500000 },
+  { day: "Sat", total: 900000 },
+  { day: "Sun", total: 1250000 },
+];
+
+export const RevenueChart = () => {
+  return (
+    <div>
+      {/* Header Info */}
+      <div className="flex justify-between items-start mb-8 relative z-10">
+        <div>
+          <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">
+            Revenue Velocity
+          </p>
+          <h3 className="text-4xl font-black text-white tracking-tighter">
+            UGX 1,250,000
+            <span className="ml-2 text-xs text-teal-500 font-bold bg-teal-500/10 px-2 py-0.5 rounded-lg">
+              +12.4%
+            </span>
+          </h3>
+        </div>
+      </div>
+
+      {/* Chart Wrapper - Crucial: defined height or flex-1 with a parent min-h */}
+      <div className="w-full h-[250px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={MOCK_CHART_DATA}
+            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+          >
+            <defs>
+              <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#2dd4bf" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="rgba(255,255,255,0.03)"
+            />
+            <XAxis
+              dataKey="day"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#4b5563", fontSize: 10, fontWeight: 900 }}
+              dy={10}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#11141A",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "16px",
+              }}
+              itemStyle={{ color: "#2dd4bf", fontWeight: "900" }}
+              cursor={{ stroke: "rgba(45, 212, 191, 0.2)", strokeWidth: 2 }}
+            />
+            <Area
+              type="monotone"
+              dataKey="total"
+              stroke="#2dd4bf"
+              strokeWidth={3}
+              fillOpacity={1}
+              fill="url(#colorTotal)"
+              isAnimationActive={true}
               animationDuration={1500}
             />
           </AreaChart>

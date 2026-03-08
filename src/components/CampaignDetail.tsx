@@ -16,6 +16,7 @@ import { AnalyticTile } from "./CampaignDetailSections/sections";
 import PerformanceOverview from "./CampaignDetailSections/PerformanceOverview";
 import CampaignBrief from "./CampaignDetailSections/CampaignBrief";
 import PayoutTiers from "./CampaignDetailSections/PayoutTiers";
+import CollapsibleDescription from "./CollapsibleDescription";
 
 const platform_payouts = [
   {
@@ -31,26 +32,6 @@ const platform_payouts = [
     maxPayout: 2500000,
   },
 ];
-
-export const CampaignDescription = ({ desc }: { desc: string }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  return (
-    <div>
-      <p
-        className={`text-gray-400 text-lg md:text-xl max-w-4xl transition-all ${!isExpanded && "line-clamp-3"}`}
-      >
-        {desc}
-      </p>
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="text-blue-500 hover:underline mt-2 text-sm font-medium"
-      >
-        {isExpanded ? "Show Less" : "Read More"}
-      </button>
-    </div>
-  );
-};
 
 const CampaignDetails = () => {
   const { setActiveView, campaignInDetails, ctxType } = useCampaignDetail();
@@ -104,7 +85,7 @@ const CampaignDetails = () => {
             <h1 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
               {campaign.title}
             </h1>
-            <CampaignDescription desc={campaign.description} />
+            <CollapsibleDescription desc={campaign.description} />
           </div>
 
           {is_brand && (

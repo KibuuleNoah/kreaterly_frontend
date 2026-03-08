@@ -2,6 +2,53 @@ import { useState, useEffect } from "react";
 import { type ListResult, type RecordModel } from "pocketbase";
 import { pb } from "../lib/pocketbase";
 
+export function useGetOneCollection<T>(
+  collectionName: string,
+  id: string,
+  options: object = {},
+) {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    // Return early if no ID is provided (useful for dynamic routing)
+    if (!id) return;
+
+    let isMounted = true;
+
+    async function fetchRecord() {
+      setLoading(true);
+      try {
+        const record = await pb
+          .collection(collectionName)
+          .getOne<T>(id, options);
+
+        if (isMounted) {
+          setData(record);
+          setError(null);
+        }
+      } catch (err: any) {
+        if (isMounted && !err.isAbort) {
+          setError(err as Error);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    fetchRecord();
+    return () => {
+      isMounted = false;
+    };
+  }, [collectionName, id, JSON.stringify(options)]);
+
+  return {
+    item: data,
+    itemLoading: loading,
+    itemErr: error,
+  };
+}
 /**
  * Custom hook to fetch a PocketBase collection.
  * T represents the record type for better DX.

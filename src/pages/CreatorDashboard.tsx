@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import CreatorDashboardLayout from "../layouts/CreatorDashboardLayout";
 import Wallet from "../components/CreatorDashboardViews/Wallet";
 import Home from "../components/CreatorDashboardViews/Home";
-import LogOutButton from "../components/LogOutButton";
 import LoadingScreen from "../components/LoadingScreen";
 import { CreatorDashboardProvider } from "../components/contexts/CreatorDashboardContext";
 import { useNavigate } from "react-router-dom";
 import Submissions from "../components/CreatorDashboardViews/Submissions";
+import MyCampaignDetail from "../components/CreatorDashboardViews/MyCampaignDetail";
 
-const CreatorDashboard = () => {
+const CreatorDashboard: React.FC = () => {
   const [activeView, setActiveView] = useState("Home");
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ const CreatorDashboard = () => {
   const renderContent = () => {
     switch (activeView) {
       case "Home":
-        return <Home />;
+        return <MyCampaignDetail />;
       case "Submissions":
         return <Submissions />;
       case "Wallet":

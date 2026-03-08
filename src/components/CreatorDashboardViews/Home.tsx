@@ -1,78 +1,210 @@
-import { IconWallet, IconUsers, IconLink } from "@tabler/icons-react";
+import React from "react";
+import {
+  IconWallet,
+  IconUsers,
+  IconLink,
+  IconArrowUpRight,
+  IconActivity,
+  IconChevronRight,
+  IconCircleCheck,
+  IconLock,
+} from "@tabler/icons-react";
+import { motion } from "framer-motion";
 import { pb } from "../../lib/pocketbase";
-
 import { FormatUGXCurrency, GreetUser } from "../../lib/helpers";
 
+import { RevenueChart } from "../Charts";
+
+import {
+  IconRocket,
+  IconMailOpened,
+  IconClock,
+  IconArrowRight,
+} from "@tabler/icons-react";
+import MyCampaigns from "./sections/MyCampaigns";
+import Invites from "./sections/Invites";
+
 const Home = () => {
-  const storedUser = { name: "John" };
-  const userName = pb?.authStore?.record?.name;
-  console.log(userName);
+  const userName = pb?.authStore?.record?.name || "Kibuule Noah";
 
   const stats = [
     {
       label: "Available",
       value: FormatUGXCurrency(1250000),
-      icon: <IconWallet size={24} />, // Wallet for financial status
+      icon: <IconWallet size={20} />,
+      color: "text-teal-400",
     },
     {
       label: "Platform Reach",
       value: "2.4M",
-      icon: <IconUsers size={24} />, // Group of users for reach
+      icon: <IconUsers size={20} />,
+      color: "text-blue-400",
     },
     {
       label: "Verified Links",
       value: "4 Assets",
-      icon: <IconLink size={24} />, // Link icon for assets/URLs
+      icon: <IconLink size={20} />,
+      color: "text-purple-400",
     },
   ];
 
+  const MOCK_CHART_DATA = [
+    { day: "Mon", total: 400000 },
+    { day: "Tue", total: 300000 },
+    { day: "Wed", total: 600000 },
+    { day: "Thu", total: 800000 },
+    { day: "Fri", total: 500000 },
+    { day: "Sat", total: 900000 },
+    { day: "Sun", total: 1250000 },
+  ];
+
+  // Container variants for staggered entrance
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    show: { y: 0, opacity: 1 },
+  };
+
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
-      {/* Hero Welcome */}
-      <header className="space-y-4">
-        <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight">
-          {GreetUser()}{" "}
-          <span className="text-white/40">{userName || "Kibuule Noah"}.</span>
-        </h1>
-        <div className="flex flex-wrap gap-4">
-          <a className="bg-white/5 border border-white/10 text-white font-black px-8 py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all btn-bubble">
-            View Wallet
-          </a>
-          <a className="bg-teal-500 text-black font-black px-8 py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-teal-500/20 active:scale-95 transition-all btn-bubble">
-            Browse Gigs
-          </a>
-        </div>
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-12 pb-20 max-w-7xl mx-auto"
+    >
+      {/* Hero Section: Dynamic & Bold */}
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 pt-4">
+        <motion.div variants={item} className="space-y-2">
+          <p className="text-teal-500 text-[10px] font-black uppercase tracking-[0.4em] flex items-center gap-2">
+            <span className="w-8 h-[1px] bg-teal-500/30"></span> Creator
+            Dashboard
+          </p>
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]">
+            {GreetUser()}
+            <br />
+            <span className="text-white/20 hover:text-white/40 transition-colors duration-500 cursor-default">
+              {userName}.
+            </span>
+          </h1>
+        </motion.div>
+
+        <motion.div variants={item} className="flex gap-4">
+          <button className="group relative overflow-hidden bg-teal-500 text-black font-black px-10 py-5 rounded-[24px] text-[11px] uppercase tracking-widest transition-all active:scale-95 shadow-2xl shadow-teal-500/20">
+            <span className="relative z-10 flex items-center gap-2">
+              Explore Gigs <IconArrowUpRight size={16} />
+            </span>
+          </button>
+        </motion.div>
       </header>
 
-      {/* Modern Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+      {/* Metrics Grid */}
+      <motion.div
+        variants={item}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+      >
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="bg-[#101217] border border-white/5 p-6 md:p-8 rounded-[32px] md:rounded-[40px] hover:border-white/10 transition-all group cursor-default"
+            className="group bg-[#11141A] border border-white/[0.05] p-8 rounded-[40px] hover:border-teal-500/30 transition-all duration-500 relative overflow-hidden"
           >
+            <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+              {React.cloneElement(stat.icon as React.ReactElement, {
+                size: 120,
+              })}
+            </div>
             <div
-              className={`w-12 h-12 bg-teal-500/10 rounded-2xl flex items-center justify-center text-teal-400 mb-6 border border-teal-500/20 group-hover:scale-110 transition-transform`}
+              className={`w-12 h-12 bg-white/[0.03] rounded-2xl flex items-center justify-center ${stat.color} mb-6 border border-white/5`}
             >
               {stat.icon}
             </div>
-            <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">
+            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">
               {stat.label}
             </p>
-            <p className="text-2xl md:text-3xl font-black text-white tracking-tighter">
+            <p className="text-3xl font-black text-white tracking-tighter">
               {stat.value}
             </p>
           </div>
         ))}
+      </motion.div>
+
+      {/* In your component */}
+      <div className="lg:col-span-2 bg-[#11141A] border border-white/[0.05] rounded-[40px] p-8 pb-2 relative overflow-hidden group min-h-[350px] flex flex-col">
+        <RevenueChart />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        {/* My Campaigns (2/3 Width) */}
+        <div className="md:col-span-8 space-y-6">
+          <MyCampaigns />
+        </div>
+
+        {/* Invites (1/3 Width) */}
+        <div className="md:col-span-4 space-y-6">
+          <Invites />
+        </div>
+      </div>
+
+      <div className="flex justify-center items-center gap-6">
+        {/* Profile Strength */}
+        <div className="bg-teal-500 w-2xl p-8 rounded-[40px] flex items-center justify-between group cursor-pointer active:scale-[0.98] transition-all">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="bg-black text-teal-500 p-1.5 rounded-lg">
+                <IconCircleCheck size={18} />
+              </div>
+              <p className="text-[10px] font-black text-black/60 uppercase tracking-widest">
+                Account Health
+              </p>
+            </div>
+            <h4 className="text-2xl font-black text-black tracking-tight leading-none">
+              Complete Verification
+            </h4>
+            <p className="text-black/50 text-[10px] font-bold uppercase tracking-wider">
+              Unlock UGX 1M+ Gigs
+            </p>
+          </div>
+          <div className="relative w-20 h-20 flex items-center justify-center">
+            <svg className="w-full h-full rotate-[-90deg]">
+              <circle
+                cx="40"
+                cy="40"
+                r="34"
+                className="stroke-black/10 fill-none"
+                strokeWidth="6"
+              />
+              <circle
+                cx="40"
+                cy="40"
+                r="34"
+                className="stroke-black fill-none"
+                strokeWidth="6"
+                strokeDasharray="213"
+                strokeDashoffset="42"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span className="absolute text-sm font-black text-black">80%</span>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Active Ledger / Activity */}
-        <div className="lg:col-span-4 space-y-6">
-          <h3 className="text-xl font-black text-white tracking-tight px-2">
-            Live Ledger
-          </h3>
-          <div className="bg-[#101217] border border-white/5 p-8 rounded-[40px] space-y-6">
+        {/* Activity Ledger: Minimalist & Clean */}
+        <motion.div variants={item} className="lg:col-span-4 space-y-6">
+          <div className="flex items-center justify-between px-2">
+            <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+              <IconActivity size={16} className="text-teal-500" /> Recent Events
+            </h3>
+          </div>
+
+          <div className="bg-[#11141A] border border-white/[0.05] p-2 rounded-[40px] divide-y divide-white/[0.03]">
             {[
               {
                 label: "Payment Received",
@@ -93,74 +225,33 @@ const Home = () => {
                 status: "ACTIVE",
               },
             ].map((log, i) => (
-              <div key={i} className="flex justify-between items-center group">
-                <div>
+              <div
+                key={i}
+                className="flex justify-between items-center p-6 hover:bg-white/[0.02] transition-colors rounded-[32px]"
+              >
+                <div className="space-y-1">
                   <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
                     {log.label}
                   </p>
-                  <p className="text-sm font-black text-white">{log.val}</p>
+                  <p className="text-sm font-bold text-white">{log.val}</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-[8px] font-black text-teal-500 uppercase">
-                    {log.status}
-                  </p>
-                  <p className="text-[10px] text-gray-600 font-bold">
+                <div className="text-right space-y-1">
+                  <div className="flex items-center gap-1 justify-end">
+                    <IconCircleCheck size={10} className="text-teal-500" />
+                    <span className="text-[9px] font-black text-teal-500 uppercase">
+                      {log.status}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-gray-600 font-medium">
                     {log.date}
                   </p>
                 </div>
               </div>
             ))}
-            <button className="w-full py-5 text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-colors bg-white/5 rounded-[24px] btn-bubble">
-              Full Transaction History
-            </button>
           </div>
-        </div>
-
-        {/* Featured Content Gigs */}
-        <div className="lg:col-span-8 space-y-6">
-          <div className="flex items-center justify-between px-2">
-            <h3 className="text-xl font-black text-white tracking-tight">
-              Curated Marketplace
-            </h3>
-            <a className="text-teal-500 text-[10px] font-black uppercase tracking-widest btn-bubble px-3 py-1 rounded-lg">
-              See All Gigs
-            </a>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[].slice(0, 2).map((c) => (
-              <a
-                key={c.id}
-                className="group bg-[#101217] border border-white/5 p-6 rounded-[36px] hover:border-teal-500/20 transition-all flex flex-col gap-4 btn-bubble"
-              >
-                <div className="h-40 rounded-2xl overflow-hidden relative">
-                  <img
-                    src={c.image}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                </div>
-                <div>
-                  <p className="text-[9px] font-black text-teal-500 uppercase tracking-widest mb-1">
-                    {c.brandName}
-                  </p>
-                  <h4 className="text-lg font-black text-white leading-tight">
-                    {c.title}
-                  </h4>
-                  <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
-                    <span className="text-xs font-black text-white/70">
-                      {formatCurrency(c.cpmUGX)}
-                    </span>
-                    <span className="text-[10px] font-black uppercase text-teal-500">
-                      Apply Now →
-                    </span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
