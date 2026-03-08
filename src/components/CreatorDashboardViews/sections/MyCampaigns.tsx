@@ -6,6 +6,11 @@ import {
   IconRocket,
   IconUsers,
 } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
+import { usePaginatedCollection } from "../../../hooks/useCollection";
+import { useCreatorDashboard } from "../../../hooks/useCreatorDashboard";
+import { a } from "framer-motion/client";
+import type { CampaignsParticipantsResponse } from "../../../pocketbase-types";
 
 type Campaign = {
   id: string;
@@ -16,66 +21,38 @@ type Campaign = {
   thumbnail?: string;
 };
 
-const MOCK_CAMPAIGNS: Campaign[] = [
-  {
-    id: "1",
-    brand: "Nike",
-    title: "Summer Sneaker Launch",
-    deadline: "3 days left",
-    slots: 12,
-    thumbnail: "",
-  },
-  {
-    id: "2",
-    brand: "Apple",
-    title: "iPhone Creator Showcase",
-    deadline: "5 days left",
-    slots: 8,
-    thumbnail: "",
-  },
-  {
-    id: "3",
-    brand: "Adidas",
-    title: "Streetwear Challenge",
-    deadline: "1 week left",
-    slots: 20,
-    thumbnail: "",
-  },
-  {
-    id: "4",
-    brand: "Samsung",
-    title: "Galaxy Creator Program",
-    deadline: "2 days left",
-    slots: 5,
-    thumbnail: "",
-  },
-];
+const MyCampaigns: React.FC = () => {
+  const navigate = useNavigate();
+  const {
+    creator,
+    setActiveView,
+    setParticipantCampaignInDetail,
+    participantCampaigns,
+  } = useCreatorDashboard();
 
-const MyCampaigns: React.FC<{ campaigns?: Campaign[] }> = ({ campaigns }) => {
-  campaigns = MOCK_CAMPAIGNS;
   return (
     <>
       <div className="flex items-center justify-between px-2">
         <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
-          <IconRocket size={16} className="text-teal-500" /> Active Campaigns
+          <IconRocket size={16} className="text-teal-500" /> My Campaigns
           <span className="ml-2 text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-gray-500">
-            {campaigns.length}
+            {participantCampaigns?.length}
           </span>
         </h3>
       </div>
 
       {/* Dynamic Container: Expands with content up to 500px */}
       <div className="space-y-4 max-h-[500px] overflow-y-auto no-scrollbar pr-1 transition-all duration-500">
-        {campaigns.length > 0 ? (
-          campaigns.map((camp) => (
+        {participantCampaigns?.length > 0 ? (
+          participantCampaigns?.map((c) => (
             <div
-              key={camp.id}
+              key={c.expand.campaign.id}
               className="group bg-[#11141A] border border-white/[0.05] p-5 rounded-[32px] hover:border-teal-500/30 transition-all flex items-center gap-5 cursor-pointer"
             >
               <div className="w-20 h-20 rounded-2xl bg-zinc-900 border border-white/5 overflow-hidden shrink-0 flex items-center justify-center">
-                {camp.thumbnail ? (
+                {c.thumbnail ? (
                   <img
-                    src={camp.thumbnail}
+                    src={c.thumbnail}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     alt=""
                   />
@@ -85,21 +62,31 @@ const MyCampaigns: React.FC<{ campaigns?: Campaign[] }> = ({ campaigns }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-black text-teal-500 uppercase tracking-widest mb-1">
-                  {camp.brand}
+                  {c?.expand?.campaign?.expand?.brand?.name}
                 </p>
                 <h4 className="text-white font-bold text-lg truncate">
-                  {camp.title}
+                  {c?.expand?.campaign?.title}
                 </h4>
                 <div className="flex gap-4 mt-2">
                   <span className="text-[10px] font-bold text-gray-500 flex items-center gap-1">
-                    <IconClock size={12} /> {camp.deadline}
+                    <IconClock size={12} />{" "}
+                    {new Date(
+                      c?.expand?.campaign?.end_date,
+                    ).toLocaleDateString()}{" "}
+                    deadline
                   </span>
                   <span className="text-[10px] font-bold text-gray-500 flex items-center gap-1">
-                    <IconUsers size={12} /> {camp.slots} left
+                    <IconUsers size={12} /> c.slots left
                   </span>
                 </div>
               </div>
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-teal-500 group-hover:text-black transition-all">
+              <div
+                onClick={() => {
+                  setParticipantCampaignInDetail(c || null);
+                  setActiveView("MyCampaignDetail");
+                }}
+                className="p-3 bg-white/5 rounded-2xl group-hover:bg-teal-500 group-hover:text-black transition-all"
+              >
                 <IconChevronRight size={20} />
               </div>
             </div>
@@ -110,8 +97,11 @@ const MyCampaigns: React.FC<{ campaigns?: Campaign[] }> = ({ campaigns }) => {
             <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
               No active campaigns
             </p>
-            <button className="text-teal-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
-              Find a Gig <IconArrowRight size={14} />
+            <button
+              onClick={() => navigate("/home")}
+              className="text-teal-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all"
+            >
+              Find One Now <IconArrowRight size={14} />
             </button>
           </div>
         )}

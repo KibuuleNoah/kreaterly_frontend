@@ -5,9 +5,7 @@ import {
   IconLink,
   IconArrowUpRight,
   IconActivity,
-  IconChevronRight,
   IconCircleCheck,
-  IconLock,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { pb } from "../../lib/pocketbase";
@@ -15,12 +13,6 @@ import { FormatUGXCurrency, GreetUser } from "../../lib/helpers";
 
 import { RevenueChart } from "../Charts";
 
-import {
-  IconRocket,
-  IconMailOpened,
-  IconClock,
-  IconArrowRight,
-} from "@tabler/icons-react";
 import MyCampaigns from "./sections/MyCampaigns";
 import Invites from "./sections/Invites";
 
@@ -89,7 +81,7 @@ const Home = () => {
           <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]">
             {GreetUser()}
             <br />
-            <span className="text-white/20 hover:text-white/40 transition-colors duration-500 cursor-default">
+            <span className="capitalize text-white/20 hover:text-white/40 transition-colors duration-500 cursor-default">
               {userName}.
             </span>
           </h1>

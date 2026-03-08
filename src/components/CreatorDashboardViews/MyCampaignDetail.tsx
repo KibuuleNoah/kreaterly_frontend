@@ -18,29 +18,25 @@ import {
   IconCalculator,
   IconLock,
   IconMessageCircle,
-  IconShieldLock,
   IconClock,
 } from "@tabler/icons-react";
-import { useGetOneCollection } from "../../hooks/useCollection";
-import type { CampaignsResponse } from "../../pocketbase-types";
 import CampaignBrief from "../CampaignDetailSections/CampaignBrief";
 import PayoutTiers from "../CampaignDetailSections/PayoutTiers";
 import CollapsibleDescription from "../CollapsibleDescription";
+import { useCreatorDashboard } from "../../hooks/useCreatorDashboard";
 
 const MyCampaignDetail: React.FC = () => {
   const [estimateViews, setEstimateViews] = useState(50000);
-  const submissions: string[] = [];
-  const maxSubmissions = 3;
-  const campResp = useGetOneCollection<CampaignsResponse>(
-    "campaigns",
-    "o2h5p8jp70d181n",
-  );
+  const { participantCampaignInDetail } = useCreatorDashboard();
 
-  if (!campResp.item) {
+  if (!participantCampaignInDetail) {
     return;
   }
 
-  const campaign = campResp.item;
+  const submissions: string[] = [];
+  const maxSubmissions = 3;
+
+  const campaign = participantCampaignInDetail.expand?.campaign;
 
   // Payout Projection Data
   const projectionData = [

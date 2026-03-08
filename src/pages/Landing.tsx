@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  IconBolt,
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandYoutube,
   IconCreditCard,
   IconHome,
   IconLock,
+  IconTargetArrow,
 } from "@tabler/icons-react";
 import { FormatUGXCurrency } from "../lib/helpers";
-const MOCK_CAMPAIGNS = [{}];
+import Footer from "../components/Footer";
+import { KreaterlyLogo, KreaterlyLogoAnimateDraw } from "../components/Icons";
+
 const PARTNERS_ROW_1 = [
   {
     name: "Nasser N.",
@@ -139,11 +143,29 @@ const LogoNode: React.FC<{ partner: any }> = ({ partner }) => (
 const CampaingCard: React.FC<{ campaign: any }> = ({ campaign }) => (
   <div className="w-[180px] sm:w-[220px] md:w-[240px] flex-shrink-0 glass-card border border-white/[0.04] rounded-[20px] md:rounded-[28px] overflow-hidden p-2 md:p-3 group hover:border-teal-500/20 hover:bg-white/[0.02] transition-all duration-500 shadow-lg mx-2">
     <div className="aspect-square rounded-[14px] md:rounded-[20px] overflow-hidden relative bg-black/40">
-      <img
+      {/*<img
         src={campaign.image}
         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
         alt={campaign.title}
-      />
+      />*/}
+      <div className="absolute inset-0 flex items-center justify-center bg-teal-400/10">
+        <svg
+          xmlns="http://www.w3.org"
+          className="h-10 w-10 stroke-teal-400/20"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M15 8h.01" />
+          <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z" />
+          <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
+          <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
+        </svg>
+      </div>
+
       <div className="absolute inset-0 bg-gradient-to-t from-[#0A0B0E] via-transparent to-transparent opacity-60"></div>
       <div className="absolute top-2 md:top-3 left-2 md:left-3">
         <span className="bg-teal-500 text-black px-1.5 py-0.5 md:px-2 md:py-1 rounded-md text-[6px] md:text-[7px] font-black uppercase tracking-widest shadow-lg">
@@ -161,7 +183,7 @@ const CampaingCard: React.FC<{ campaign: any }> = ({ campaign }) => (
             Rate
           </p>
           <p className="text-[9px] md:text-[11px] font-black tracking-tighter whitespace-nowrap">
-            {FormatUGXCurrency(campaign.cpmUGX)}
+            {FormatUGXCurrency(campaign.cpmUGX || 25000)}
           </p>
         </div>
       </div>
@@ -216,29 +238,6 @@ const NavItem: React.FC<{
   return isLink ? <Link to={to}>{Content}</Link> : Content;
 };
 
-const ProtocolCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}> = ({ icon, title, description }) => (
-  <div className="aspect-square glass-card border border-white/5 p-6 md:p-8 rounded-[48px] md:rounded-[64px] flex flex-col items-center justify-center text-center space-y-4 md:space-y-5 hover:border-teal-500/40 hover:bg-[#12151B] transition-all duration-500 group relative overflow-hidden shadow-[0_30px_100px_-20px_rgba(0,0,0,0.5)] active:scale-[0.97]">
-    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-    <div className="absolute -top-[40%] -right-[40%] w-[80%] h-[80%] bg-teal-500/5 rounded-full blur-[60px] group-hover:bg-teal-500/15 transition-all duration-1000"></div>
-    <div className="w-14 h-14 md:w-20 md:h-20 bg-black/40 rounded-2xl md:rounded-[28px] border border-white/10 flex items-center justify-center text-teal-400 relative z-10 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shadow-2xl">
-      <div className="absolute inset-0 bg-teal-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-      <div className="scale-75 md:scale-110 relative z-20">{icon}</div>
-    </div>
-    <div className="space-y-1 md:space-y-2 relative z-10">
-      <h3 className="text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tighter uppercase font-display leading-none group-hover:text-teal-400 transition-colors duration-300">
-        {title}
-      </h3>
-      <p className="text-gray-500 text-[9px] md:text-[11px] font-bold uppercase tracking-[0.15em] leading-relaxed max-w-[140px] md:max-w-[180px] mx-auto opacity-60 group-hover:opacity-100 transition-opacity">
-        {description}
-      </p>
-    </div>
-  </div>
-);
-
 const Landing: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
 
@@ -252,7 +251,7 @@ const Landing: React.FC = () => {
     "1531427186611-ecfd6d936c79",
     "1531123897727-8f129e1688ce",
     "1507003211169-0a1dd7228f2d",
-    "1523910088395-d7457f8ee315",
+    // "1523910088395-d7457f8ee315",
   ];
 
   return (
@@ -280,10 +279,8 @@ const Landing: React.FC = () => {
             className="flex items-center gap-3 md:gap-4 group cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
-            <div className="w-9 h-9 md:w-11 md:h-11 bg-teal-500 rounded-[10px] md:rounded-[14px] flex items-center justify-center text-black font-black shadow-[0_4px_30px_rgba(20,184,166,0.4)] group-hover:scale-110 transition-transform">
-              <span className="text-lg md:text-xl font-display leading-none pt-0.5">
-                K
-              </span>
+            <div className="w-9 h-9 md:w-11 md:h-11 rounded-[10px] md:rounded-[14px] flex items-center justify-center font-black shadow-[0_4px_30px_rgba(20,184,166,0.4)] group-hover:scale-110 transition-transform">
+              <KreaterlyLogo />
             </div>
             <span className="font-display text-2xl md:text-3xl tracking-tight text-white uppercase pt-1">
               Kreaterly
@@ -298,10 +295,10 @@ const Landing: React.FC = () => {
             </nav>
             <div className="flex items-center gap-3">
               <Link
-                to="/onboarding"
+                to="/auth"
                 className="bg-white text-black text-[9px] md:text-[10px] font-black uppercase tracking-widest px-5 md:px-8 py-3 md:py-4 rounded-full btn-bubble shadow-2xl hover:bg-teal-500 transition-all"
               >
-                Launch My Hub
+                Join Now
               </Link>
             </div>
           </div>
@@ -312,9 +309,22 @@ const Landing: React.FC = () => {
       <section className="relative pt-48 md:pt-64 pb-20 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 items-center relative z-10">
           <div className="space-y-10 text-center lg:text-left">
-            <div className="inline-flex items-center gap-3 px-6 py-2 bg-teal-500/10 border border-teal-500/20 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-teal-400">
-              <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
-              AFRICA'S CREATOR INFRASTRUCTURE
+            <div className="inline-flex items-center gap-3 px-1 py-1 bg-teal-500 border border-teal-500/20 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-teal-400">
+              <div className="flex items-center gap-4 px-6 py-4 bg-black rounded-[32px] border border-teal-500 shadow-2xl">
+                <div className="flex -space-x-3">
+                  {avatarIds.map((id) => (
+                    <img
+                      key={id}
+                      src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80&w=100&h=100`}
+                      className="w-10 h-10 rounded-full border-2 border-white bg-gray-800 object-cover shadow-lg"
+                      alt=""
+                    />
+                  ))}
+                </div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-gray-500">
+                  <span className="text-white">12k+</span> Active Creators
+                </div>
+              </div>
             </div>
             <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-display tracking-tight leading-[0.8] animate-in fade-in slide-in-from-bottom-8 duration-700">
               BUILD <span className="text-teal-500">WEALTH</span> <br />
@@ -328,25 +338,21 @@ const Landing: React.FC = () => {
               payouts. We empower Ugandan TikTokers, YouTubers, and Artists to
               scale.
             </p>
+
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-4">
-              <button className="w-full sm:w-auto bg-teal-500 text-black text-xl font-black uppercase tracking-tighter px-12 py-7 rounded-[32px] shadow-2xl btn-bubble">
+              <Link
+                to="/home"
+                className="w-full sm:w-auto bg-teal-500 text-black text-xl font-black uppercase tracking-tighter px-12 py-7 rounded-[32px] shadow-[0_20px_50px_rgba(20,184,166,0.3)] hover:scale-105 transition-transform btn-bubble"
+              >
+                Explore Campaigns
+              </Link>
+
+              <Link
+                to="/auth"
+                className="w-full sm:w-auto bg-transparent text-white/50 hover:text-teal-400 text-xl font-black uppercase tracking-tighter px-12 py-7 rounded-[32px] border border-white/10 hover:border-teal-500/50 transition-all"
+              >
                 Get Started
-              </button>
-              <div className="flex items-center gap-4 px-6 py-4 glass-card rounded-[32px] border border-white/5 shadow-2xl">
-                <div className="flex -space-x-3">
-                  {avatarIds.map((id) => (
-                    <img
-                      key={id}
-                      src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80&w=100&h=100`}
-                      className="w-10 h-10 rounded-full border-2 border-[#0A0B0E] bg-gray-800 object-cover shadow-lg"
-                      alt=""
-                    />
-                  ))}
-                </div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-gray-500">
-                  <span className="text-white">12k+</span> Nodes Active
-                </div>
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -377,43 +383,6 @@ const Landing: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AI STRATEGY SECTION (Gemini Integration) */}
-      <section className="py-24 px-6 relative z-10">
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-[#11141A] border border-white/5 rounded-[56px] p-8 md:p-16 shadow-3xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-12 opacity-[0.03] text-[200px] pointer-events-none">
-              ✨
-            </div>
-            <div className="relative z-10 space-y-12">
-              <div className="text-center md:text-left space-y-2">
-                <h2 className="text-teal-500 text-[10px] font-black uppercase tracking-[0.4em]">
-                  Gemini Intelligence
-                </h2>
-                <p className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase font-display leading-none">
-                  AI Campaign Architect
-                </p>
-                <p className="text-gray-500 font-medium">
-                  Instantly generate a high-impact creative strategy for the
-                  African market.
-                </p>
-              </div>
-
-              <form className="flex flex-col md:flex-row gap-4">
-                <input
-                  required
-                  type="text"
-                  placeholder="Describe your goal (e.g. 'Launch a lifestyle brand in Kampala targeting Gen-Z')"
-                  className="flex-1 bg-black/40 border border-white/5 rounded-3xl py-6 px-8 text-white font-bold focus:border-teal-500/50 outline-none transition-all placeholder:text-gray-800"
-                />
-                <button className="bg-teal-500 text-black font-black px-12 py-6 rounded-3xl uppercase tracking-widest text-xs hover:brightness-110 active:scale-95 transition-all disabled:opacity-30">
-                  'Generate Blueprint'
-                </button>
-              </form>
             </div>
           </div>
         </div>
@@ -453,21 +422,19 @@ const Landing: React.FC = () => {
             </p>
           </div>
           <Link
-            to="/discover"
+            to="/home"
             className="bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-widest px-8 py-4 rounded-full hover:bg-white/10 transition-all btn-bubble"
           >
-            Explore Market →
+            Explore Campaings →
           </Link>
         </div>
 
         <div className="relative group">
           <div className="flex overflow-hidden">
             <div className="flex animate-slide-infinite whitespace-nowrap items-stretch py-6 md:py-8">
-              {[...MOCK_CAMPAIGNS, ...MOCK_CAMPAIGNS, ...MOCK_CAMPAIGNS].map(
-                (campaign, i) => (
-                  <CampaingCard key={`campaings-${i}`} campaign={campaign} />
-                ),
-              )}
+              {[1, 2, 2, 1, 1, 2, 2, 2, 3, 2, 2, 2, 2, 2].map((campaign, i) => (
+                <CampaingCard key={`campaings-${i}`} campaign={campaign} />
+              ))}
             </div>
           </div>
           {/* Edge Gradients for smooth transition */}
@@ -479,40 +446,6 @@ const Landing: React.FC = () => {
       {/* CREATOR SHOWCASE (Improved Grid) */}
       <section className="py-32 md:py-48 px-6 bg-black relative">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 md:gap-32 items-center relative z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10">
-            <div className="space-y-6 md:space-y-10 sm:mt-16">
-              <div className="aspect-[3/4] rounded-[48px] md:rounded-[64px] shadow-3xl overflow-hidden border border-white/5 group bg-[#0D0F14]">
-                <img
-                  src="https://images.unsplash.com/photo-1529139572744-b1540a799c42?auto=format&fit=crop&w=800&q=80"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-                  alt=""
-                />
-              </div>
-              <div className="aspect-[3/4] rounded-[48px] md:rounded-[64px] shadow-3xl overflow-hidden border border-white/5 group bg-[#0D0F14]">
-                <img
-                  src="https://images.unsplash.com/photo-1523910088395-d7457f8ee315?auto=format&fit=crop&w=800&q=80"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-                  alt=""
-                />
-              </div>
-            </div>
-            <div className="space-y-6 md:space-y-10">
-              <div className="aspect-[3/4] rounded-[48px] md:rounded-[64px] shadow-3xl overflow-hidden border border-white/5 group bg-[#0D0F14]">
-                <img
-                  src="https://images.unsplash.com/photo-1567103472667-6898f3a79cf2?auto=format&fit=crop&w=800&q=80"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-                  alt=""
-                />
-              </div>
-              <div className="aspect-[3/4] rounded-[48px] md:rounded-[64px] shadow-3xl overflow-hidden border border-white/5 group bg-[#0D0F14]">
-                <img
-                  src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
           <div className="space-y-8 md:space-y-12 text-center lg:text-left">
             <h2 className="text-6xl sm:text-8xl md:text-9xl font-black text-white font-display tracking-tight leading-[0.85] uppercase">
               THE NEW <br />
@@ -526,14 +459,16 @@ const Landing: React.FC = () => {
             <div className="space-y-6 md:space-y-8">
               {[
                 {
-                  icon: "⚡",
+                  icon: <IconBolt className="w-8 h-8 text-black" />,
                   title: "UGX Mobile Payouts",
-                  desc: "Real-time transfers to your MoMo or Airtel wallet.",
+                  desc: "Real-time settlements. Instant liquidity directly to your MTN MoMo or Airtel Money wallet.",
+                  accent: "border-teal-500/20",
                 },
                 {
-                  icon: "🎯",
-                  title: "Global Brand Node",
-                  desc: "Direct contracts with MTN, Airtel, and international brands.",
+                  icon: <IconTargetArrow className="w-8 h-8 text-black" />,
+                  title: "Global Brand",
+                  desc: "Direct infrastructure for the big players. Secure contracts with MTN, Airtel, and Global FMCGs.",
+                  accent: "border-teal-500/20",
                 },
               ].map((f, i) => (
                 <div
@@ -556,145 +491,8 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* INFRASTRUCTURE PILLARS */}
-      <section className="py-32 md:py-56 px-6 relative overflow-hidden bg-black/60 border-y border-white/5">
-        <div className="max-w-7xl mx-auto space-y-28">
-          <div className="text-center space-y-10">
-            <div className="inline-block px-6 py-2 bg-teal-500/10 border border-teal-500/20 rounded-full text-[10px] font-black text-teal-500 uppercase tracking-[0.8em]">
-              THE INFRASTRUCTURE
-            </div>
-            <h2 className="text-7xl md:text-[130px] font-black text-white tracking-tighter uppercase font-display leading-[0.75] max-w-5xl mx-auto">
-              SECURE{" "}
-              <span className="text-teal-500 text-glow-teal">NUCLEUS</span>{" "}
-              <br />
-              FOR SCALING.
-            </h2>
-            <p className="text-gray-500 text-xl md:text-3xl max-w-3xl mx-auto font-medium tracking-tight">
-              African-built protocol for global digital creators.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24 max-w-6xl mx-auto">
-            <ProtocolCard
-              icon={<IconCreditCard />}
-              title="UGX Engine"
-              description="Rapid liquidity to your mobile wallet."
-            />
-            <ProtocolCard
-              icon={<>Icon</>}
-              title="AI Oversight"
-              description="Live performance monitoring & verification."
-            />
-            <ProtocolCard
-              icon={<IconLock />}
-              title="Smart Escrow"
-              description="Pre-funded campaign pools for total safety."
-            />
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
-      <footer className="py-32 border-t border-white/5 bg-[#080A0E] relative z-10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-20">
-            <div className="space-y-8">
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-teal-500 rounded-[16px] flex items-center justify-center text-black font-black text-3xl">
-                  K
-                </div>
-                <span className="font-display text-5xl tracking-tight uppercase">
-                  Kreaterly
-                </span>
-              </div>
-              <p className="text-gray-600 font-bold text-sm max-w-xs leading-relaxed uppercase tracking-[0.2em]">
-                Uganda's Premier Creator OS. <br /> Built in Kampala for the
-                Pan-African Digital Revolution.
-              </p>
-            </div>
-            <nav className="flex flex-wrap gap-16 lg:gap-32">
-              <div className="space-y-6">
-                <h4 className="text-[14px] font-black text-teal-500 uppercase tracking-[0.5em]">
-                  Protocol
-                </h4>
-                <ul className="space-y-4 text-[11px] text-gray-500 font-black uppercase tracking-widest">
-                  <li>
-                    <Link
-                      to="/onboarding"
-                      className="hover:text-white transition-all"
-                    >
-                      Portal Access
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/discover"
-                      className="hover:text-white transition-all"
-                    >
-                      Marketplace
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/contact"
-                      className="hover:text-white transition-all"
-                    >
-                      Kampala HQ
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="space-y-6">
-                <h4 className="text-[14px] font-black text-orange-500 uppercase tracking-[0.5em]">
-                  Network
-                </h4>
-                <ul className="space-y-4 text-[11px] text-gray-500 font-black uppercase tracking-widest">
-                  <li>
-                    <a href="#" className="hover:text-white transition-all">
-                      Security Node
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-all">
-                      Global Scaling
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </nav>
-            <div className="flex flex-col items-center md:items-end gap-10">
-              <div className="flex gap-10">
-                <a
-                  href="#"
-                  className="text-gray-700 hover:text-teal-400 transition-all scale-150"
-                >
-                  <IconBrandTiktok />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-700 hover:text-teal-400 transition-all scale-150"
-                >
-                  <IconBrandInstagram />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-700 hover:text-teal-400 transition-all scale-150"
-                >
-                  <IconBrandYoutube />
-                </a>
-              </div>
-              <div className="text-right">
-                <p className="text-[9px] font-black text-gray-800 uppercase tracking-[0.6em]">
-                  Node v3.5.4 Primary Cluster
-                </p>
-                <p className="text-[9px] font-black text-teal-500/40 uppercase tracking-[0.6em] mt-2">
-                  © 2025 KREATERLY GROUP AFRICA
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

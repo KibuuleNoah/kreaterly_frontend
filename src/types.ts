@@ -1,7 +1,12 @@
 import type React from "react";
 import type { Dispatch, SetStateAction } from "react";
 
-import type { CampaignsRecord, CampaignsResponse } from "./pocketbase-types";
+import {
+  type CampaignsParticipantsResponse,
+  type CampaignsRecord,
+  type CampaignsResponse,
+  type CreatorsResponse,
+} from "./pocketbase-types";
 import z from "zod";
 export type AuthStep = "ROLE_SELECTION" | "AUTH_ENTRY" | "OTP_VERIFY";
 
@@ -114,6 +119,17 @@ export interface CreatorDashboardContextType {
   ctxType?: string;
   activeView: string;
   setActiveView: Dispatch<SetStateAction<string>>;
+  creator: CreatorsResponse | null;
+  participantCampaigns: CampaignsParticipantsResponse[] | null;
+  setParticipantCampaigns: Dispatch<
+    SetStateAction<CampaignsParticipantsResponse[] | null>
+  >;
+  participantCampaignInDetail: CampaignsParticipantsResponse | null;
+  setParticipantCampaignInDetail: Dispatch<
+    SetStateAction<CampaignsParticipantsResponse | null>
+  >;
+  viewNavTree: string[];
+  setViewNavTree: Dispatch<SetStateAction<string[]>>;
 }
 
 export interface HomeContextType {
@@ -135,7 +151,7 @@ export interface BrandDashboardContextType {
   campaigns: CampaignsResponse[] | null;
   setCampaigns: Dispatch<SetStateAction<CampaignsResponse[] | null>>;
   campaignInDetails: CampaignsResponse;
-  setCampaignInDetails: Dispatch<SetStateAction<CampaignResponse>>;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignsResponse>>;
   isBrandFirstTime: boolean;
   viewNavTree: string[];
   setViewNavTree: React.Dispatch<SetStateAction<string[]>>;
