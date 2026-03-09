@@ -17,10 +17,15 @@ const CreatorInvitesSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState("ALL");
   const { campaignInDetails } = useBrandDashboard();
 
-  const { items: invites } = usePaginatedCollection("campaign_invites", 1, 20, {
-    filter: `campaign="${campaignInDetails.id}"`,
-    expand: "creator",
-  });
+  const { items: invites } = usePaginatedCollection(
+    "campaigns_invites",
+    1,
+    20,
+    {
+      filter: `campaign="${campaignInDetails.id}"`,
+      expand: "creator",
+    },
+  );
 
   // // Example Data
   // const creators = [

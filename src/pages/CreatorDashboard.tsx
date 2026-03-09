@@ -13,6 +13,7 @@ import type {
   CampaignsParticipantsResponse,
   CreatorsResponse,
 } from "../pocketbase-types";
+import LogOutButton from "../components/LogOutButton";
 
 const BASE_VIEWS = ["Home"];
 

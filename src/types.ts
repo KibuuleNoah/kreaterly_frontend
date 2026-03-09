@@ -150,11 +150,15 @@ export interface BrandDashboardContextType {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   campaigns: CampaignsResponse[] | null;
   setCampaigns: Dispatch<SetStateAction<CampaignsResponse[] | null>>;
-  campaignInDetails: CampaignsResponse;
-  setCampaignInDetails: Dispatch<SetStateAction<CampaignsResponse>>;
+  campaignInDetails: CampaignsResponse | null;
+  setCampaignInDetails: Dispatch<SetStateAction<CampaignsResponse | null>>;
   isBrandFirstTime: boolean;
   viewNavTree: string[];
-  setViewNavTree: React.Dispatch<SetStateAction<string[]>>;
+  setViewNavTree: Dispatch<SetStateAction<string[]>>;
+  campaignInvitesCreatorIds: { [key: string]: string };
+  setCampaignInvitesCreatorIds: Dispatch<
+    SetStateAction<{ [key: string]: string }>
+  >;
 }
 
 export enum Platform {

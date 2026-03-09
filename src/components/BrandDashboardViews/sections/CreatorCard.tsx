@@ -1,7 +1,26 @@
-import { IconBrandTiktok } from "@tabler/icons-react";
-import React from "react";
+import { IconBrandTiktok, IconCircleCheck } from "@tabler/icons-react";
+import React, { useState } from "react";
+import { pb } from "../../../lib/pocketbase";
 
-const CreatorCard: React.FC<{ creator: any }> = ({ creator }) => {
+const CreatorCard: React.FC<{ creator: any; campaignId: string }> = ({
+  creator,
+  campaignId,
+}) => {
+  const [invited, setInvited] = useState(false);
+
+  const handleCreatorInvite = async () => {
+    try {
+      const resp = await pb.collection("campaigns_invites").create({
+        campaign: campaignId,
+        brand: "xxx",
+      });
+      setInvited(resp.id ? true : false);
+    } catch (err: any) {
+      console.log(err);
+      setInvited(false);
+    }
+  };
+
   return (
     <div className="group bg-[#11141A] border border-white/5 rounded-[40px] p-6 hover:border-teal-500/20 hover:bg-[#141921] transition-all duration-500 shadow-2xl flex flex-col h-full cursor-pointer">
       <div className="flex items-center gap-4 mb-8">
@@ -73,14 +92,27 @@ const CreatorCard: React.FC<{ creator: any }> = ({ creator }) => {
         </div>
       </div>
 
-      <div className="flex justify-between gap-1">
-        <button className="w-full mt-8 py-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-gray-600 hover:bg-teal-500 hover:text-black hover:border-teal-500 transition-all">
+      <div className="flex justify-between gap-3 mt-8">
+        <button className="w-full py-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:bg-white/10 hover:text-white transition-all active:scale-95">
           Profile
         </button>
 
-        <button className="w-full mt-8 py-4 bg-teal-500/20 border border-teal-500/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-teal-400 hover:bg-teal-500 hover:text-black hover:border-teal-500 transition-all">
-          Invite
-        </button>
+        {invited ? (
+          <button
+            disabled
+            className="w-full py-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-emerald-500/60 flex items-center justify-center gap-2 cursor-default transition-all"
+          >
+            <IconCircleCheck size={14} stroke={3} />
+            Invited
+          </button>
+        ) : (
+          <button
+            onClick={handleCreatorInvite}
+            className="w-full py-4 bg-teal-500/10 border border-teal-500/20 rounded-2xl text-[10px] font-black uppercase tracking-widest text-teal-400 hover:bg-teal-500 hover:text-black hover:border-teal-500 hover:shadow-lg hover:shadow-teal-500/20 transition-all active:scale-95"
+          >
+            Invite
+          </button>
+        )}
       </div>
     </div>
   );
