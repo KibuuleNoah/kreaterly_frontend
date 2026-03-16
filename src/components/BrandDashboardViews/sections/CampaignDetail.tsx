@@ -8,8 +8,8 @@ import CampaignBrief from "../../CampaignDetailSections/CampaignBrief";
 import PayoutTiers from "../../CampaignDetailSections/PayoutTiers";
 import CollapsibleDescription from "../../CollapsibleDescription";
 import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
-import { pb } from "../../../lib/pocketbase";
 import { useCollection } from "../../../hooks/useCollection";
+import { useEffect, useState } from "react";
 
 const platform_payouts = [
   {
@@ -30,18 +30,53 @@ const CampaignDetail = () => {
   const {
     setActiveView,
     campaignInDetails,
-    campaignInvitesCreatorIds,
-    setCampaignInvitesCreatorIds,
+    allBrandCampaignsInvites,
+    setAllBrandCampaignsInvites,
   } = useBrandDashboard();
 
+  const [isCampInDetail, setIsCampInDetail] = useState(false);
+
   const campaign = campaignInDetails;
+  const campaignId: string = campaign?.id || "";
 
-  const records = useCollection("campaigns_invites", {
-    fields: "creator",
-    filter: `campaign=${campaign.id}`,
-  });
+  const { items } = useCollection(
+    "campaigns_invites",
+    {
+      fields: "creator,status",
+      filter: `campaign="${campaign.id}"`,
+    },
+    isCampInDetail,
+  );
 
-  console.log(records);
+  useEffect(() => {
+    if (campaign) {
+      setIsCampInDetail(true);
+    }
+  }, [campaign]); // Only runs when 'campaign' changes
+
+  useEffect(() => {
+    if (items) {
+      const CampaignsInvites: { [key: string]: string } = {};
+      items.map((invite) => {
+        CampaignsInvites[invite.creator] = invite.status;
+      });
+
+      if (campaignId) {
+        const tempObj: { [key: string]: { [key: string]: string } } = {};
+        tempObj[campaignId] = CampaignsInvites;
+        setAllBrandCampaignsInvites({
+          ...allBrandCampaignsInvites,
+          ...tempObj,
+        });
+        console.log(
+          items,
+          allBrandCampaignsInvites,
+          tempObj,
+          allBrandCampaignsInvites,
+        );
+      }
+    }
+  }, [items]);
 
   return (
     <div className="bg-[#0A0B0E] text-white">

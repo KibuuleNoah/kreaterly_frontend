@@ -27,14 +27,6 @@ const CreatorInvitesSection: React.FC = () => {
     },
   );
 
-  // // Example Data
-  // const creators = [
-  //   { id: 1, name: "Amanda J", email: "amanda@kreaterly.ug", status: "ACCEPTED", date: "Oct 12, 2023", },
-  //   { id: 2, name: "David Chen", email: "d.chen@social.com", status: "PENDING", date: "Oct 14, 2023", },
-  //   { id: 3, name: "Sarah Miller", email: "sarah@creators.io", status: "REJECTED", date: "Oct 10, 2023", },
-  //   { id: 4, name: "Marcus Vane", email: "vane@media.ug", status: "ACCEPTED", date: "Oct 11, 2023", },
-  // ];
-
   const tabs = ["all", "accepted", "pending", "rejected"];
 
   const filteredInvites =

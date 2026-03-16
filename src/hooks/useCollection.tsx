@@ -53,12 +53,20 @@ export function useGetOneCollection<T>(
  * Custom hook to fetch a PocketBase collection.
  * T represents the record type for better DX.
  */
-export function useCollection<T>(collectionName: string, options: object = {}) {
+export function useCollection<T>(
+  collectionName: string,
+  options: object = {},
+  enabled: boolean = true,
+) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
     let isMounted = true;
 
     async function fetchData() {
@@ -92,9 +100,9 @@ export function useCollection<T>(collectionName: string, options: object = {}) {
       pb.cancelAllRequests();
     };
     // Use stringified options to prevent infinite re-renders from object reference changes
-  }, [collectionName, JSON.stringify(options)]);
+  }, [collectionName, enabled, JSON.stringify(options)]);
 
-  return { data, loading, error };
+  return { items: data, collLoading: loading, collErr: error };
 }
 
 export function usePaginatedCollection<T>(

@@ -1,25 +1,91 @@
-import { IconBrandTiktok, IconCircleCheck } from "@tabler/icons-react";
-import React, { useState } from "react";
+import {
+  IconBrandTiktok,
+  IconCircleCheck,
+  IconLoader,
+  IconUserCheck,
+  IconX,
+} from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
 import { pb } from "../../../lib/pocketbase";
+import type { CreatorsResponse } from "../../../pocketbase-types";
+import { useBrandDashboard } from "../../../hooks/useBrandDashboard";
 
-const CreatorCard: React.FC<{ creator: any; campaignId: string }> = ({
-  creator,
-  campaignId,
-}) => {
-  const [invited, setInvited] = useState(false);
+const INVITESTATES = {
+  invited: {
+    label: "Invited",
+    icon: <IconCircleCheck size={14} stroke={3} />,
+    classes:
+      "bg-emerald-500/5 border-emerald-500/10 text-emerald-500/60 cursor-default",
+    disabled: true,
+  },
+  accepted: {
+    label: "Accepted",
+    icon: <IconUserCheck size={14} stroke={3} />,
+    classes: "bg-blue-500/10 border-blue-500/20 text-blue-400 cursor-default",
+    disabled: true,
+  },
+  rejected: {
+    label: "Rejected",
+    icon: <IconX size={14} stroke={3} />,
+    classes:
+      "bg-rose-500/10 border-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-black",
+    disabled: false, // Optional: allow re-invite if rejected
+  },
+  pending: {
+    label: "Invited",
+    icon: <IconCircleCheck size={14} stroke={3} />,
+    classes:
+      "bg-emerald-500/5 border-emerald-500/10 text-emerald-500/60 cursor-default",
+    disabled: true,
+  },
+  // pending: {
+  //   label: "Pending",
+  //   icon: <IconLoader size={14} stroke={3} className="animate-spin" />,
+  //   classes: "bg-amber-500/5 border-amber-500/10 text-amber-500/60 cursor-wait",
+  //   disabled: true,
+  // },
+  default: {
+    label: "Invite",
+    icon: null,
+    classes:
+      "bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500 hover:text-black hover:border-teal-500 hover:shadow-lg hover:shadow-teal-500/20 active:scale-95",
+    disabled: false,
+  },
+};
+
+const CreatorCard: React.FC<{
+  creator: CreatorsResponse;
+  campaignId: string;
+}> = ({ creator, campaignId }) => {
+  const [inviteStatus, setInviteStatus] = useState<string>("default");
+  const { allBrandCampaignsInvites } = useBrandDashboard();
 
   const handleCreatorInvite = async () => {
     try {
       const resp = await pb.collection("campaigns_invites").create({
         campaign: campaignId,
-        brand: "xxx",
+        creator: creator.id,
       });
-      setInvited(resp.id ? true : false);
+      setInviteStatus(resp.id ? "invited" : "default");
     } catch (err: any) {
       console.log(err);
-      setInvited(false);
     }
   };
+
+  useEffect(() => {
+    if (campaignId && allBrandCampaignsInvites[campaignId])
+      for (const [id, status] of Object.entries(
+        allBrandCampaignsInvites[campaignId],
+      )) {
+        if (id === creator.id) {
+          (() => {
+            setInviteStatus(status || "default");
+          })();
+        }
+      }
+  }, []);
+
+  const currentState = INVITESTATES[inviteStatus] || INVITESTATES.default;
 
   return (
     <div className="group bg-[#11141A] border border-white/5 rounded-[40px] p-6 hover:border-teal-500/20 hover:bg-[#141921] transition-all duration-500 shadow-2xl flex flex-col h-full cursor-pointer">
@@ -45,7 +111,7 @@ const CreatorCard: React.FC<{ creator: any; campaignId: string }> = ({
                 <IconBrandTiktok />
               </span>
               <span className="text-[10px] font-black text-gray-400 uppercase">
-                {creator.stats.tiktok.followers}
+                {creator?.stats.tiktok.followers}
               </span>
             </div>
           </div>
@@ -97,22 +163,16 @@ const CreatorCard: React.FC<{ creator: any; campaignId: string }> = ({
           Profile
         </button>
 
-        {invited ? (
-          <button
-            disabled
-            className="w-full py-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-emerald-500/60 flex items-center justify-center gap-2 cursor-default transition-all"
-          >
-            <IconCircleCheck size={14} stroke={3} />
-            Invited
-          </button>
-        ) : (
-          <button
-            onClick={handleCreatorInvite}
-            className="w-full py-4 bg-teal-500/10 border border-teal-500/20 rounded-2xl text-[10px] font-black uppercase tracking-widest text-teal-400 hover:bg-teal-500 hover:text-black hover:border-teal-500 hover:shadow-lg hover:shadow-teal-500/20 transition-all active:scale-95"
-          >
-            Invite
-          </button>
-        )}
+        <button
+          disabled={currentState.disabled}
+          onClick={
+            status === "rejected" || !status ? handleCreatorInvite : undefined
+          }
+          className={`w-full py-4 border rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${currentState.classes}`}
+        >
+          {currentState.icon}
+          {currentState.label}
+        </button>
       </div>
     </div>
   );

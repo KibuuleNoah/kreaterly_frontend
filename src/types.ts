@@ -155,9 +155,9 @@ export interface BrandDashboardContextType {
   isBrandFirstTime: boolean;
   viewNavTree: string[];
   setViewNavTree: Dispatch<SetStateAction<string[]>>;
-  campaignInvitesCreatorIds: { [key: string]: string };
-  setCampaignInvitesCreatorIds: Dispatch<
-    SetStateAction<{ [key: string]: string }>
+  allBrandCampaignsInvites: { [key: string]: { [key: string]: string } };
+  setAllBrandCampaignsInvites: Dispatch<
+    SetStateAction<{ [key: string]: { [key: string]: string } }>
   >;
 }
 

@@ -81,6 +81,12 @@ The frontend provides interfaces for:
 
 ---
 
+# To-Do Features
+
+These features were to be implemented but!!
+
+* Campaign Detail top earners
+
 # Getting Started
 
 Clone the repository:

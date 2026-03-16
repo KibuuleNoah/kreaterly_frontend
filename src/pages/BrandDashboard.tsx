@@ -156,8 +156,8 @@ const BrandDashboard = () => {
   const [campaigns, setCampaigns] = useState<CampaignsResponse[] | null>(null);
   const [campaignInDetails, setCampaignInDetails] =
     useState<CampaignsResponse | null>(null);
-  const [campaignInvitesCreatorIds, setCampaignInvitesCreatorIds] = useState<{
-    [key: string]: string;
+  const [allBrandCampaignsInvites, setAllBrandCampaignsInvites] = useState<{
+    [key: string]: { [key: string]: string };
   }>({});
   const navigate = useNavigate();
 
@@ -265,8 +265,8 @@ const BrandDashboard = () => {
         isBrandFirstTime,
         viewNavTree,
         setViewNavTree,
-        campaignInvitesCreatorIds,
-        setCampaignInvitesCreatorIds,
+        allBrandCampaignsInvites,
+        setAllBrandCampaignsInvites,
       }}
     >
       {isLoading && <LoadingScreen />}

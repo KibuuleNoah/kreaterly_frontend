@@ -8,6 +8,7 @@ import {
   useCollection,
   usePaginatedCollection,
 } from "../../hooks/useCollection";
+import type { CreatorsResponse } from "../../pocketbase-types";
 
 export const MOCK_CREATORS = [
   {
@@ -107,7 +108,8 @@ const InviteCreators: React.FC = () => {
   const [activePlatform, setActivePlatform] = useState<Platform | "All">("All");
   const { campaignInDetails } = useBrandDashboard();
 
-  const { items, collLoading, collErr } = usePaginatedCollection("creators");
+  const { items, collLoading, collErr } =
+    usePaginatedCollection<CreatorsResponse>("creators");
 
   if (!campaignInDetails) {
     return;
@@ -238,7 +240,11 @@ const InviteCreators: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {items.length > 0 ? (
           items.map((creator, idx) => (
-            <CreatorCard key={idx} creator={creator} />
+            <CreatorCard
+              key={idx}
+              creator={creator}
+              campaignId={campaignInDetails.id}
+            />
           ))
         ) : (
           <div className="col-span-full py-40 text-center space-y-6">
